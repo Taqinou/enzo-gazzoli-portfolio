@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de Logo eG - Anti-Border Fix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue: #0000ff;
+            --bg: #111;
+        }
+
+        body {
+            background-color: var(--bg);
+            display: flex;
+            flex-direction: column;
+            padding: 50px 0;
+            align-items: center;
+            font-family: 'Helvetica', sans-serif;
+            color: white;
+            margin: 0;
+        }
+
+        .container {
+            padding: 40px;
+            background: #222;
+            border-radius: 12px;
+            text-align: center;
+            width: 500px;
+        }
+
+        canvas {
+            border: 1px solid #444;
+            max-width: 400px;
+            height: auto;
+            margin-bottom: 20px;
+            background: #000;
+        }
+
+        .controls {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        select {
+            padding: 10px;
+            background: #333;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-png {
+            background-color: var(--blue);
+            color: white;
+        }
+
+        .btn-svg {
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2 style="margin: 0 0 5px 0; font-weight: 900;">LOGO FIX (NO BORDER)</h2>
+        <p style="margin: 0 0 25px 0; font-size: 13px; color: #888;">Ajout d'une marge de sécurité anti-bleed (2%)</p>
+
+        <canvas id="canvas"></canvas>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Résolution</label>
+                <select id="res">
+                    <option value="32">Small (32px)</option>
+                    <option value="512" selected>Standard (512px)</option>
+                    <option value="1024">HD (1024px)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-png" onclick="downloadPNG()">Exporter PNG</button>
+            <button class="btn btn-svg" onclick="downloadSVG()">Exporter SVG</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let autoParams = { minX: 0, minY: 0, maxX: 0, maxY: 0, textW: 0, textH: 0, buffer: null };
+
+        async function computeLayout() {
+            await document.fonts.ready;
+            const buffer = document.createElement('canvas');
+            const bCtx = buffer.getContext('2d');
+            buffer.width = 3000;
+            buffer.height = 3000;
+
+            bCtx.font = "1000px 'Mrs Saint Delafield'";
+            bCtx.fillStyle = "white";
+            bCtx.textAlign = "center";
+            bCtx.textBaseline = "middle";
+            bCtx.fillText("EG", buffer.width / 2, buffer.height / 2);
+
+            const imgData = bCtx.getImageData(0, 0, buffer.width, buffer.height).data;
+            let minX = buffer.width, minY = buffer.height, maxX = 0, maxY = 0;
+
+            for (let y = 0; y < buffer.height; y++) {
+                for (let x = 0; x < buffer.width; x++) {
+                    if (imgData[(y * buffer.width + x) * 4 + 3] > 0) {
+                        if (x < minX) minX = x; if (y < minY) minY = y;
+                        if (x > maxX) maxX = x; if (y > maxY) maxY = y;
+                    }
+                }
+            }
+
+            autoParams = {
+                minX, minY, maxX, maxY,
+                textW: maxX - minX,
+                textH: maxY - minY,
+                buffer: buffer
+            };
+
+            renderPreview();
+        }
+
+        function renderPreview() {
+            canvas.width = 512;
+            canvas.height = 512;
+            drawOnCanvas(ctx, 512);
+        }
+
+        function drawOnCanvas(targetCtx, targetSize) {
+            // 1. Fond bleu avec un léger dépassement pour être sûr de couvrir tout le cadre
+            targetCtx.fillStyle = "#0000ff";
+            targetCtx.fillRect(-1, -1, targetSize + 2, targetSize + 2);
+
+            // 2. Marge de sécurité de 2% pour éviter que l'anti-aliasing blanc ne touche le bord
+            const safePadding = targetSize * 0.02;
+            const safeArea = targetSize - (safePadding * 2);
+
+            const scale = Math.min(safeArea / autoParams.textW, safeArea / autoParams.textH);
+            const finalW = autoParams.textW * scale;
+            const finalH = autoParams.textH * scale;
+
+            const destX = (targetSize - finalW) / 2;
+            const destY = (targetSize - finalH) / 2;
+
+            targetCtx.drawImage(
+                autoParams.buffer,
+                autoParams.minX, autoParams.minY, autoParams.textW, autoParams.textH,
+                destX, destY, finalW, finalH
+            );
+        }
+
+        function downloadPNG() {
+            const size = parseInt(document.getElementById('res').value);
+            const off = document.createElement('canvas');
+            off.width = size; off.height = size;
+            drawOnCanvas(off.getContext('2d'), size);
+            const link = document.createElement('a');
+            link.download = `logo-eg-${size}x${size}.png`;
+            link.href = off.toDataURL("image/png");
+            link.click();
+        }
+
+        function downloadSVG() {
+            const size = parseInt(document.getElementById('res').value);
+            const off = document.createElement('canvas');
+            off.width = size; off.height = size;
+            drawOnCanvas(off.getContext('2d'), size);
+            const dataUrl = off.toDataURL("image/png");
+
+            const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <rect width="${size}" height="${size}" fill="#0000ff" />
+    <image width="${size}" height="${size}" href="${dataUrl}" />
+</svg>`.trim();
+
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            const link = document.createElement('a');
+            link.download = `logo-eg-${size}x${size}.svg`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+        }
+
+        window.onload = () => {
+            setTimeout(computeLayout, 500);
+            setTimeout(computeLayout, 1500);
+        };
+    </script>
+</body>
+
+</html>
