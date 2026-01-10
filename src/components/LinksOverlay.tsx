@@ -28,24 +28,24 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-white z-[20000] flex flex-col items-center justify-center"
+          className="fixed inset-0 bg-white z-[20000] flex flex-col items-center justify-center px-4 md:px-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
           onClick={handleClose}
         >
-          <div className="flex flex-col items-center gap-2.5">
+          <div className="flex flex-col items-center gap-1 md:gap-2.5">
             {links.map((link, i) => (
               <motion.a
                 key={link.label}
                 href={link.href}
                 target={link.target}
                 rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-                className="font-mono text-[clamp(4rem,15vw,22rem)] font-black uppercase text-ink
+                className="font-mono text-[clamp(2.5rem,12vw,22rem)] md:text-[clamp(4rem,15vw,22rem)] font-black uppercase text-ink
                           no-underline transition-colors duration-100 tracking-[-0.08em] text-center
                           hover:text-blue select-text"
-                style={{ lineHeight: 0.7 }}
+                style={{ lineHeight: 0.75 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}

@@ -57,14 +57,14 @@ const ProjectSection = memo(
 
           {/* Project Content */}
           <div
-            className="flex items-center justify-center w-full h-full px-[10vw]
+            className="flex items-center justify-center w-full h-full px-4 md:px-[10vw]
                       relative"
           >
             {/* Project Title - Closed State */}
             <AnimatePresence mode="wait">
               {!isOpen && (
                 <motion.div
-                  className={`font-serif text-[14vw] lowercase text-center cursor-pointer z-10 mx-auto
+                  className={`font-serif text-[11vw] md:text-[14vw] lowercase text-center cursor-pointer z-10 mx-auto
                              leading-085 tracking-[-0.05em]
                              ${isProjectActive ? "text-white" : "text-ink"}
                              hover:text-blue`}
@@ -83,7 +83,7 @@ const ProjectSection = memo(
             <AnimatePresence>
               {isOpen && (
                 <motion.div
-                  className="fixed inset-0 z-[50] flex flex-col items-center justify-center bg-blue"
+                  className="fixed inset-0 z-[50] flex flex-col items-center justify-center bg-blue px-4 md:px-0"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -91,14 +91,14 @@ const ProjectSection = memo(
                 >
                   {/* Background Title */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.07] pointer-events-none">
-                    <h3 className="font-serif text-[clamp(8rem,28vw,45rem)] leading-none text-white lowercase whitespace-nowrap">
+                    <h3 className="font-serif text-[clamp(4rem,25vw,45rem)] md:text-[clamp(8rem,28vw,45rem)] leading-none text-white lowercase whitespace-nowrap">
                       {project.title}.
                     </h3>
                   </div>
 
                   {/* Content */}
                   <motion.div
-                    className="z-10 text-center flex flex-col items-center relative"
+                    className="z-10 text-center flex flex-col items-center relative px-2 md:px-0"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 30 }}
@@ -106,8 +106,8 @@ const ProjectSection = memo(
                   >
                     {/* Description */}
                     <motion.div
-                      className="text-[clamp(1.5rem,3.5vw,6rem)] font-mono font-extrabold uppercase
-                               tracking-[-0.05em] leading-[0.9] text-white mb-10 max-w-[90vw] text-center"
+                      className="text-[clamp(1.1rem,4.5vw,6rem)] md:text-[clamp(1.5rem,3.5vw,6rem)] font-mono font-extrabold uppercase
+                               tracking-[-0.05em] leading-[0.95] md:leading-[0.9] text-white mb-6 md:mb-10 max-w-[95vw] md:max-w-[90vw] text-center"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
@@ -117,14 +117,14 @@ const ProjectSection = memo(
 
                     {/* Link */}
                     <motion.div
-                      className="flex gap-8 mt-5"
+                      className="flex gap-4 md:gap-8 mt-3 md:mt-5"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
                     >
                       <a
                         href={project.linkUrl}
-                        className="font-serif text-xl lowercase border-b border-white
+                        className="font-serif text-lg md:text-xl lowercase border-b border-white
                                   pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
                         rel="noopener noreferrer"
                         target="_blank"
@@ -135,7 +135,7 @@ const ProjectSection = memo(
                       {project.githubUrl && (
                         <a
                           href={project.githubUrl}
-                          className="font-serif text-xl lowercase border-b border-white
+                          className="font-serif text-lg md:text-xl lowercase border-b border-white
                                     pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
                           rel="noopener noreferrer"
                           target="_blank"

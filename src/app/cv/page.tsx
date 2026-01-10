@@ -212,9 +212,9 @@ export default function CVPage() {
       <main id="cv-content" className="relative z-10 w-full max-w-[1400px] mx-auto px-6 py-12 lg:py-20 flex flex-col gap-8 lg:gap-12 font-mono">
 
         {/* === HEADER BLOCK (BLUE) === */}
-        <section className="bg-blue p-8 lg:p-12 relative overflow-hidden group">
-          <div className="photo-placeholder absolute top-1/2 right-[15%] -translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none text-center">
-            <span className="text-[clamp(2rem,6vw,8rem)] leading-[0.7] tracking-tighter text-white font-black uppercase">photo</span>
+        <section className="bg-blue p-6 md:p-8 lg:p-12 relative overflow-hidden group min-h-[280px] md:min-h-0">
+          <div className="photo-placeholder absolute bottom-4 right-4 md:top-1/2 md:bottom-auto md:right-[15%] md:-translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none text-center">
+            <span className="text-[clamp(3rem,10vw,8rem)] leading-[0.7] tracking-tighter text-white font-black uppercase">photo</span>
           </div>
 
           <motion.div
@@ -222,10 +222,10 @@ export default function CVPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, ease: easeOutExpo }}
           >
-            <h1 className="font-serif text-[clamp(4rem,14vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-10">
+            <h1 className="font-serif text-[clamp(3.5rem,14vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-6 md:mb-10">
               enzo <br /> gazzoli
             </h1>
-            <p className="font-serif text-[clamp(1.5rem,4vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter">
+            <p className="font-serif text-[clamp(1.3rem,4vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter">
               developpeur <br /> fullstack
             </p>
           </motion.div>

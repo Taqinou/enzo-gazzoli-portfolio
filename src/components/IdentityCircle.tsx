@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 
@@ -11,6 +12,20 @@ interface IdentityCircleProps {
   showExit: boolean;
 }
 
+// Hook to detect mobile viewport
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+}
+
 export default function IdentityCircle({
   onClick,
   isProjectActive,
@@ -19,6 +34,8 @@ export default function IdentityCircle({
   showExit,
 }: IdentityCircleProps) {
   const { playClick, playExit } = useSound();
+  const isMobile = useIsMobile();
+  const letterRadius = isMobile ? 28 : 30;
 
   const handleClick = () => {
     if (showExit) {
@@ -41,7 +58,7 @@ export default function IdentityCircle({
 
   return (
     <motion.div
-      className={`fixed bottom-[4%] left-[4%] w-20 h-20 cursor-pointer z-[1000] rounded-full
+      className={`fixed bottom-[3%] left-[3%] md:bottom-[4%] md:left-[4%] w-[72px] h-[72px] md:w-20 md:h-20 cursor-pointer z-[1000] rounded-full
                   transition-colors duration-100
                   ${isProjectActive || isHero ? "bg-white border border-blue" : "bg-blue"}`}
       animate={{
@@ -64,10 +81,10 @@ export default function IdentityCircle({
         {letters.map((letter, i) => (
           <span
             key={i}
-            className={`absolute top-1/2 left-1/2 font-mono text-base font-bold
+            className={`absolute top-1/2 left-1/2 font-mono text-sm md:text-base font-bold
                         ${isProjectActive || isHero ? "text-blue" : "text-white"}`}
             style={{
-              transform: `translate(-50%, -50%) rotate(${positions[i]}deg) translateY(-30px) rotate(180deg)`,
+              transform: `translate(-50%, -50%) rotate(${positions[i]}deg) translateY(-${letterRadius}px) rotate(180deg)`,
             }}
           >
             {letter}
