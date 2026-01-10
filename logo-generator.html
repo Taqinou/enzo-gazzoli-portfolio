@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Générateur de Logo eG - Anti-Border Fix</title>
+    <title>Générateur de Logo eG - Infinite Blue Fix</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
@@ -105,8 +105,9 @@
 <body>
 
     <div class="container">
-        <h2 style="margin: 0 0 5px 0; font-weight: 900;">LOGO FIX (NO BORDER)</h2>
-        <p style="margin: 0 0 25px 0; font-size: 13px; color: #888;">Ajout d'une marge de sécurité anti-bleed (2%)</p>
+        <h2 style="margin: 0 0 5px 0; font-weight: 900;">INFINITE BLUE FIX</h2>
+        <p style="margin: 0 0 25px 0; font-size: 13px; color: #888;">Fond Infini + Marge 8% pour garantir zéro bordure
+            blanche</p>
 
         <canvas id="canvas"></canvas>
 
@@ -174,12 +175,14 @@
         }
 
         function drawOnCanvas(targetCtx, targetSize) {
-            // 1. Fond bleu avec un léger dépassement pour être sûr de couvrir tout le cadre
+            // Fond bleu massif pour la preview
             targetCtx.fillStyle = "#0000ff";
-            targetCtx.fillRect(-1, -1, targetSize + 2, targetSize + 2);
+            targetCtx.fillRect(-50, -50, targetSize + 100, targetSize + 100);
 
-            // 2. Marge de sécurité de 2% pour éviter que l'anti-aliasing blanc ne touche le bord
-            const safePadding = targetSize * 0.02;
+            // Marge de sécurité augmentée à 8%
+            // Si le bord blanc persiste, c'est que l'AA touche encore le bord ou que le navigateur crée un artefact.
+            // En réduisant légèrement le texte (8% de padding), on s'assure qu'il est bien isolé dans le bleu.
+            const safePadding = targetSize * 0.08;
             const safeArea = targetSize - (safePadding * 2);
 
             const scale = Math.min(safeArea / autoParams.textW, safeArea / autoParams.textH);
@@ -214,9 +217,11 @@
             drawOnCanvas(off.getContext('2d'), size);
             const dataUrl = off.toDataURL("image/png");
 
+            // SVG avec fond infini "Infinite Blue"
+            // Le rect commence à -50% et fait 200% de large pour être sûr de couvrir tout viewport
             const svg = `
-<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-    <rect width="${size}" height="${size}" fill="#0000ff" />
+<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" preserveAspectRatio="xMidYMid slice">
+    <rect x="-50%" y="-50%" width="200%" height="200%" fill="#0000ff" />
     <image width="${size}" height="${size}" href="${dataUrl}" />
 </svg>`.trim();
 
