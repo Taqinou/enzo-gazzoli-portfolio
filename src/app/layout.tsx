@@ -9,8 +9,34 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ENZO GAZZOLI - PORTFOLIO",
-  description: "Enzo Gazzoli - Developpeur Creative",
+  title: "Enzo Gazzoli",
+  description: "Portfolio of Enzo Gazzoli, a creative developer and freelance designer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
+  keywords: ["Creative Developer", "Freelance", "Web Design", "Nancy", "Next.js", "React", "3D Web", "Front-end Developer", "Portfolio", "Remote", "Fullstack"],
+  authors: [{ name: "Enzo Gazzoli" }],
+  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+  themeColor: "#0000ff",
+  openGraph: {
+    title: "Enzo Gazzoli | Creative Developer & Designer - Nancy",
+    description: "Immersive digital experiences and creative development.",
+    url: "https://enzogazzoli.com",
+    siteName: "Enzo Gazzoli Portfolio",
+    locale: "fr_FR",
+    type: "website",
+    images: [
+      {
+        url: "/images/og-image.jpg", // We will need to generate this later
+        width: 1200,
+        height: 630,
+        alt: "Enzo Gazzoli Portfolio",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Enzo Gazzoli | Creative Developer",
+    description: "Immersive digital experiences and creative development.",
+    creator: "@enzogazzoli",
+  },
   icons: {
     icon: [
       { url: "/images/logo-eg-32x32.svg", sizes: "32x32", type: "image/svg+xml" },

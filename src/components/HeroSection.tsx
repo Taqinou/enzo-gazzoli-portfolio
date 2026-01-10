@@ -67,7 +67,7 @@ export default function HeroSection({
       {/* Sidebar Wrapper */}
       <div className="row-span-2 overflow-visible flex items-center justify-start pl-5 relative">
         {/* Archive Button */}
-        <motion.div
+        <motion.h2
           className="font-serif text-[clamp(2.5rem,10vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left"
           style={{ lineHeight: 0.8 }}
           animate={{
@@ -78,7 +78,7 @@ export default function HeroSection({
           onPointerDown={toggleArchive}
         >
           ARCHIVE
-        </motion.div>
+        </motion.h2>
 
       </div>
 
