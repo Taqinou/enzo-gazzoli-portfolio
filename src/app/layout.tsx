@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
   themeColor: "#0000ff",
   openGraph: {
-    title: "Enzo Gazzoli | Creative Developer & Designer - Nancy",
+    title: "Enzo Gazzoli | Creative Fullstack Developer - Nancy",
     description: "Immersive digital experiences and creative development.",
-    url: "https://enzogazzoli.com",
+    url: "https://enzo-gazzoli.vercel.app",
     siteName: "Enzo Gazzoli Portfolio",
     locale: "fr_FR",
     type: "website",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Enzo Gazzoli | Creative Developer",
+    title: "Enzo Gazzoli | Creative Fullstack Developer",
     description: "Immersive digital experiences and creative development.",
     creator: "@enzogazzoli",
   },
