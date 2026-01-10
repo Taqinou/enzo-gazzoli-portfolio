@@ -116,16 +116,34 @@ const ProjectSection = memo(
                     </motion.div>
 
                     {/* Link */}
-                    <motion.a
-                      href={project.linkUrl}
-                      className="font-serif text-xl lowercase border-b border-white
-                                pb-0.5 inline-block mt-5 text-white hover:text-ink hover:border-ink transition-colors duration-200"
+                    <motion.div
+                      className="flex gap-8 mt-5"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5 }}
                     >
-                      {project.linkText}
-                    </motion.a>
+                      <a
+                        href={project.linkUrl}
+                        className="font-serif text-xl lowercase border-b border-white
+                                  pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        {project.linkText}
+                      </a>
+
+                      {project.githubUrl && (
+                        <a
+                          href={project.githubUrl}
+                          className="font-serif text-xl lowercase border-b border-white
+                                    pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          github
+                        </a>
+                      )}
+                    </motion.div>
                   </motion.div>
                 </motion.div>
               )}

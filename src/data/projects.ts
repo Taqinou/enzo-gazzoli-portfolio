@@ -5,6 +5,7 @@ export interface Project {
   stack: string;
   linkText: string;
   linkUrl: string;
+  githubUrl?: string;
 }
 
 export const projects: Project[] = [
@@ -33,7 +34,8 @@ export const projects: Project[] = [
       "une interface interactive pensée pour montrer. mouvement subtil, attente proactive, typographie brute.",
     stack: "Next.js / React 19 / Framer Motion / Web Audio API",
     linkText: "visiter",
-    linkUrl: "https://enzo-gazzoli.vercel.app",
+    linkUrl: "https://enzo-gazzoli.com",
+    githubUrl: "https://github.com/Taqinou/enzo-gazzoli-portfolio",
   },
   {
     index: "04",
