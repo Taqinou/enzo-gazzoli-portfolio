@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Enzo Gazzoli | Creative Fullstack Developer - Nancy",
     description: "Immersive digital experiences and creative development.",
-    url: "https://enzo-gazzoli.vercel.app",
+    url: "https://enzo-gazzoli.com",
     siteName: "Enzo Gazzoli Portfolio",
     locale: "fr_FR",
     type: "website",
