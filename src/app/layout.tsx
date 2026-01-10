@@ -9,8 +9,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Enzo Gazzoli",
-  description: "Portfolio of Enzo Gazzoli, a creative developer and freelance designer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
+  title: "enzo gazzoli.",
+  description: "Portfolio of Enzo Gazzoli, a creative fullstack developer and freelance designer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
   keywords: ["Creative Developer", "Freelance", "Web Design", "Nancy", "Next.js", "React", "3D Web", "Front-end Developer", "Portfolio", "Remote", "Fullstack"],
   authors: [{ name: "Enzo Gazzoli" }],
   viewport: "width=device-width, initial-scale=1, maximum-scale=1",
