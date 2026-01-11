@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { archiveItems } from "@/data/projects";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface HeroSectionProps {
   isActive: boolean;
@@ -35,6 +36,7 @@ export default function HeroSection({
   const lastSoundTime = useRef(0);
   const isMobile = useIsMobile();
   const { t } = useTranslation();
+  const { locale, setLocale } = useLanguage();
 
   const toggleArchive = () => {
     const now = Date.now();
@@ -83,6 +85,23 @@ export default function HeroSection({
     >
       {/* Sidebar - ARCHIVE on left */}
       <div className="row-span-2 overflow-visible flex items-center justify-start pl-3 md:pl-5 relative">
+        {/* Language Toggle - Raw Style */}
+        <div className="absolute top-[80px] left-5 z-[101] font-serif italic text-white/60 text-2xl md:text-4xl flex gap-3 pointer-events-auto">
+          <button
+            onClick={() => setLocale("fr")}
+            className={`hover:text-white transition-colors ${locale === "fr" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
+          >
+            fr
+          </button>
+          <span className="opacity-30">/</span>
+          <button
+            onClick={() => setLocale("en")}
+            className={`hover:text-white transition-colors ${locale === "en" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
+          >
+            en
+          </button>
+        </div>
+
         {/* Archive Button */}
         <motion.h2
           className="font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left"
@@ -101,11 +120,18 @@ export default function HeroSection({
       {/* Archive List - Mobile: fullscreen overlay / Desktop: inline */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            className={`${isMobile
-              ? "fixed inset-0 z-[100] bg-blue flex flex-col justify-center items-start px-8 py-20"
-              : "col-start-2 row-span-2 flex flex-col justify-between items-start pl-[10vw] relative"}`}
-            initial={{ opacity: 0 }}
+            <motion.div
+              className={`${isMobile
+                ? "fixed inset-0 z-[100] bg-blue flex flex-col justify-center items-start px-8 pt-40 pb-20 overflow-y-auto max-h-screen"
+                : "col-start-2 row-span-2 flex flex-col justify-between items-start pl-[10vw] relative"}`}
+              initial={{ opacity: 0 }}
+              onPan={(e, info) => {
+                 // Close if scrolled down (dragged up) significantly
+                 if (isMobile && info.offset.y < -30) {
+                    setIsOpen(false);
+                    playExit();
+                 }
+              }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
@@ -113,7 +139,7 @@ export default function HeroSection({
             {/* Mobile: ARCHIVE button to close */}
             {isMobile && (
               <motion.h2
-                className="absolute top-28 left-8 font-serif text-[15vw] uppercase text-white/40 cursor-pointer tracking-[-0.05em] hover:text-white"
+                className="absolute top-48 left-8 font-serif text-[15vw] uppercase text-white/40 cursor-pointer tracking-[-0.05em] hover:text-white"
                 style={{ lineHeight: 0.8 }}
                 onClick={toggleArchive}
                 initial={{ opacity: 0 }}
@@ -147,7 +173,7 @@ export default function HeroSection({
       </AnimatePresence>
 
       {/* CV Link */}
-      <div className="absolute top-[60px] md:top-[120px] right-4 md:right-10 z-20 pointer-events-auto">
+      <div className="absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] pointer-events-auto">
         <Link
           href="/cv"
           onPointerDown={handleCvClick}
