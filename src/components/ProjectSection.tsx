@@ -3,6 +3,7 @@
 import { useState, useEffect, forwardRef, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 import type { Project } from "@/data/projects";
 
 interface ProjectSectionProps {
@@ -17,6 +18,14 @@ const ProjectSection = memo(
     ({ project, isActive, isProjectActive, onToggle }, ref) => {
       const [isOpen, setIsOpen] = useState(false);
       const { playMechanicalClack, playExit } = useSound();
+      const { t } = useTranslation();
+
+      // Get translated content for this project
+      const projectTitle = t(`projects.${project.index}.title`);
+      const projectDescription = t(`projects.${project.index}.description`);
+      const linkText = project.linkText === "visiter" || project.linkText === "visit" 
+        ? t("projects.visit") 
+        : t("projects.github");
 
       // Sync local state with parent when closed externally (e.g., via IdentityCircle)
       useEffect(() => {
@@ -74,7 +83,7 @@ const ProjectSection = memo(
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   onClick={toggleProject}
                 >
-                  {project.title}.
+                  {projectTitle}.
                 </motion.div>
               )}
             </AnimatePresence>
@@ -92,7 +101,7 @@ const ProjectSection = memo(
                   {/* Background Title */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.07] pointer-events-none">
                     <h3 className="font-serif text-[clamp(4rem,25vw,45rem)] md:text-[clamp(8rem,28vw,45rem)] leading-none text-white lowercase whitespace-nowrap">
-                      {project.title}.
+                      {projectTitle}.
                     </h3>
                   </div>
 
@@ -112,7 +121,7 @@ const ProjectSection = memo(
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
                     >
-                      {project.description}
+                      {projectDescription}
                     </motion.div>
 
                     {/* Link */}
@@ -129,7 +138,7 @@ const ProjectSection = memo(
                         rel="noopener noreferrer"
                         target="_blank"
                       >
-                        {project.linkText}
+                        {linkText}
                       </a>
 
                       {project.githubUrl && (
@@ -140,7 +149,7 @@ const ProjectSection = memo(
                           rel="noopener noreferrer"
                           target="_blank"
                         >
-                          github
+                          {t("projects.github")}
                         </a>
                       )}
                     </motion.div>

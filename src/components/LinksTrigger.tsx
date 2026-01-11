@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface LinksTriggerProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export default function LinksTrigger({
   isHero,
 }: LinksTriggerProps) {
   const { playClick, playExit } = useSound();
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
 
   const handleClick = () => {
@@ -55,7 +57,7 @@ export default function LinksTrigger({
         whileTap={{ scale: 0.95 }}
         onClick={handleClick}
       >
-        {isOpen ? "FERMER" : (isProjectActive ? "STACK" : "OU?")}
+        {isOpen ? t("links.close") : (isProjectActive ? t("links.stack") : t("links.where"))}
       </motion.div>
     );
   }
@@ -74,7 +76,7 @@ export default function LinksTrigger({
       whileHover={{ width: 50 }}
       onClick={handleClick}
     >
-      {isOpen ? "FERMER" : (isProjectActive ? "STACK" : "OU?")}
+      {isOpen ? t("links.close") : (isProjectActive ? t("links.stack") : t("links.where"))}
     </motion.div>
   );
 }

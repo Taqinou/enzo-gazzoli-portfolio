@@ -15,6 +15,7 @@ import StackPanel from "@/components/StackPanel";
 import ScrollProgress from "@/components/ScrollProgress";
 import { projects } from "@/data/projects";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Home() {
   return (
@@ -27,6 +28,7 @@ export default function Home() {
 function HomeContent() {
   const searchParams = useSearchParams();
   const skipIntroParam = searchParams.get("skipIntro") === "true";
+  const { t } = useTranslation();
 
   // State
   const [introComplete, setIntroComplete] = useState(skipIntroParam);
@@ -36,7 +38,7 @@ function HomeContent() {
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [isProjectActive, setIsProjectActive] = useState(false);
   const [isHero, setIsHero] = useState(true);
-  const [currentProject, setCurrentProject] = useState("HOME // WELCOME_INDEX");
+  const [currentProject, setCurrentProject] = useState(t("nav.homeWelcome"));
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [activeSections, setActiveSections] = useState<Set<number>>(new Set([0]));
@@ -109,7 +111,7 @@ function HomeContent() {
 
               if (index === 0) {
                 setIsHero(true);
-                setCurrentProject("INDEX");
+                setCurrentProject(t("nav.index"));
                 setActiveProjectIndex(0);
               } else {
                 setIsHero(false);

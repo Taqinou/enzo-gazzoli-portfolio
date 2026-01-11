@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
 import { SmileyContent } from "./SmileyContent";
 
@@ -13,6 +14,7 @@ interface EllipsePanelProps {
 
 export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
   const { playExit } = useSound();
+  const { t } = useTranslation();
   const [imageError, setImageError] = useState(false);
 
   const handleClose = () => {
@@ -59,7 +61,7 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                DEVELOPPEUR FULLSTACK
+                {t("ellipse.title")}
               </motion.div>
 
               {/* Contact */}
@@ -111,9 +113,9 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                 transition={{ delay: 0.5 }}
               >
                 <div className="font-mono text-[11px] md:text-[13px] uppercase tracking-[0.15em] md:tracking-[0.2em] leading-relaxed">
-                  Nancy (FR)
+                  {t("ellipse.location")}
                   <br />
-                  Worldwide
+                  {t("ellipse.worldwide")}
                 </div>
 
                 {/* Smiley Button as a Signature */}

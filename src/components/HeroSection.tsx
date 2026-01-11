@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { archiveItems } from "@/data/projects";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface HeroSectionProps {
   isActive: boolean;
@@ -33,6 +34,7 @@ export default function HeroSection({
   const { playClick, playExit } = useSound();
   const lastSoundTime = useRef(0);
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   const toggleArchive = () => {
     const now = Date.now();
@@ -92,7 +94,7 @@ export default function HeroSection({
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           onPointerDown={toggleArchive}
         >
-          ARCHIVE
+          {t("hero.archive")}
         </motion.h2>
       </div>
 
@@ -118,7 +120,7 @@ export default function HeroSection({
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
               >
-                ARCHIVE
+                {t("hero.archive")}
               </motion.h2>
             )}
 
@@ -151,7 +153,7 @@ export default function HeroSection({
           onPointerDown={handleCvClick}
           className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
         >
-          curriculum vitae.
+          {t("hero.cv")}
         </Link>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface StackPanelProps {
     isOpen: boolean;
@@ -11,6 +12,7 @@ interface StackPanelProps {
 
 export default function StackPanel({ isOpen, onClose, stack }: StackPanelProps) {
     const { playExit } = useSound();
+    const { t } = useTranslation();
 
     const handleClose = () => {
         playExit();
@@ -36,7 +38,7 @@ export default function StackPanel({ isOpen, onClose, stack }: StackPanelProps) 
                         className="absolute top-0 right-0 p-10 z-20 cursor-pointer font-serif text-lg lowercase tracking-widest hover:text-blue"
                         onClick={handleClose}
                     >
-                        fermer
+                        {t("stack.close")}
                     </div>
 
                     {/* Content */}

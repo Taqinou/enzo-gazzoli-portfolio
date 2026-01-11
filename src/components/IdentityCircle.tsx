@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface IdentityCircleProps {
   onClick: () => void;
@@ -34,6 +35,7 @@ export default function IdentityCircle({
   showExit,
 }: IdentityCircleProps) {
   const { playClick, playExit } = useSound();
+  const { t } = useTranslation();
   const isMobile = useIsMobile();
   const letterRadius = isMobile ? 28 : 30;
 
@@ -51,7 +53,7 @@ export default function IdentityCircle({
   const scaleX = 1 - scrollVelocity * 0.002;
 
   // Letters for the spinning wheel - more meaningful text
-  const letters = showExit ? "EXITEXIT".split("") : "INFOINF0".split("");
+  const letters = showExit ? t("identity.exit").split("") : t("identity.info").split("");
 
   // Position for each letter (8 positions around the circle)
   const positions = [0, 45, 90, 135, 180, 225, 270, 315];

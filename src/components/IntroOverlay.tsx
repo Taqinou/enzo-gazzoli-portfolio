@@ -3,14 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
-
-const currentYear = new Date().getFullYear().toString();
-
-const SEQUENCE = [
-  "ENZO GAZZOLI",
-  "DEVELOPPEUR",
-  "FULLSTACK",
-];
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface IntroOverlayProps {
   onComplete: () => void;
@@ -20,6 +13,13 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
   const [phase, setPhase] = useState<"menu" | "sequence" | "done">("menu");
   const [visibleLines, setVisibleLines] = useState<number>(0);
   const { playIntroTick, playClick } = useSound();
+  const { t } = useTranslation();
+
+  const SEQUENCE = [
+    "ENZO GAZZOLI",
+    t("intro.developer"),
+    "FULLSTACK",
+  ];
 
   const startAnimation = useCallback(() => {
     if (phase === "menu") {
@@ -78,7 +78,7 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
         {phase === "menu" && (
           <div className="text-center select-none">
             <h1 className="font-mono text-white text-[15px] font-bold tracking-widest">
-              portfolio.
+              {t("intro.portfolio")}
             </h1>
           </div>
         )}

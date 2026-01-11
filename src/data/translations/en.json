@@ -1,0 +1,86 @@
+{
+  "intro": {
+    "developer": "DEVELOPER",
+    "portfolio": "portfolio."
+  },
+  "hero": {
+    "archive": "ARCHIVE",
+    "cv": "curriculum vitae."
+  },
+  "nav": {
+    "index": "INDEX",
+    "homeWelcome": "HOME // WELCOME_INDEX",
+    "scroll": "SCROLL"
+  },
+  "identity": {
+    "info": "INFOINF0",
+    "exit": "EXITEXIT"
+  },
+  "ellipse": {
+    "title": "FULLSTACK DEVELOPER",
+    "location": "Nancy (FR)",
+    "worldwide": "Worldwide"
+  },
+  "links": {
+    "close": "CLOSE",
+    "stack": "STACK",
+    "where": "WHERE?"
+  },
+  "stack": {
+    "close": "close"
+  },
+  "projects": {
+    "visit": "visit",
+    "github": "github",
+    "01": {
+      "title": "lumiere de soso shop",
+      "description": "an immersive e-commerce boutique designed to sell differently. headless architecture, smooth cart, integrated payment."
+    },
+    "02": {
+      "title": "sneakerscope",
+      "description": "an advanced analytics platform dedicated to the sneaker market. proprietary algorithm, autonomous AI advisor, real-time reports."
+    },
+    "03": {
+      "title": "web portfolio",
+      "description": "an interactive interface designed to showcase. subtle motion, proactive waiting, raw typography."
+    },
+    "04": {
+      "title": "apartment aggregator",
+      "description": "a real estate aggregation platform. centralized listings, simplified comparison, augmented search."
+    },
+    "05": {
+      "title": "functional calendar",
+      "description": "a time management tool. intuitive event creation, clean interface, smooth workflow."
+    }
+  },
+  "cv": {
+    "index": "index.",
+    "saveAsPdf": "save as pdf.",
+    "developer": "fullstack developer",
+    "connect": "CONNECT",
+    "status": "STATUS",
+    "freelance": "FREELANCE",
+    "statusDescription": "Creating bespoke digital experiences. I design robust and scalable solutions, from technical architecture to interface design, with a constant commitment to performance and visual balance, adaptable to any brand identity.",
+    "curriculum": "Curriculum",
+    "projects": "PROJECTS",
+    "stack": "stack",
+    "education": "education",
+    "photo": "photo",
+    "experience": {
+      "present": "25_PRES",
+      "freelanceTitle": "independent dev",
+      "freelanceDesc": "comprehensive design of web solutions finished in detail. total adaptation to your universe and objectives for a finished, coherent, and performant product.",
+      "2024": "2024",
+      "internshipTitle": "technical internship",
+      "internshipDesc": "development of a technical bridge in python. automating the passage from excel data to pdf format to give a final and clean form to raw information."
+    },
+    "projectDescriptions": {
+      "sneakerscope": "ai analytics platform. real-time reports.",
+      "lumiere": "ultra-smooth headless e-commerce."
+    },
+    "degrees": {
+      "licence": "computer science degree",
+      "bac": "general baccalaureate"
+    }
+  }
+}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef, memo } from "react";
+import { useState, useEffect, useRef, memo, useCallback } from "react";
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TopRibbonProps {
   isVisible: boolean;
@@ -16,6 +17,7 @@ function TopRibbon({
 }: TopRibbonProps) {
   const [time, setTime] = useState("00:00");
   const lastMinuteRef = useRef(-1);
+  const { locale, setLocale } = useLanguage();
 
   useEffect(() => {
     const updateClock = () => {
@@ -35,6 +37,10 @@ function TopRibbon({
     const interval = setInterval(updateClock, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  const toggleLocale = useCallback(() => {
+    setLocale(locale === "en" ? "fr" : "en");
+  }, [locale, setLocale]);
 
   if (isProjectActive) return null;
 
@@ -59,7 +65,19 @@ function TopRibbon({
         <span className="hidden md:inline">NANCY (FR)</span>
         <span className="opacity-30 hidden md:inline">|</span>
         <span>{time}</span>
+        <span className="opacity-30">|</span>
+        <button
+          onClick={toggleLocale}
+          className="flex items-center gap-1 hover:opacity-70 transition-opacity cursor-pointer"
+          aria-label="Toggle language"
+        >
+          <span className={locale === "fr" ? "opacity-100" : "opacity-40"}>FR</span>
+          <span className="opacity-40">/</span>
+          <span className={locale === "en" ? "opacity-100" : "opacity-40"}>EN</span>
+        </button>
       </div>
     </motion.div>
   );
-} export default memo(TopRibbon);
+}
+
+export default memo(TopRibbon);

@@ -1,0 +1,86 @@
+{
+  "intro": {
+    "developer": "DEVELOPPEUR",
+    "portfolio": "portfolio."
+  },
+  "hero": {
+    "archive": "ARCHIVE",
+    "cv": "curriculum vitae."
+  },
+  "nav": {
+    "index": "INDEX",
+    "homeWelcome": "HOME // WELCOME_INDEX",
+    "scroll": "SCROLL"
+  },
+  "identity": {
+    "info": "INFOINF0",
+    "exit": "EXITEXIT"
+  },
+  "ellipse": {
+    "title": "DEVELOPPEUR FULLSTACK",
+    "location": "Nancy (FR)",
+    "worldwide": "Mondial"
+  },
+  "links": {
+    "close": "FERMER",
+    "stack": "STACK",
+    "where": "OU?"
+  },
+  "stack": {
+    "close": "fermer"
+  },
+  "projects": {
+    "visit": "visiter",
+    "github": "github",
+    "01": {
+      "title": "lumiere de soso shop",
+      "description": "une boutique e-commerce immersive pensée pour vendre autrement. architecture headless, panier fluide, paiement intégré."
+    },
+    "02": {
+      "title": "sneakerscope",
+      "description": "une plateforme analytique avancée dédiée au marché des sneakers. algorithme propriétaire, conseiller IA autonome, rapports en temps réel."
+    },
+    "03": {
+      "title": "portfolio web",
+      "description": "une interface interactive pensée pour montrer. mouvement subtil, attente proactive, typographie brute."
+    },
+    "04": {
+      "title": "apartment aggregator",
+      "description": "une plateforme d'agrégation immobilière. centralisation des annonces, comparaison simplifiée, recherche augmentée."
+    },
+    "05": {
+      "title": "functional calendar",
+      "description": "un outil de gestion temporelle. création intuitive d'événements, interface épurée, flux fluide."
+    }
+  },
+  "cv": {
+    "index": "index.",
+    "saveAsPdf": "enregistrer en pdf.",
+    "developer": "developpeur fullstack",
+    "connect": "CONNECT",
+    "status": "STATUS",
+    "freelance": "FREELANCE",
+    "statusDescription": "Création d'expériences numériques sur mesure. je conçois des solutions robustes et évolutives, de l'architecture technique au design d'interface, avec un engagement constant pour la performance et l'équilibre visuel, adaptable à chaque identité de marque.",
+    "curriculum": "Curriculum",
+    "projects": "PROJETS",
+    "stack": "stack",
+    "education": "education",
+    "photo": "photo",
+    "experience": {
+      "present": "25_PRES",
+      "freelanceTitle": "dev indépendant",
+      "freelanceDesc": "conception intégrale de solutions web finies dans le détail. adaptation totale à votre univers et vos objectifs pour un produit fini, cohérent et performant.",
+      "2024": "2024",
+      "internshipTitle": "stage de parcours",
+      "internshipDesc": "développement d'un pont technique sous python. automatiser le passage de la donnée excel vers le format pdf pour donner une forme finale et propre à l'information brute."
+    },
+    "projectDescriptions": {
+      "sneakerscope": "plateforme analytique ia. rapports temps réel.",
+      "lumiere": "e-commerce headless ultra-fluide."
+    },
+    "degrees": {
+      "licence": "licence informatique",
+      "bac": "baccalauréat général"
+    }
+  }
+}

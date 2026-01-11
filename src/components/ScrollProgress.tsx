@@ -2,6 +2,7 @@
 
 import { memo } from "react";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface ScrollProgressProps {
   progress: number;
@@ -16,6 +17,8 @@ function ScrollProgress({
   isHero,
   isProjectActive,
 }: ScrollProgressProps) {
+  const { t } = useTranslation();
+  
   return (
     <motion.div
       className="fixed left-4 md:left-10 top-1/2 -translate-y-1/2 flex flex-col items-center gap-4 md:gap-5 z-50 pointer-events-none"
@@ -29,7 +32,7 @@ function ScrollProgress({
                    ${isHero ? "text-white opacity-80" : "text-blue opacity-50"}`}
         style={{ writingMode: "vertical-rl" }}
       >
-        SCROLL
+        {t("nav.scroll")}
       </div>
 
       {/* Progress Bar Container */}
