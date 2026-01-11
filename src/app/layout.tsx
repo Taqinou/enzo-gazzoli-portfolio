@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Playfair_Display } from "next/font/google";
 import { Providers } from "@/components/core/Providers";
 import "./globals.css";
@@ -9,13 +9,19 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: "#0000ff",
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://enzo-gazzoli.com"),
   title: "enzo gazzoli.",
   description: "Portfolio of Enzo Gazzoli, a creative fullstack developer and freelance designer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
   keywords: ["Creative Developer", "Freelance", "Web Design", "Nancy", "Next.js", "React", "3D Web", "Front-end Developer", "Portfolio", "Remote", "Fullstack"],
   authors: [{ name: "Enzo Gazzoli" }],
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
-  themeColor: "#0000ff",
   openGraph: {
     title: "Enzo Gazzoli | Creative Fullstack Developer - Nancy",
     description: "Immersive digital experiences and creative development.",
