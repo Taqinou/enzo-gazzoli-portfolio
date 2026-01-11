@@ -40,6 +40,7 @@ next-env.d.ts
 .claude/
 .opencode/
 AGENTS.md
+CLAUDE.md
 
 #other
 docs/
