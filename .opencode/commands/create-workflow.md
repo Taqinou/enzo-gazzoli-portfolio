@@ -2,6 +2,8 @@
 description: Generate MASTERPIECE Tier-S agent workflow with Chain of Thought & Few-Shot prompting
 ---
 
+**SPEAK TO ME IN FRENCH**
+
 # Create Command Workflow
 
 Forge **Cognitive Engines**, not just scripts. Quality > Speed.

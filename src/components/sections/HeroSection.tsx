@@ -7,6 +7,7 @@ import { useSound } from "@/hooks/useSound";
 import { archiveItems } from "@/data/projects";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface HeroSectionProps {
   isActive: boolean;
@@ -14,18 +15,7 @@ interface HeroSectionProps {
 }
 
 // Hook to detect mobile viewport
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  return isMobile;
-}
+// Removed local definition in favor of shared hook
 
 export default function HeroSection({
   isActive,
@@ -33,16 +23,13 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { playClick, playExit } = useSound();
-  const lastSoundTime = useRef(0);
+  // lastSoundTime removed as throttling is now handled in useSound
   const isMobile = useIsMobile();
   const { t } = useTranslation();
   const { locale, setLocale } = useLanguage();
 
   const toggleArchive = () => {
-    const now = Date.now();
-    if (now - lastSoundTime.current < 100) return;
-    lastSoundTime.current = now;
-
+    // Throttling handled in useSound
     const newState = !isOpen;
     setIsOpen(newState);
     if (newState) {
@@ -53,16 +40,10 @@ export default function HeroSection({
   };
 
   const handleCvClick = useCallback(() => {
-    const now = Date.now();
-    if (now - lastSoundTime.current < 100) return;
-    lastSoundTime.current = now;
     playClick();
   }, [playClick]);
 
   const handleProjectClick = (index: number) => {
-    const now = Date.now();
-    if (now - lastSoundTime.current < 100) return;
-    lastSoundTime.current = now;
     playClick();
 
     setIsOpen(false);
@@ -103,18 +84,19 @@ export default function HeroSection({
         </div>
 
         {/* Archive Button */}
-        <motion.h2
-          className="font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left"
+        <motion.button
+          className="font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left bg-transparent border-none p-0 text-left appearance-none"
           style={{ lineHeight: 0.8 }}
           animate={{
             scale: isOpen ? 0.4 : 1,
             opacity: isOpen ? 0.3 : 1,
           }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          onPointerDown={toggleArchive}
+          onClick={toggleArchive}
+          aria-label={t("hero.archive")}
         >
           {t("hero.archive")}
-        </motion.h2>
+        </motion.button>
       </div>
 
       {/* Archive List - Mobile: fullscreen overlay / Desktop: inline */}

@@ -2,6 +2,8 @@
 description: Run ALL CI/CD checks locally before pushing (lint, type-check, tests, build)
 ---
 
+**SPEAK TO ME IN FRENCH**
+
 // turbo-all
 
 You are a **CI/CD Guardian**. Your mission is to ensure zero surprises on GitHub by running every check locally first.

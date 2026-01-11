@@ -27,6 +27,14 @@ function getAudioContext(): AudioContext | null {
 
 export function useSound() {
   const isUnmountedRef = useRef(false);
+  const lastSoundTime = useRef(0);
+
+  const throttle = (callback: () => void, limit: number = 100) => {
+    const now = Date.now();
+    if (now - lastSoundTime.current < limit) return;
+    lastSoundTime.current = now;
+    callback();
+  };
 
   useEffect(() => {
     isUnmountedRef.current = false;
@@ -37,8 +45,13 @@ export function useSound() {
 
   // Son de clic "designer" (sinus doux avec jitter)
   const playClick = useCallback(() => {
+    const now = Date.now();
+    if (now - lastSoundTime.current < 100) return;
+    lastSoundTime.current = now;
+
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
+
 
     try {
       const osc = audioCtx.createOscillator();

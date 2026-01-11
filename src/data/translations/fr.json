@@ -3,6 +3,9 @@
     "developer": "DEVELOPPEUR",
     "portfolio": "portfolio."
   },
+  "notFound": {
+    "label": "rien."
+  },
   "hero": {
     "archive": "ARCHIVE",
     "cv": "curriculum vitae."

@@ -2,6 +2,8 @@
 description: Full project review and .agent/rules/init.md synchronization
 ---
 
+**SPEAK TO ME IN FRENCH**
+
 ---
 description: "Full project review and .agent/rules/init.md synchronization"
 ---

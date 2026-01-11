@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface IdentityCircleProps {
   onClick: () => void;
@@ -14,18 +15,7 @@ interface IdentityCircleProps {
 }
 
 // Hook to detect mobile viewport
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  return isMobile;
-}
+// Removed local definition in favor of shared hook
 
 export default function IdentityCircle({
   onClick,
@@ -59,9 +49,9 @@ export default function IdentityCircle({
   const positions = [0, 45, 90, 135, 180, 225, 270, 315];
 
   return (
-    <motion.div
+    <motion.button
       className={`fixed bottom-[3%] left-[3%] md:bottom-[4%] md:left-[4%] w-[72px] h-[72px] md:w-20 md:h-20 cursor-pointer z-[1000] rounded-full
-                  transition-colors duration-100
+                  transition-colors duration-100 flex items-center justify-center appearance-none border-none p-0
                   ${isProjectActive || isHero ? "bg-white border border-blue" : "bg-blue"}`}
       animate={{
         scaleX: Math.max(0.8, scaleX),
@@ -70,6 +60,7 @@ export default function IdentityCircle({
       transition={{ duration: 0.1, ease: "easeOut" }}
       onClick={handleClick}
       whileHover={{ scale: 1.05 }}
+      aria-label="Identity info"
     >
       <motion.div
         className="relative w-full h-full"
@@ -93,6 +84,6 @@ export default function IdentityCircle({
           </span>
         ))}
       </motion.div>
-    </motion.div>
+    </motion.button>
   );
 }

@@ -11,6 +11,8 @@ npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
 
+**SPEAK TO ME IN FRENCH ONLY**
+
 **Testing**: This project does not have a test suite. Focus on manual testing and lint validation.
 
 ## Architecture Overview

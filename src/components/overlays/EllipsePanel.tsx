@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
-import { SmileyContent } from "./SmileyContent";
+import { SmileyContent } from "@/components/ui/SmileyContent";
 
 interface EllipsePanelProps {
   isOpen: boolean;

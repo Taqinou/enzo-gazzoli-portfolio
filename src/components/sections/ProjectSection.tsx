@@ -72,9 +72,9 @@ const ProjectSection = memo(
             {/* Project Title - Closed State */}
             <AnimatePresence mode="wait">
               {!isOpen && (
-                <motion.div
+                <motion.button
                   className={`font-serif text-[11vw] md:text-[14vw] lowercase text-center cursor-pointer z-10 mx-auto
-                             leading-085 tracking-[-0.05em]
+                             leading-085 tracking-[-0.05em] bg-transparent border-none appearance-none p-0
                              ${isProjectActive ? "text-white" : "text-ink"}
                              hover:text-blue`}
                   initial={{ y: "110%", opacity: 0 }}
@@ -82,9 +82,10 @@ const ProjectSection = memo(
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   onClick={toggleProject}
+                  aria-label={`Open project ${projectTitle}`}
                 >
                   {projectTitle}.
-                </motion.div>
+                </motion.button>
               )}
             </AnimatePresence>
 
