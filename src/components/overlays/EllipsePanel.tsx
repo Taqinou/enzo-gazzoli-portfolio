@@ -16,6 +16,7 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
   const { playExit } = useSound();
   const { t } = useTranslation();
   const [imageError, setImageError] = useState(false);
+  const [isSmileyHovered, setIsSmileyHovered] = useState(false);
 
   const handleClose = () => {
     playExit();
@@ -91,7 +92,7 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
               >
                 {!imageError ? (
                     <Image
-                      src="/images/profile-picture.jpg"
+                      src={isSmileyHovered ? "/images/profile-picture2.jpg" : "/images/profile-picture.jpg"}
                       alt="Enzo Gazzoli"
                       fill
                       sizes="(max-width: 768px) 200px, 420px"
@@ -126,6 +127,8 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                     transformOrigin: "center center",
                   }}
                   onClick={handleClose}
+                  onMouseEnter={() => setIsSmileyHovered(true)}
+                  onMouseLeave={() => setIsSmileyHovered(false)}
                 >
                   <SmileyContent />
                 </div>
