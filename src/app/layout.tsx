@@ -46,11 +46,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/images/logo-eg-32x32.svg", sizes: "32x32", type: "image/svg+xml" },
-      { url: "/images/logo-eg-512x512.svg", sizes: "512x512", type: "image/svg+xml" },
+      { url: "/images/favicon.png", sizes: "32x32", type: "image/png" },
+      { url: "/images/logo-eg-512x512.svg", sizes: "any", type: "image/svg+xml" },
     ],
     apple: [
-      { url: "/images/logo-eg-1024x1024.svg", sizes: "1024x1024", type: "image/svg+xml" },
+      { url: "/images/apple-icon.png", sizes: "180x180", type: "image/png" },
     ],
   },
 };
