@@ -45,13 +45,8 @@ export const metadata: Metadata = {
     creator: "@enzogazzoli",
   },
   icons: {
-    icon: [
-      { url: "/images/favicon.png", sizes: "32x32", type: "image/png" },
-      { url: "/images/logo-eg-512x512.svg", sizes: "any", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/images/apple-icon.png", sizes: "180x180", type: "image/png" },
-    ],
+    icon: "/favicon.ico",
+    apple: "/images/apple-icon.png",
   },
 };
 
