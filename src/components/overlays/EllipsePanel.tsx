@@ -84,8 +84,8 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
             <div className="flex flex-col justify-center">
               {/* Photo Container */}
               <motion.div
-                className="w-full max-w-[200px] md:max-w-[450px] aspect-square relative rotate-2 overflow-hidden"
-                initial={{ opacity: 0, scale: 0.9 }}
+                className="w-full max-w-[200px] md:max-w-[420px] aspect-square relative"
+                initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
               >
@@ -94,8 +94,8 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                       src="/images/profile-picture.jpg"
                       alt="Enzo Gazzoli"
                       fill
-                      sizes="(max-width: 768px) 200px, 450px"
-                      className="object-contain"
+                      sizes="(max-width: 768px) 200px, 420px"
+                      className="object-cover object-center"
                       onError={() => setImageError(true)}
                     />
                 ) : (
