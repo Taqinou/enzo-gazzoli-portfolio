@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSound } from "@/hooks/useSound";
 
@@ -36,9 +37,29 @@ export function CVContent({ variant }: CVContentProps) {
         className={`${isPrint ? "p-8" : "p-6 md:p-8 lg:p-12"} bg-blue relative overflow-hidden group ${!isPrint ? "min-h-[280px] md:min-h-0" : ""}`}
         style={isPrint ? { minHeight: "60mm" } : undefined}
       >
-        {!isPrint && (
-            <div className="photo-placeholder absolute bottom-4 right-4 md:top-1/2 md:bottom-auto md:right-[15%] md:-translate-y-1/2 opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none text-center">
-                <span className="text-[clamp(3rem,10vw,8rem)] leading-[0.7] tracking-tighter text-white font-black uppercase">{t("cv.photo")}</span>
+        {isPrint ? (
+            <div 
+                className="absolute pointer-events-none z-50" 
+                style={{ 
+                    top: "5mm", 
+                    right: "5mm", 
+                    height: "50mm", 
+                    width: "40mm",
+                    backgroundImage: "url('/images/profile-picture.jpg')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat"
+                }}
+            />
+        ) : (
+            <div className="absolute top-6 right-6 bottom-6 w-1/4 max-w-[300px] pointer-events-none">
+                <Image 
+                    src="/images/profile-picture.jpg" 
+                    alt={t("cv.photo")}
+                    fill
+                    className="object-cover object-center"
+                    priority
+                />
             </div>
         )}
         

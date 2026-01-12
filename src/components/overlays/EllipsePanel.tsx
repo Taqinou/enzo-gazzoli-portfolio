@@ -90,14 +90,14 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                 transition={{ delay: 0.3 }}
               >
                 {!imageError ? (
-                  <Image
-                    src="/images/placeholder.jpg"
-                    alt="Enzo Gazzoli"
-                    fill
-                    sizes="(max-width: 768px) 200px, 450px"
-                    className="object-cover grayscale contrast-150 brightness-90"
-                    onError={() => setImageError(true)}
-                  />
+                    <Image
+                      src="/images/profile-picture.jpg"
+                      alt="Enzo Gazzoli"
+                      fill
+                      sizes="(max-width: 768px) 200px, 450px"
+                      className="object-contain"
+                      onError={() => setImageError(true)}
+                    />
                 ) : (
                   <div className="w-full h-full bg-ink/10 flex items-center justify-center">
                     <span className="font-mono text-ink/30 text-sm uppercase">Photo</span>
