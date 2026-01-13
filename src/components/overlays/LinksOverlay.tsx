@@ -43,10 +43,10 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
                 href={link.href}
                 target={link.target}
                 rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
-                className="font-mono text-[clamp(2.5rem,12vw,22rem)] md:text-[clamp(4rem,15vw,22rem)] font-black uppercase text-ink
+                className="font-mono text-[clamp(2rem,8vw,4rem)] md:text-[clamp(3rem,10vw,8rem)] font-black uppercase text-ink
                           no-underline transition-colors duration-100 tracking-[-0.08em] text-center
-                          hover:text-blue select-text"
-                style={{ lineHeight: 0.75 }}
+                          hover:text-blue select-text w-full break-words max-w-[90vw]"
+                style={{ lineHeight: 0.9 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
