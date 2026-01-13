@@ -13,7 +13,8 @@ const links = [
   { label: "EMAIL", href: "mailto:enzo.gazzoli@icloud.com" },
   { label: "GITHUB", href: "https://github.com/Taqinou", target: "_blank" },
   { label: "LINKEDIN", href: "https://www.linkedin.com/in/enzo-gazzoli", target: "_blank" },
-  { label: "FIVERR", href: "https://www.fiverr.com/taqiin_/build-a-professional-website-for-your-business?utm_campaign=gigs_show&utm_medium=shared&utm_source=copy_link&utm_term=yvgdx95", target: "_blank" },
+  { label: "FIVERR", href: "https://www.fiverr.com/s/Q7Pyl31", target: "_blank" },
+  { label: "MALT", href: "https://www.malt.fr/profile/enzogazzoli", target: "_blank" },
 ];
 
 export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
