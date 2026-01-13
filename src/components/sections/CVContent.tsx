@@ -38,12 +38,19 @@ export function CVContent({ variant }: CVContentProps) {
         style={isPrint ? { minHeight: "60mm" } : undefined}
       >
         {isPrint ? (
-            /* Using standard img tag for print to avoid html2canvas blurry background-image issues */
-            <div className="absolute pointer-events-none z-50" style={{ top: "5mm", right: "5mm", height: "50mm", width: "40mm", overflow: "hidden" }}>
+            /* Using flex container + auto height to force aspect ratio preservation in html2canvas */
+            <div className="absolute pointer-events-none z-50 flex justify-center items-start overflow-hidden" 
+                 style={{ top: "5mm", right: "5mm", height: "50mm", width: "40mm" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                     src="/images/profile-picture.jpg" 
                     alt="Enzo Gazzoli"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    style={{ 
+                        width: "100%", 
+                        height: "auto",
+                        minHeight: "100%",
+                        objectFit: "cover" // Fallback
+                    }}
                 />
             </div>
         ) : (
