@@ -237,43 +237,97 @@ export function useSound() {
     }
   }, []);
 
-  // Son de Glitch / Static Noise (Brut et court)
+  // Son de Glitch / Static Noise (Version Mystérieuse/Dark)
   const playGlitch = useCallback(() => {
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
     try {
-      const bufferSize = audioCtx.sampleRate * 0.1; // 100ms
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
+      const t = audioCtx.currentTime;
+      
+      // Oscillateur 1 : La base sombre
+      const osc1 = audioCtx.createOscillator();
+      osc1.type = "triangle";
+      osc1.frequency.setValueAtTime(110, t); // La2 (Grave)
+      osc1.frequency.exponentialRampToValueAtTime(60, t + 0.3); // Pitch down (Chute)
 
-      // White noise generation
-      for (let i = 0; i < bufferSize; i++) {
-        data[i] = Math.random() * 2 - 1;
-      }
+      // Oscillateur 2 : La dissonance (Triton ou léger detune)
+      const osc2 = audioCtx.createOscillator();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(114, t); // Légèrement désaccordé -> Battement lent
+      osc2.frequency.exponentialRampToValueAtTime(58, t + 0.3);
 
-      const noise = audioCtx.createBufferSource();
-      noise.buffer = buffer;
-
-      // Filter to make it less harsh (Lowpass)
+      // Filtre pour étouffer le son (Ambiance)
       const filter = audioCtx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.value = 1000;
+      filter.frequency.setValueAtTime(800, t);
+      filter.frequency.linearRampToValueAtTime(200, t + 0.3); // Le son se ferme
 
+      // Gain (Enveloppe)
       const gain = audioCtx.createGain();
-      // Enveloppe brutale : Attaque immédiate, Release rapide
-      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.3, t + 0.05); // Attaque douce (pas de click)
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4); // Release long
 
-      noise.connect(filter);
+      // Connexions
+      osc1.connect(filter);
+      osc2.connect(filter);
       filter.connect(gain);
       gain.connect(audioCtx.destination);
-      
-      noise.start();
+
+      // Start
+      osc1.start(t);
+      osc2.start(t);
+      osc1.stop(t + 0.4);
+      osc2.stop(t + 0.4);
+
     } catch {
       // Silently fail
     }
   }, []);
 
-  return { playClick, playIntroTick, playMechanicalClack, playScrollTick, playExit, playPdfSave, playGlitch };
+  // Son de changement de langue (Morphing/Whoosh numérique)
+  const playLanguageSwitch = useCallback(() => {
+    const audioCtx = getAudioContext();
+    if (!audioCtx || isUnmountedRef.current) return;
+
+    try {
+      const t = audioCtx.currentTime;
+      const dur = 0.3;
+
+      // Source de bruit
+      const bufferSize = audioCtx.sampleRate * dur;
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+
+      // Filtre balayage (Le "Whoosh")
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.Q.value = 5; // Résonance pour accentuer l'effet
+      filter.frequency.setValueAtTime(400, t);
+      filter.frequency.exponentialRampToValueAtTime(3000, t + dur); // Monte vers l'aigu
+
+      // Gain (Fade in/out)
+      const gain = audioCtx.createGain();
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.1, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      noise.start(t);
+    } catch {
+      // Silently fail
+    }
+  }, []);
+
+  return { playClick, playIntroTick, playMechanicalClack, playScrollTick, playExit, playPdfSave, playGlitch, playLanguageSwitch };
 }

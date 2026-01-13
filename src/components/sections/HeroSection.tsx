@@ -22,7 +22,7 @@ export default function HeroSection({
   onScrollToProject,
 }: HeroSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const { playClick, playExit } = useSound();
+  const { playClick, playExit, playLanguageSwitch } = useSound();
   // lastSoundTime removed as throttling is now handled in useSound
   const isMobile = useIsMobile();
   const { t } = useTranslation();
@@ -69,14 +69,20 @@ export default function HeroSection({
         {/* Language Toggle - Raw Style */}
         <div className="absolute top-[80px] left-5 z-[101] font-serif italic text-white/60 text-2xl md:text-4xl flex gap-3 pointer-events-auto">
           <button
-            onClick={() => setLocale("fr")}
+            onClick={() => {
+              setLocale("fr");
+              playLanguageSwitch();
+            }}
             className={`hover:text-white transition-colors ${locale === "fr" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
           >
             fr
           </button>
           <span className="opacity-30">/</span>
           <button
-            onClick={() => setLocale("en")}
+            onClick={() => {
+              setLocale("en");
+              playLanguageSwitch();
+            }}
             className={`hover:text-white transition-colors ${locale === "en" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
           >
             en
