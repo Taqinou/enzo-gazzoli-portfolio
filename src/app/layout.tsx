@@ -1,7 +1,30 @@
 import type { Metadata, Viewport } from "next";
 import { Playfair_Display } from "next/font/google";
 import { Providers } from "@/components/core/Providers";
+import { PERSONAL, SOCIAL_LINKS, SITE_CONFIG } from "@/data/constants";
 import "./globals.css";
+
+// JSON-LD structured data for SEO
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: PERSONAL.name,
+  url: SITE_CONFIG.url,
+  email: `mailto:${PERSONAL.email}`,
+  jobTitle: "Creative Fullstack Developer",
+  description: "Creative fullstack developer and freelance designer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Nancy",
+    addressCountry: "FR",
+  },
+  sameAs: [
+    SOCIAL_LINKS.github,
+    SOCIAL_LINKS.linkedin,
+    SOCIAL_LINKS.malt,
+    SOCIAL_LINKS.fiverr,
+  ],
+};
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -12,7 +35,7 @@ const playfair = Playfair_Display({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
+  maximumScale: 5,
   themeColor: "#0000ff",
 };
 
@@ -57,6 +80,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className={`${playfair.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>

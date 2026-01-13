@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSound } from "@/hooks/useSound";
+import { PERSONAL, SOCIAL_LINKS } from "@/data/constants";
 
 const easeOutExpo = [0.16, 1, 0.3, 1] as const;
 
@@ -108,14 +109,14 @@ export function CVContent({ variant }: CVContentProps) {
                 </span>
                 <div className={isPrint ? "space-y-2" : "space-y-4"}>
                     {isPrint ? (
-                         <span className="block font-serif text-[10.5pt] lowercase italic underline decoration-white/10">enzo.gazzoli@icloud.com</span>
+                         <span className="block font-serif text-[10.5pt] lowercase italic underline decoration-white/10">{PERSONAL.email}</span>
                     ) : (
                         <a
-                            href="mailto:enzo.gazzoli@icloud.com"
+                            href="mailto:{PERSONAL.email}"
                             onClick={() => playClick()}
                             className="block font-serif text-2xl lowercase italic hover:text-blue transition-colors underline underline-offset-8 decoration-bg/10"
                         >
-                            enzo.gazzoli@icloud.com
+                            {PERSONAL.email}
                         </a>
                     )}
                    
@@ -127,8 +128,8 @@ export function CVContent({ variant }: CVContentProps) {
                             </>
                         ) : (
                             <>
-                                <a href="https://github.com/Taqinou" onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">GITHUB.COM/TAQINOU</a>
-                                <a href="https://linkedin.com/in/enzo-gazzoli" onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">LINKEDIN/ENZO-GAZZOLI</a>
+                                <a href={SOCIAL_LINKS.github} onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">GITHUB.COM/TAQINOU</a>
+                                <a href={SOCIAL_LINKS.linkedin} onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">LINKEDIN/ENZO-GAZZOLI</a>
                             </>
                         )}
                     </div>

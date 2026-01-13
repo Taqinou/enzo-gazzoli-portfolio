@@ -6,6 +6,7 @@ import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import Image from "next/image";
 import { SmileyContent } from "@/components/ui/SmileyContent";
+import { PERSONAL } from "@/data/constants";
 
 interface EllipsePanelProps {
   isOpen: boolean;
@@ -79,10 +80,10 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                 transition={{ delay: 0.4 }}
               >
                 <a
-                  href="mailto:enzo.gazzoli@icloud.com"
+                  href={`mailto:${PERSONAL.email}`}
                   className="text-ink underline underline-offset-4 hover:opacity-70 transition-opacity select-text break-all"
                 >
-                  {getCensoredText("ENZO.GAZZOLI@ICLOUD.COM")}
+                  {getCensoredText(PERSONAL.email.toUpperCase())}
                 </a>
               </motion.div>
             </div>

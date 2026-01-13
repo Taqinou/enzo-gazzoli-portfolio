@@ -1,19 +1,22 @@
 "use client";
 
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import BackgroundName from "@/components/ui/BackgroundName";
 import IntroOverlay from "@/components/overlays/IntroOverlay";
 import TopRibbon from "@/components/layout/TopRibbon";
 import IdentityCircle from "@/components/ui/IdentityCircle";
-import EllipsePanel from "@/components/overlays/EllipsePanel";
 import HeroSection from "@/components/sections/HeroSection";
 import ProjectSection from "@/components/sections/ProjectSection";
 import LinksTrigger from "@/components/ui/LinksTrigger";
-import LinksOverlay from "@/components/overlays/LinksOverlay";
-import StackPanel from "@/components/overlays/StackPanel";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import { projects } from "@/data/projects";
 import { useHomeState } from "@/hooks/useHomeState";
+
+// Lazy load overlays for better initial load performance
+const EllipsePanel = dynamic(() => import("@/components/overlays/EllipsePanel"), { ssr: false });
+const LinksOverlay = dynamic(() => import("@/components/overlays/LinksOverlay"), { ssr: false });
+const StackPanel = dynamic(() => import("@/components/overlays/StackPanel"), { ssr: false });
 
 export default function Home() {
   return (

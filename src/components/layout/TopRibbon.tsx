@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, memo } from "react";
 import { motion } from "framer-motion";
+import { useSoundContext } from "@/contexts/SoundContext";
+import { PERSONAL } from "@/data/constants";
 
 interface TopRibbonProps {
   isVisible: boolean;
@@ -16,6 +18,7 @@ function TopRibbon({
 }: TopRibbonProps) {
   const [time, setTime] = useState("00:00");
   const lastMinuteRef = useRef(-1);
+  const { isMuted, toggleMute } = useSoundContext();
 
   useEffect(() => {
     const updateClock = () => {
@@ -56,7 +59,15 @@ function TopRibbon({
         <span className="truncate max-w-[200px] md:max-w-none">{currentProject}</span>
       </div>
       <div className="flex items-center gap-2 md:gap-4">
-        <span className="hidden md:inline">NANCY (FR)</span>
+        <button
+          onClick={toggleMute}
+          className="opacity-70 hover:opacity-100 transition-opacity"
+          aria-label={isMuted ? "Activer le son" : "Couper le son"}
+        >
+          {isMuted ? "MUTE" : "SFX"}
+        </button>
+        <span className="opacity-30">|</span>
+        <span className="hidden md:inline">{PERSONAL.location}</span>
         <span className="opacity-30 hidden md:inline">|</span>
         <span>{time}</span>
       </div>

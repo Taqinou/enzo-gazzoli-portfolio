@@ -1,8 +1,25 @@
 "use client";
 
 import { useCallback, useRef, useEffect } from "react";
+import { ANIMATION } from "@/data/constants";
 
 let sharedAudioContext: AudioContext | null = null;
+
+// Log audio errors only in development
+function logAudioError(context: string, error: unknown): void {
+  if (process.env.NODE_ENV === "development") {
+    console.warn(`[useSound] ${context}:`, error);
+  }
+}
+
+function checkIsMuted(): boolean {
+  if (typeof window === "undefined") return false;
+  // Check localStorage preference
+  if (localStorage.getItem("soundMuted") === "true") return true;
+  // Check prefers-reduced-motion
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+  return false;
+}
 
 function getAudioContext(): AudioContext | null {
   if (typeof window === "undefined") return null;
@@ -12,7 +29,8 @@ function getAudioContext(): AudioContext | null {
       sharedAudioContext = new (window.AudioContext ||
         (window as unknown as { webkitAudioContext: typeof AudioContext })
           .webkitAudioContext)();
-    } catch {
+    } catch (error) {
+      logAudioError("Failed to create AudioContext", error);
       return null;
     }
   }
@@ -28,8 +46,27 @@ function getAudioContext(): AudioContext | null {
 export function useSound() {
   const isUnmountedRef = useRef(false);
   const lastSoundTime = useRef(0);
+  const isMutedRef = useRef(false);
 
-  const throttle = (callback: () => void, limit: number = 100) => {
+  // Check mute status on mount and listen for changes
+  useEffect(() => {
+    isMutedRef.current = checkIsMuted();
+
+    const handleMuteChange = () => {
+      isMutedRef.current = checkIsMuted();
+    };
+
+    window.addEventListener("storage", handleMuteChange);
+    // Custom event for same-tab updates
+    window.addEventListener("soundMuteChanged", handleMuteChange);
+
+    return () => {
+      window.removeEventListener("storage", handleMuteChange);
+      window.removeEventListener("soundMuteChanged", handleMuteChange);
+    };
+  }, []);
+
+  const throttle = (callback: () => void, limit: number = ANIMATION.throttleLimit) => {
     const now = Date.now();
     if (now - lastSoundTime.current < limit) return;
     lastSoundTime.current = now;
@@ -45,8 +82,9 @@ export function useSound() {
 
   // Son de clic "designer" (sinus doux avec jitter)
   const playClick = useCallback(() => {
+    if (isMutedRef.current) return;
     const now = Date.now();
-    if (now - lastSoundTime.current < 100) return;
+    if (now - lastSoundTime.current < ANIMATION.throttleLimit) return;
     lastSoundTime.current = now;
 
     const audioCtx = getAudioContext();
@@ -69,13 +107,14 @@ export function useSound() {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.03);
-    } catch {
-      // Silently fail if audio context unavailable
+    } catch (error) {
+      logAudioError("playClick", error);
     }
   }, []);
 
   // Son d'intro (tick "design" composite)
   const playIntroTick = useCallback((freq: number) => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -111,13 +150,14 @@ export function useSound() {
       oscBody.stop(audioCtx.currentTime + 0.1);
       oscPing.start();
       oscPing.stop(audioCtx.currentTime + 0.02);
-    } catch {
-      // Silently fail
+    } catch (error) {
+      logAudioError("playIntroTick", error);
     }
   }, []);
 
   // Son mécanique raffiné (avec jitter sur la fréquence et le mix)
   const playMechanicalClack = useCallback((freq: number, dur: number) => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -153,13 +193,14 @@ export function useSound() {
       osc.start();
       osc.stop(audioCtx.currentTime + dur);
       noiseSource.start();
-    } catch {
-      // Silently fail if audio context unavailable
+    } catch (error) {
+      logAudioError("playMechanicalClack", error);
     }
   }, []);
 
   // Son de défilement très subtil (avec micro-jitter)
   const playScrollTick = useCallback(() => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -179,13 +220,14 @@ export function useSound() {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.01);
-    } catch {
-      // Silently fail if audio context unavailable
+    } catch (error) {
+      logAudioError("playScrollTick", error);
     }
   }, []);
 
   // Son de sortie/fermeture (sinus descendant doux)
   const playExit = useCallback(() => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -205,13 +247,14 @@ export function useSound() {
       gain.connect(audioCtx.destination);
       osc.start();
       osc.stop(audioCtx.currentTime + 0.08);
-    } catch {
-      // Silently fail
+    } catch (error) {
+      logAudioError("playExit", error);
     }
   }, []);
 
   // Son pour le PDF (double-ton ascendant doux)
   const playPdfSave = useCallback(() => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -232,13 +275,14 @@ export function useSound() {
 
       playTone(800, 0, 0.05);
       playTone(1200, 0.03, 0.04);
-    } catch {
-      // Silently fail
+    } catch (error) {
+      logAudioError("playPdfSave", error);
     }
   }, []);
 
   // Son de Glitch / Static Noise (Version Mystérieuse/Dark)
   const playGlitch = useCallback(() => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -281,13 +325,14 @@ export function useSound() {
       osc1.stop(t + 0.4);
       osc2.stop(t + 0.4);
 
-    } catch {
-      // Silently fail
+    } catch (error) {
+      logAudioError("playGlitch", error);
     }
   }, []);
 
   // Son de changement de langue (Morphing/Whoosh numérique)
   const playLanguageSwitch = useCallback(() => {
+    if (isMutedRef.current) return;
     const audioCtx = getAudioContext();
     if (!audioCtx || isUnmountedRef.current) return;
 
@@ -324,8 +369,8 @@ export function useSound() {
       gain.connect(audioCtx.destination);
       
       noise.start(t);
-    } catch {
-      // Silently fail
+    } catch (error) {
+      logAudioError("playLanguageSwitch", error);
     }
   }, []);
 

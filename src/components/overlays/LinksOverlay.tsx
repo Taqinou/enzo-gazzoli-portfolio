@@ -2,20 +2,12 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { NAV_LINKS } from "@/data/constants";
 
 interface LinksOverlayProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const links = [
-  { label: "CV", href: "/cv" },
-  { label: "EMAIL", href: "mailto:enzo.gazzoli@icloud.com" },
-  { label: "GITHUB", href: "https://github.com/Taqinou", target: "_blank" },
-  { label: "LINKEDIN", href: "https://www.linkedin.com/in/enzo-gazzoli", target: "_blank" },
-  { label: "FIVERR", href: "https://www.fiverr.com/s/Q7Pyl31", target: "_blank" },
-  { label: "MALT", href: "https://www.malt.fr/profile/enzogazzoli", target: "_blank" },
-];
 
 export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
   const { playExit } = useSound();
@@ -37,12 +29,14 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
           onClick={handleClose}
         >
           <div className="flex flex-col items-center gap-1 md:gap-2.5">
-            {links.map((link, i) => (
+            {NAV_LINKS.map((link, i) => {
+              const target = "target" in link ? link.target : undefined;
+              return (
               <motion.a
                 key={link.label}
                 href={link.href}
-                target={link.target}
-                rel={link.target === "_blank" ? "noopener noreferrer" : undefined}
+                target={target}
+                rel={target === "_blank" ? "noopener noreferrer" : undefined}
                 className="font-mono text-[clamp(2rem,8vw,4rem)] md:text-[clamp(3rem,10vw,8rem)] font-black uppercase text-ink
                           no-underline transition-colors duration-100 tracking-[-0.08em] text-center
                           hover:text-blue select-text w-full break-words max-w-[90vw]"
@@ -54,7 +48,8 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
               >
                 {link.label}
               </motion.a>
-            ))}
+            );
+            })}
           </div>
         </motion.div>
       )}

@@ -3,6 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSound } from "@/hooks/useSound";
 import { projects } from "@/data/projects";
+import { ANIMATION } from "@/data/constants";
 
 export function useHomeState() {
   const searchParams = useSearchParams();
@@ -57,7 +58,7 @@ export function useHomeState() {
 
       // Reset velocity after stop
       if (velocityTimeout.current) clearTimeout(velocityTimeout.current);
-      velocityTimeout.current = setTimeout(() => setScrollVelocity(0), 100);
+      velocityTimeout.current = setTimeout(() => setScrollVelocity(0), ANIMATION.velocityResetDelay);
 
       setScrollProgress(progress);
       scrollThrottleRef.current = false;
@@ -110,7 +111,7 @@ export function useHomeState() {
           setActiveSections(newActiveSections);
         }
       },
-      { threshold: 0.5 }
+      { threshold: ANIMATION.intersectionThreshold }
     );
 
     // Observe hero section

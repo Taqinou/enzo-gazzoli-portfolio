@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useIsMobile } from "@/hooks/useIsMobile";
+import { ANIMATION } from "@/data/constants";
 
 interface IdentityCircleProps {
   onClick: () => void;
@@ -28,6 +29,17 @@ export default function IdentityCircle({
   const { t } = useTranslation();
   const isMobile = useIsMobile();
   const letterRadius = isMobile ? 28 : 30;
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
+  }, []);
 
   const handleClick = () => {
     if (showExit) {
@@ -64,9 +76,9 @@ export default function IdentityCircle({
     >
       <motion.div
         className="relative w-full h-full"
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 12,
+        animate={prefersReducedMotion ? {} : { rotate: 360 }}
+        transition={prefersReducedMotion ? {} : {
+          duration: ANIMATION.identityCircleRotationDuration,
           repeat: Infinity,
           ease: "linear",
         }}
