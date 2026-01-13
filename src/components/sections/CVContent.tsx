@@ -38,19 +38,14 @@ export function CVContent({ variant }: CVContentProps) {
         style={isPrint ? { minHeight: "60mm" } : undefined}
       >
         {isPrint ? (
-            <div 
-                className="absolute pointer-events-none z-50" 
-                style={{ 
-                    top: "5mm", 
-                    right: "5mm", 
-                    height: "50mm", 
-                    width: "40mm",
-                    backgroundImage: "url('/images/profile-picture.jpg')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }}
-            />
+            /* Using standard img tag for print to avoid html2canvas blurry background-image issues */
+            <div className="absolute pointer-events-none z-50" style={{ top: "5mm", right: "5mm", height: "50mm", width: "40mm", overflow: "hidden" }}>
+                <img 
+                    src="/images/profile-picture.jpg" 
+                    alt="Enzo Gazzoli"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+            </div>
         ) : (
             <div className="absolute top-6 right-6 bottom-6 w-1/4 max-w-[300px] pointer-events-none">
                 <Image 
