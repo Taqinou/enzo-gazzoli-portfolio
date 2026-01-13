@@ -7,7 +7,7 @@ export function SmileyContent() {
         <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="transition-transform hover:scale-110"
+            className={`transition-transform hover:scale-110 ${isHovered ? "cursor-question" : ""}`}
         >
             {isHovered ? ":-(" : ":-)"}
         </div>
