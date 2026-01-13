@@ -55,7 +55,7 @@ export function CVContent({ variant }: CVContentProps) {
                 />
             </div>
         ) : (
-            <div className="absolute top-6 right-6 w-[28vw] max-w-[300px] h-auto pointer-events-none">
+            <div className="absolute top-28 right-6 w-[28vw] md:top-6 md:w-1/4 max-w-[300px] h-auto md:bottom-6 pointer-events-none">
                 <div className="relative w-full aspect-[3/4] md:aspect-auto md:h-full">
                     <Image 
                         src="/images/profile-picture.jpg" 
@@ -87,7 +87,7 @@ export function CVContent({ variant }: CVContentProps) {
                 <h1 className="font-serif text-[clamp(3.5rem,15vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-6 md:mb-10">
                     enzo <br /> gazzoli
                 </h1>
-                <p className="font-serif text-[clamp(1.5rem,5vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter">
+                <p className="font-serif text-[clamp(1.5rem,5vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter mt-4 md:mt-0">
                     {t("cv.developer").split(" ")[0]} <br /> {t("cv.developer").split(" ")[1] || "fullstack"}
                 </p>
             </motion.div>
