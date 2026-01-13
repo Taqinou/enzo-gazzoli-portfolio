@@ -46,12 +46,12 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
           {/* Content Grid */}
-          <div className="w-full h-full grid gap-y-6 md:gap-y-10 grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] relative">
+          <div className="w-full h-full flex flex-col md:grid md:gap-y-10 md:grid-cols-[1.2fr_0.8fr] relative">
             {/* Left Column: Text Info */}
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center h-full md:justify-center mt-0 md:mt-0">
               {/* Name */}
               <motion.div
-                className="font-mono text-[clamp(2.8rem,12vw,9rem)] font-black uppercase tracking-[-0.05em]"
+                className="font-mono text-[clamp(2.8rem,14vw,9rem)] font-black uppercase tracking-[-0.05em]"
                 style={{ lineHeight: 0.75 }}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -64,7 +64,7 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
 
               {/* Role */}
               <motion.div
-                className="font-serif text-[clamp(1.2rem,5vw,3.5rem)] uppercase text-blue mt-3 md:mt-4"
+                className="font-serif text-[clamp(1.3rem,6vw,3.5rem)] uppercase text-blue mt-4 md:mt-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
@@ -74,14 +74,14 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
 
               {/* Contact */}
               <motion.div
-                className="font-serif text-[clamp(1rem,3vw,2rem)] italic mt-4 md:mt-8 select-text"
+                className="font-serif text-[clamp(1rem,4vw,2rem)] italic mt-6 md:mt-8 select-text underline underline-offset-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <a
                   href={`mailto:${PERSONAL.email}`}
-                  className="text-ink underline underline-offset-4 hover:opacity-70 transition-opacity select-text break-all"
+                  className="text-ink hover:opacity-70 transition-opacity select-text break-all"
                 >
                   {getCensoredText(PERSONAL.email.toUpperCase())}
                 </a>
@@ -89,10 +89,10 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
             </div>
 
             {/* Right Column: Visual Block */}
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-end md:justify-center mt-auto md:mt-0 pb-6 md:pb-0 h-[45%] md:h-auto">
               {/* Photo Container */}
               <motion.div
-                className="w-full max-w-[200px] md:max-w-[420px] aspect-square relative bg-white"
+                className="w-full max-w-[min(85vw,400px)] md:max-w-[420px] aspect-square relative bg-white self-center md:self-auto mb-4 md:mb-0"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
@@ -136,12 +136,12 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
 
               {/* Caption Block (Loc + Smiley) */}
               <motion.div
-                className="mt-5 md:mt-10 flex items-center justify-between gap-8 md:gap-4 max-w-[220px] md:max-w-[450px] relative z-[100]"
+                className="mt-0 md:mt-10 flex items-end justify-between w-full md:gap-4 md:max-w-[450px] relative z-[100]"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <div className="font-mono text-[11px] md:text-[13px] uppercase tracking-[0.15em] md:tracking-[0.2em] leading-relaxed">
+                <div className="font-mono text-[10px] md:text-[13px] uppercase tracking-[0.15em] md:tracking-[0.2em] leading-relaxed">
                   {getCensoredText(t("ellipse.location"))}
                   <br />
                   {getCensoredText(t("ellipse.worldwide"))}
@@ -149,9 +149,9 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
 
                 {/* Smiley Button as a Signature */}
                 <div
-                  className="font-mono text-[clamp(3.5rem,12vw,5rem)] cursor-pointer text-blue leading-none"
+                  className="font-mono text-[clamp(3rem,12vw,5rem)] cursor-pointer text-blue leading-none"
                   style={{
-                    transform: "rotate(90deg) translateX(-10%)",
+                    transform: "rotate(90deg) translateY(-10px)",
                     transformOrigin: "center center",
                   }}
                   onClick={handleClose}

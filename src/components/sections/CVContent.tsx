@@ -55,14 +55,16 @@ export function CVContent({ variant }: CVContentProps) {
                 />
             </div>
         ) : (
-            <div className="absolute top-6 right-6 bottom-6 w-1/4 max-w-[300px] pointer-events-none">
-                <Image 
-                    src="/images/profile-picture.jpg" 
-                    alt={t("cv.photo")}
-                    fill
-                    className="object-cover object-center"
-                    priority
-                />
+            <div className="absolute top-6 right-6 w-[28vw] max-w-[300px] h-auto pointer-events-none">
+                <div className="relative w-full aspect-[3/4] md:aspect-auto md:h-full">
+                    <Image 
+                        src="/images/profile-picture.jpg" 
+                        alt={t("cv.photo")}
+                        fill
+                        className="object-cover object-center"
+                        priority
+                    />
+                </div>
             </div>
         )}
         
@@ -80,11 +82,12 @@ export function CVContent({ variant }: CVContentProps) {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, ease: easeOutExpo }}
+                className="mt-20 md:mt-0 flex flex-col justify-center md:block h-full md:h-auto"
             >
-                <h1 className="font-serif text-[clamp(3.5rem,14vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-6 md:mb-10">
+                <h1 className="font-serif text-[clamp(3.5rem,15vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-6 md:mb-10">
                     enzo <br /> gazzoli
                 </h1>
-                <p className="font-serif text-[clamp(1.3rem,4vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter">
+                <p className="font-serif text-[clamp(1.5rem,5vw,5rem)] leading-[0.8] italic text-white/90 lowercase tracking-tighter">
                     {t("cv.developer").split(" ")[0]} <br /> {t("cv.developer").split(" ")[1] || "fullstack"}
                 </p>
             </motion.div>
