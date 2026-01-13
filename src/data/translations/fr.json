@@ -97,6 +97,7 @@
   "hero": {
     "archive": "ARCHIVE",
     "cv": "curriculum vitae.",
+    "services": "services.",
     "languageFrAriaLabel": "Passer en français",
     "languageEnAriaLabel": "Passer en anglais"
   },
@@ -112,5 +113,36 @@
     "info": "INFOINF0",
     "exit": "EXITEXIT",
     "ariaLabel": "Informations d'identité"
+  },
+  "services": {
+    "title": "SERVICES",
+    "index": "index.",
+    "offers": {
+      "website": {
+        "title": "SITE VITRINE",
+        "description": "Landing page, portfolio, site vitrine, blog. Design sur mesure, responsive, optimisé SEO.",
+        "price": "à partir de 300€"
+      },
+      "application": {
+        "title": "APPLICATION",
+        "description": "MVP, SaaS, dashboard, e-commerce Shopify headless. Architecture robuste, API, base de données.",
+        "price": "à partir de 1200€"
+      },
+      "custom": {
+        "title": "SUR MESURE",
+        "description": "Consulting, audit technique, intégration API. Selon vos besoins spécifiques.",
+        "price": "selon projet"
+      }
+    },
+    "form": {
+      "heading": "DISCUTONS DE VOTRE PROJET",
+      "name": "nom",
+      "email": "email",
+      "message": "message",
+      "send": "envoyer",
+      "sending": "envoi...",
+      "success": "Message envoyé.",
+      "error": "Erreur lors de l'envoi."
+    }
   }
 }

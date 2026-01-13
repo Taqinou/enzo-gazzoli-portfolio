@@ -97,6 +97,7 @@
   "hero": {
     "archive": "ARCHIVE",
     "cv": "curriculum vitae.",
+    "services": "services.",
     "languageFrAriaLabel": "Switch to French",
     "languageEnAriaLabel": "Switch to English"
   },
@@ -112,5 +113,36 @@
     "info": "INFOINF0",
     "exit": "EXITEXIT",
     "ariaLabel": "Identity info"
+  },
+  "services": {
+    "title": "SERVICES",
+    "index": "index.",
+    "offers": {
+      "website": {
+        "title": "WEBSITE",
+        "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized.",
+        "price": "from 300€"
+      },
+      "application": {
+        "title": "APPLICATION",
+        "description": "MVP, SaaS, dashboard, headless Shopify e-commerce. Robust architecture, API, database.",
+        "price": "from 1200€"
+      },
+      "custom": {
+        "title": "CUSTOM",
+        "description": "Consulting, technical audit, API integration. Tailored to your specific needs.",
+        "price": "upon request"
+      }
+    },
+    "form": {
+      "heading": "LET'S DISCUSS YOUR PROJECT",
+      "name": "name",
+      "email": "email",
+      "message": "message",
+      "send": "send",
+      "sending": "sending...",
+      "success": "Message sent.",
+      "error": "Error sending message."
+    }
   }
 }

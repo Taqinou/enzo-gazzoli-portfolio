@@ -162,14 +162,21 @@ export default function HeroSection({
         )}
       </AnimatePresence>
 
-      {/* CV Link */}
-      <div className="absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] pointer-events-auto">
+      {/* CV & Services Links */}
+      <div className="absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] pointer-events-auto flex flex-col items-end gap-1 md:gap-2">
         <Link
           href="/cv"
           onPointerDown={handleCvClick}
           className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
         >
           {t("hero.cv")}
+        </Link>
+        <Link
+          href="/services"
+          onPointerDown={handleCvClick}
+          className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
+        >
+          {t("hero.services")}
         </Link>
       </div>
 
