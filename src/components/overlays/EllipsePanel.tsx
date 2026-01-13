@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import Image from "next/image";
 import { SmileyContent } from "@/components/ui/SmileyContent";
 import { PERSONAL } from "@/data/constants";
@@ -16,12 +17,47 @@ interface EllipsePanelProps {
 export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
   const { playExit, playGlitch } = useSound();
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [imageError, setImageError] = useState(false);
   const [isSmileyHovered, setIsSmileyHovered] = useState(false);
+
+  // Reset hover state when panel opens
+  useEffect(() => {
+    if (isOpen) {
+      setIsSmileyHovered(false);
+    }
+  }, [isOpen]);
 
   const handleClose = () => {
     playExit();
     onClose();
+  };
+
+  const handleSmileyClick = () => {
+    if (isMobile) {
+      // On mobile: trigger animation + sound, then close after a short delay
+      setIsSmileyHovered(true);
+      playGlitch();
+      setTimeout(() => {
+        handleClose();
+      }, 400);
+    } else {
+      handleClose();
+    }
+  };
+
+  const handleSmileyEnter = () => {
+    // Only trigger hover effect on desktop
+    if (!isMobile) {
+      setIsSmileyHovered(true);
+      playGlitch();
+    }
+  };
+
+  const handleSmileyLeave = () => {
+    if (!isMobile) {
+      setIsSmileyHovered(false);
+    }
   };
 
   // Helper to censor text
@@ -154,12 +190,9 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                     transform: "rotate(90deg) translateY(-10px)",
                     transformOrigin: "center center",
                   }}
-                  onClick={handleClose}
-                  onMouseEnter={() => {
-                    setIsSmileyHovered(true);
-                    playGlitch();
-                  }}
-                  onMouseLeave={() => setIsSmileyHovered(false)}
+                  onClick={handleSmileyClick}
+                  onMouseEnter={handleSmileyEnter}
+                  onMouseLeave={handleSmileyLeave}
                 >
                   <SmileyContent />
                 </div>

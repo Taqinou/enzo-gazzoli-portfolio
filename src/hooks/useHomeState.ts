@@ -139,9 +139,18 @@ export function useHomeState() {
     if (isProjectActive) {
       setIsProjectActive(false);
       document.body.classList.remove("project-active");
-      // Re-enable scrolling
+      // Re-enable scrolling with iOS fix
       if (mainPageRef.current) {
-        mainPageRef.current.style.overflowY = "scroll";
+        mainPageRef.current.style.scrollSnapType = "none";
+        mainPageRef.current.style.overflowY = "";
+        mainPageRef.current.style.touchAction = "";
+        void mainPageRef.current.offsetHeight;
+        requestAnimationFrame(() => {
+          if (mainPageRef.current) {
+            mainPageRef.current.style.scrollSnapType = "";
+          }
+        });
+        scrollThrottleRef.current = false;
       }
     } else {
       setEllipsePanelOpen(!ellipsePanelOpen);
@@ -165,7 +174,28 @@ export function useHomeState() {
   const handleProjectToggle = (isOpen: boolean) => {
     setIsProjectActive(isOpen);
     if (mainPageRef.current) {
-      mainPageRef.current.style.overflowY = isOpen ? "hidden" : "scroll";
+      if (isOpen) {
+        mainPageRef.current.style.overflowY = "hidden";
+        mainPageRef.current.style.touchAction = "none";
+      } else {
+        // Temporarily disable scroll-snap to fix iOS touch scroll bug
+        mainPageRef.current.style.scrollSnapType = "none";
+        mainPageRef.current.style.overflowY = "";
+        mainPageRef.current.style.touchAction = "";
+
+        // Force reflow
+        void mainPageRef.current.offsetHeight;
+
+        // Re-enable scroll-snap after a frame
+        requestAnimationFrame(() => {
+          if (mainPageRef.current) {
+            mainPageRef.current.style.scrollSnapType = "";
+          }
+        });
+
+        // Reset scroll throttle in case it was stuck
+        scrollThrottleRef.current = false;
+      }
     }
     // Toggle body class for custom cursor
     if (isOpen) {
@@ -186,7 +216,17 @@ export function useHomeState() {
           setIsProjectActive(false);
           document.body.classList.remove("project-active");
           if (mainPageRef.current) {
-            mainPageRef.current.style.overflowY = "scroll";
+            // iOS scroll fix
+            mainPageRef.current.style.scrollSnapType = "none";
+            mainPageRef.current.style.overflowY = "";
+            mainPageRef.current.style.touchAction = "";
+            void mainPageRef.current.offsetHeight;
+            requestAnimationFrame(() => {
+              if (mainPageRef.current) {
+                mainPageRef.current.style.scrollSnapType = "";
+              }
+            });
+            scrollThrottleRef.current = false;
           }
         }
       }
