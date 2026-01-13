@@ -41,7 +41,11 @@ export function SoundProvider({ children }: { children: ReactNode }) {
   }, []);
 
   if (!isHydrated) {
-    return <>{children}</>;
+    return (
+        <SoundContext.Provider value={{ isMuted: true, toggleMute: () => {} }}>
+            {children}
+        </SoundContext.Provider>
+    );
   }
 
   return (

@@ -74,6 +74,7 @@ export default function HeroSection({
               playLanguageSwitch();
             }}
             className={`hover:text-white transition-colors ${locale === "fr" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
+            aria-label={t("hero.languageFrAriaLabel")}
           >
             fr
           </button>
@@ -84,6 +85,7 @@ export default function HeroSection({
               playLanguageSwitch();
             }}
             className={`hover:text-white transition-colors ${locale === "en" ? "text-white underline decoration-2 underline-offset-8" : ""}`}
+            aria-label={t("hero.languageEnAriaLabel")}
           >
             en
           </button>

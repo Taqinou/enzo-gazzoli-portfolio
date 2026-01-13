@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
+import { useTranslation } from "@/hooks/useTranslation";
 import { NAV_LINKS } from "@/data/constants";
 
 interface LinksOverlayProps {
@@ -11,6 +12,7 @@ interface LinksOverlayProps {
 
 export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
   const { playExit } = useSound();
+  const { t } = useTranslation();
 
   const handleClose = () => {
     playExit();
@@ -33,7 +35,7 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
               const target = "target" in link ? link.target : undefined;
               return (
               <motion.a
-                key={link.label}
+                key={link.labelKey}
                 href={link.href}
                 target={target}
                 rel={target === "_blank" ? "noopener noreferrer" : undefined}
@@ -45,8 +47,9 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
                 onClick={(e) => e.stopPropagation()}
+                aria-label={t(link.labelKey)}
               >
-                {link.label}
+                {t(link.labelKey)}
               </motion.a>
             );
             })}

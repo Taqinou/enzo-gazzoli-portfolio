@@ -21,12 +21,12 @@ export const SITE_CONFIG = {
 
 // Navigation links for overlay
 export const NAV_LINKS = [
-  { label: "CV", href: "/cv" },
-  { label: "EMAIL", href: `mailto:${PERSONAL.email}` },
-  { label: "GITHUB", href: SOCIAL_LINKS.github, target: "_blank" as const },
-  { label: "LINKEDIN", href: SOCIAL_LINKS.linkedin, target: "_blank" as const },
-  { label: "FIVERR", href: SOCIAL_LINKS.fiverr, target: "_blank" as const },
-  { label: "MALT", href: SOCIAL_LINKS.malt, target: "_blank" as const },
+  { labelKey: "navLinks.cv", href: "/cv" },
+  { labelKey: "navLinks.email", href: `mailto:${PERSONAL.email}` },
+  { labelKey: "navLinks.github", href: SOCIAL_LINKS.github, target: "_blank" as const },
+  { labelKey: "navLinks.linkedin", href: SOCIAL_LINKS.linkedin, target: "_blank" as const },
+  { labelKey: "navLinks.fiverr", href: SOCIAL_LINKS.fiverr, target: "_blank" as const },
+  { labelKey: "navLinks.malt", href: SOCIAL_LINKS.malt, target: "_blank" as const },
 ] as const;
 
 // Animation timing constants

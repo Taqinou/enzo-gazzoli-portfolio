@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, memo } from "react";
 import { motion } from "framer-motion";
 import { useSoundContext } from "@/contexts/SoundContext";
+import { useTranslation } from "@/hooks/useTranslation";
 import { PERSONAL } from "@/data/constants";
 
 interface TopRibbonProps {
@@ -19,6 +20,7 @@ function TopRibbon({
   const [time, setTime] = useState("00:00");
   const lastMinuteRef = useRef(-1);
   const { isMuted, toggleMute } = useSoundContext();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const updateClock = () => {
@@ -53,8 +55,8 @@ function TopRibbon({
       transition={{ duration: 0.3 }}
     >
       <div className="flex items-center gap-2 md:gap-4">
-        <span className="hidden md:inline">ENZO GAZZOLI</span>
-        <span className="md:hidden">E.G</span>
+        <span className="hidden md:inline">{t("topRibbon.name")}</span>
+        <span className="md:hidden">{t("topRibbon.initials")}</span>
         <span className="opacity-30">|</span>
         <span className="truncate max-w-[200px] md:max-w-none">{currentProject}</span>
       </div>
@@ -62,9 +64,9 @@ function TopRibbon({
         <button
           onClick={toggleMute}
           className="opacity-70 hover:opacity-100 transition-opacity"
-          aria-label={isMuted ? "Activer le son" : "Couper le son"}
+          aria-label={isMuted ? t("topRibbon.unmuteAriaLabel") : t("topRibbon.muteAriaLabel")}
         >
-          {isMuted ? "MUTE" : "SFX"}
+          {isMuted ? t("topRibbon.mute") : t("topRibbon.sfx")}
         </button>
         <span className="opacity-30">|</span>
         <span className="hidden md:inline">{PERSONAL.location}</span>

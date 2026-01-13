@@ -72,7 +72,7 @@ export default function IdentityCircle({
       transition={{ duration: 0.1, ease: "easeOut" }}
       onClick={handleClick}
       whileHover={{ scale: 1.05 }}
-      aria-label="Identity info"
+      aria-label={t("identity.ariaLabel")}
     >
       <motion.div
         className="relative w-full h-full"

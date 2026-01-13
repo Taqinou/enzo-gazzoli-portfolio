@@ -85,5 +85,32 @@
       "licence": "computer science degree",
       "bac": "general baccalaureate"
     }
+  },
+  "topRibbon": {
+    "name": "ENZO GAZZOLI",
+    "initials": "E.G",
+    "mute": "MUTE",
+    "sfx": "SFX",
+    "muteAriaLabel": "Mute sound",
+    "unmuteAriaLabel": "Unmute sound"
+  },
+  "hero": {
+    "archive": "ARCHIVE",
+    "cv": "curriculum vitae.",
+    "languageFrAriaLabel": "Switch to French",
+    "languageEnAriaLabel": "Switch to English"
+  },
+  "navLinks": {
+    "cv": "CV",
+    "email": "EMAIL",
+    "github": "GITHUB",
+    "linkedin": "LINKEDIN",
+    "fiverr": "FIVERR",
+    "malt": "MALT"
+  },
+  "identity": {
+    "info": "INFOINF0",
+    "exit": "EXITEXIT",
+    "ariaLabel": "Identity info"
   }
 }
