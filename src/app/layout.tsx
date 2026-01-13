@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/og-image.jpg", // We will need to generate this later
+        url: "/images/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Enzo Gazzoli Portfolio",
