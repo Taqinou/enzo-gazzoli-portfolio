@@ -13,7 +13,7 @@ interface EllipsePanelProps {
 }
 
 export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
-  const { playExit } = useSound();
+  const { playExit, playGlitch } = useSound();
   const { t } = useTranslation();
   const [imageError, setImageError] = useState(false);
   const [isSmileyHovered, setIsSmileyHovered] = useState(false);
@@ -154,7 +154,10 @@ export default function EllipsePanel({ isOpen, onClose }: EllipsePanelProps) {
                     transformOrigin: "center center",
                   }}
                   onClick={handleClose}
-                  onMouseEnter={() => setIsSmileyHovered(true)}
+                  onMouseEnter={() => {
+                    setIsSmileyHovered(true);
+                    playGlitch();
+                  }}
                   onMouseLeave={() => setIsSmileyHovered(false)}
                 >
                   <SmileyContent />

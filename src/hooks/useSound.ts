@@ -237,5 +237,43 @@ export function useSound() {
     }
   }, []);
 
-  return { playClick, playIntroTick, playMechanicalClack, playScrollTick, playExit, playPdfSave };
+  // Son de Glitch / Static Noise (Brut et court)
+  const playGlitch = useCallback(() => {
+    const audioCtx = getAudioContext();
+    if (!audioCtx || isUnmountedRef.current) return;
+
+    try {
+      const bufferSize = audioCtx.sampleRate * 0.1; // 100ms
+      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      // White noise generation
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+
+      const noise = audioCtx.createBufferSource();
+      noise.buffer = buffer;
+
+      // Filter to make it less harsh (Lowpass)
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 1000;
+
+      const gain = audioCtx.createGain();
+      // Enveloppe brutale : Attaque immédiate, Release rapide
+      gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(audioCtx.destination);
+      
+      noise.start();
+    } catch {
+      // Silently fail
+    }
+  }, []);
+
+  return { playClick, playIntroTick, playMechanicalClack, playScrollTick, playExit, playPdfSave, playGlitch };
 }
