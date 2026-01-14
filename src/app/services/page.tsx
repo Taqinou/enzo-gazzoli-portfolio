@@ -166,13 +166,22 @@ export default function ServicesPage() {
                       whileTap={{ scale: 0.995 }}
                     >
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-10">
-                        <div className="flex items-baseline gap-4 flex-1">
+                        <div className="flex items-center gap-4 flex-1">
                           <motion.span
                             className="font-mono text-xs text-ink/30"
                             animate={{ opacity: isSelected ? 1 : 0.3 }}
                           >
                             {String(index + 1).padStart(2, "0")}
                           </motion.span>
+
+                          <motion.div
+                            animate={{ rotate: isSelected ? 45 : 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className={`${isSelected ? "text-blue" : "text-ink/30 group-hover:text-ink/60"} transition-colors`}
+                          >
+                            <Plus size={24} strokeWidth={1.5} />
+                          </motion.div>
+
                           <h2 className={`
                             font-serif text-[8vw] md:text-[3.5vw] leading-[0.95]
                             transition-colors duration-300
@@ -191,30 +200,7 @@ export default function ServicesPage() {
                               {t(`services.offers.${offer}.description`)}
                             </p>
                           </div>
-                          
-                          <motion.div
-                            animate={{ rotate: isSelected ? 45 : 0 }}
-                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className={`
-                              hidden md:flex items-center justify-center w-12 h-12 rounded-full border
-                              transition-colors duration-300
-                              ${isSelected ? "border-blue text-blue" : "border-ink/10 text-ink/30 group-hover:border-ink/30 group-hover:text-ink/60"}
-                            `}
-                          >
-                            <Plus size={24} />
-                          </motion.div>
                         </div>
-                      </div>
-                      
-                      {/* Mobile Only Indicator */}
-                      <div className="md:hidden absolute top-6 right-0">
-                         <motion.div
-                            animate={{ rotate: isSelected ? 45 : 0 }}
-                            transition={{ duration: 0.3 }}
-                            className={`${isSelected ? "text-blue" : "text-ink/30"}`}
-                          >
-                            <Plus size={20} />
-                          </motion.div>
                       </div>
                     </motion.button>
 
