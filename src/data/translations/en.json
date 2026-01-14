@@ -121,17 +121,17 @@
       "website": {
         "title": "WEBSITE",
         "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized.",
-        "price": "from 300€"
+        "price": "from 1,500€"
       },
       "application": {
         "title": "APPLICATION",
         "description": "MVP, SaaS, dashboard, headless Shopify e-commerce. Robust architecture, API, database.",
-        "price": "from 1200€"
+        "price": "custom quote"
       },
       "custom": {
         "title": "CUSTOM",
         "description": "Consulting, technical audit, API integration. Tailored to your specific needs.",
-        "price": "upon request"
+        "price": "350€ / day"
       }
     },
     "form": {

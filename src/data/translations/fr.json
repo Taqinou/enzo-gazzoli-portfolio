@@ -121,17 +121,17 @@
       "website": {
         "title": "SITE VITRINE",
         "description": "Landing page, portfolio, site vitrine, blog. Design sur mesure, responsive, optimisé SEO.",
-        "price": "à partir de 300€"
+        "price": "à partir de 1 500€"
       },
       "application": {
         "title": "APPLICATION",
         "description": "MVP, SaaS, dashboard, e-commerce Shopify headless. Architecture robuste, API, base de données.",
-        "price": "à partir de 1200€"
+        "price": "sur devis"
       },
       "custom": {
         "title": "SUR MESURE",
         "description": "Consulting, audit technique, intégration API. Selon vos besoins spécifiques.",
-        "price": "selon projet"
+        "price": "350€ / jour"
       }
     },
     "form": {
