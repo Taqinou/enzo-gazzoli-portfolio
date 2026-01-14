@@ -107,7 +107,7 @@ export function CVContent({ variant }: CVContentProps) {
             style={isPrint ? { gridColumn: "span 4", minHeight: "45mm" } : undefined}
         >
             <div>
-                <span className={`${isPrint ? "text-[26pt]" : "text-[clamp(2rem,5.5vw,7.5rem)]"} leading-[0.7] font-black tracking-[-0.07em] block ${isPrint ? "mb-4" : "mb-8"}`}>
+                <span className={`${isPrint ? "text-[26pt]" : "text-[clamp(2rem,4.5vw,5rem)]"} leading-[0.7] font-black tracking-[-0.07em] block ${isPrint ? "mb-4" : "mb-8"}`}>
                     {t("cv.connect")}
                 </span>
                 <div className={isPrint ? "space-y-2" : "space-y-4"}>
@@ -115,9 +115,9 @@ export function CVContent({ variant }: CVContentProps) {
                          <span className="block font-serif text-[10.5pt] lowercase italic underline decoration-white/10">{PERSONAL.email}</span>
                     ) : (
                         <a
-                            href="mailto:{PERSONAL.email}"
+                            href={`mailto:${PERSONAL.email}`}
                             onClick={() => playClick()}
-                            className="block font-serif text-2xl lowercase italic hover:text-blue transition-colors underline underline-offset-8 decoration-bg/10"
+                            className="block font-serif text-lg md:text-xl lowercase italic hover:text-blue transition-colors underline underline-offset-8 decoration-bg/10 break-words"
                         >
                             {PERSONAL.email}
                         </a>

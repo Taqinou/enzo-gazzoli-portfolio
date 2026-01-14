@@ -4,6 +4,7 @@ import { useState, FormEvent, useRef } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Plus } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -164,8 +165,8 @@ export default function ServicesPage() {
                       `}
                       whileTap={{ scale: 0.995 }}
                     >
-                      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-3 md:gap-10">
-                        <div className="flex items-baseline gap-4">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-10">
+                        <div className="flex items-baseline gap-4 flex-1">
                           <motion.span
                             className="font-mono text-xs text-ink/30"
                             animate={{ opacity: isSelected ? 1 : 0.3 }}
@@ -181,14 +182,39 @@ export default function ServicesPage() {
                           </h2>
                         </div>
                         
-                        <div className="flex flex-col md:items-end gap-1 md:max-w-md pl-8 md:pl-0">
-                          <span className="font-serif italic text-xl md:text-2xl text-ink/60">
-                            {t(`services.offers.${offer}.price`)}
-                          </span>
-                          <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-xs">
-                            {t(`services.offers.${offer}.description`)}
-                          </p>
+                        <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
+                          <div className="flex flex-col md:items-end gap-1 md:max-w-md pl-8 md:pl-0">
+                            <span className="font-serif italic text-xl md:text-2xl text-ink/60">
+                              {t(`services.offers.${offer}.price`)}
+                            </span>
+                            <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-xs">
+                              {t(`services.offers.${offer}.description`)}
+                            </p>
+                          </div>
+                          
+                          <motion.div
+                            animate={{ rotate: isSelected ? 45 : 0 }}
+                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className={`
+                              hidden md:flex items-center justify-center w-12 h-12 rounded-full border
+                              transition-colors duration-300
+                              ${isSelected ? "border-blue text-blue" : "border-ink/10 text-ink/30 group-hover:border-ink/30 group-hover:text-ink/60"}
+                            `}
+                          >
+                            <Plus size={24} />
+                          </motion.div>
                         </div>
+                      </div>
+                      
+                      {/* Mobile Only Indicator */}
+                      <div className="md:hidden absolute top-6 right-0">
+                         <motion.div
+                            animate={{ rotate: isSelected ? 45 : 0 }}
+                            transition={{ duration: 0.3 }}
+                            className={`${isSelected ? "text-blue" : "text-ink/30"}`}
+                          >
+                            <Plus size={20} />
+                          </motion.div>
                       </div>
                     </motion.button>
 
