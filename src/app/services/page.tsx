@@ -160,12 +160,12 @@ export default function ServicesPage() {
                       onClick={() => handleOfferClick(offer)}
                       className={`
                         group relative w-full text-left py-6 md:py-10
-                        border-b border-ink/20 transition-colors duration-300
-                        ${isSelected ? "bg-ink/[0.02]" : "hover:bg-ink/[0.01]"}
+                        border-b border-ink/20 transition-all duration-300
+                        ${isSelected ? "bg-ink/[0.02]" : "hover:bg-ink/[0.01] hover:border-ink/40"}
                       `}
                       whileTap={{ scale: 0.995 }}
                     >
-                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-10">
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 md:gap-10 transition-transform duration-300 group-hover:translate-x-2">
                         <div className="flex items-center gap-4 flex-1">
                           <motion.span
                             className="font-mono text-xs text-ink/30"
