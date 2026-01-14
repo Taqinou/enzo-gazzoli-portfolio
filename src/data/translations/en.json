@@ -121,24 +121,51 @@
       "website": {
         "title": "WEBSITE",
         "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized.",
-        "price": "from 1,500€"
+        "price": "from 1,750€"
       },
       "application": {
         "title": "APPLICATION",
-        "description": "MVP, SaaS, dashboard, headless Shopify e-commerce. Robust architecture, API, database.",
-        "price": "custom quote"
+        "description": "MVP, SaaS, dashboard. Robust architecture, API, database.",
+        "price": "from 6,250€"
+      },
+      "shopify": {
+        "title": "E-COMMERCE",
+        "description": "Headless Shopify Store (Next.js). Max performance and custom design.",
+        "price": "from 7,500€"
       },
       "custom": {
         "title": "CUSTOM",
         "description": "Consulting, technical audit, API integration. Tailored to your specific needs.",
-        "price": "350€ / day"
+        "price": "300€ / day"
       }
+    },
+    "simulator": {
+      "title": "SIMULATOR",
+      "subtitle": "Estimate your project in a few clicks",
+      "step1": "01",
+      "step2": "02",
+      "step3": "03",
+      "projectType": "Project type",
+      "formula": "Package",
+      "options": "Options",
+      "types": {
+        "website": "Website",
+        "application": "Application",
+        "shopify": "E-commerce",
+        "custom": "Custom"
+      },
+      "or": "or",
+      "skipSimulator": "I prefer to describe my project",
+      "backToSimulator": "Back to simulator",
+      "viewFullPricing": "View full pricing sheet"
     },
     "form": {
       "heading": "LET'S DISCUSS YOUR PROJECT",
+      "headingWithQuote": "SEND YOUR SIMULATION",
       "name": "name",
       "email": "email",
       "message": "message",
+      "messageOptional": "message (optional)",
       "send": "send",
       "sending": "sending...",
       "success": "Message sent.",

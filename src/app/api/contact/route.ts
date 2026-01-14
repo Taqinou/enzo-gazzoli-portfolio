@@ -5,6 +5,7 @@ interface ContactRequest {
   name: string;
   email: string;
   message: string;
+  quoteSummary?: string;
 }
 
 export async function POST(request: NextRequest) {
@@ -20,11 +21,20 @@ export async function POST(request: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     const body: ContactRequest = await request.json();
-    const { name, email, message } = body;
+    const { name, email, message, quoteSummary } = body;
 
-    if (!name || !email || !message) {
+    const isQuoteRequest = !!quoteSummary;
+
+    if (!name || !email) {
       return NextResponse.json(
-        { error: "Tous les champs sont requis" },
+        { error: "Nom et email requis" },
+        { status: 400 }
+      );
+    }
+
+    if (!isQuoteRequest && !message) {
+      return NextResponse.json(
+        { error: "Message requis" },
         { status: 400 }
       );
     }
@@ -37,18 +47,43 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const subject = isQuoteRequest
+      ? `[Portfolio] Simulation de devis - ${name}`
+      : `[Portfolio] Nouveau message de ${name}`;
+
+    let htmlContent = `
+      <h2>${isQuoteRequest ? "Nouvelle simulation de devis" : "Nouveau message depuis le portfolio"}</h2>
+      <p><strong>Nom:</strong> ${name}</p>
+      <p><strong>Email:</strong> ${email}</p>
+    `;
+
+    if (isQuoteRequest) {
+      htmlContent += `
+        <hr style="border: 1px solid #eee; margin: 20px 0;" />
+        <h3>Simulation</h3>
+        <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap;">${quoteSummary}</pre>
+      `;
+
+      if (message) {
+        htmlContent += `
+          <hr style="border: 1px solid #eee; margin: 20px 0;" />
+          <h3>Message additionnel</h3>
+          <p>${message.replace(/\n/g, "<br>")}</p>
+        `;
+      }
+    } else {
+      htmlContent += `
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, "<br>")}</p>
+      `;
+    }
+
     const { error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "enzo.gazzoli@icloud.com",
       replyTo: email,
-      subject: `[Portfolio] Nouveau message de ${name}`,
-      html: `
-        <h2>Nouveau message depuis le portfolio</h2>
-        <p><strong>Nom:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, "<br>")}</p>
-      `,
+      subject,
+      html: htmlContent,
     });
 
     if (error) {

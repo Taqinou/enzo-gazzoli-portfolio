@@ -121,24 +121,51 @@
       "website": {
         "title": "SITE VITRINE",
         "description": "Landing page, portfolio, site vitrine, blog. Design sur mesure, responsive, optimisé SEO.",
-        "price": "à partir de 1 500€"
+        "price": "à partir de 1 750€"
       },
       "application": {
         "title": "APPLICATION",
-        "description": "MVP, SaaS, dashboard, e-commerce Shopify headless. Architecture robuste, API, base de données.",
-        "price": "sur devis"
+        "description": "MVP, SaaS, dashboard. Architecture robuste, API, base de données.",
+        "price": "à partir de 6 250€"
+      },
+      "shopify": {
+        "title": "E-COMMERCE",
+        "description": "Boutique Shopify Headless (Next.js). Performance maximale et design sur mesure.",
+        "price": "à partir de 7 500€"
       },
       "custom": {
         "title": "SUR MESURE",
         "description": "Consulting, audit technique, intégration API. Selon vos besoins spécifiques.",
-        "price": "350€ / jour"
+        "price": "300€ / jour"
       }
+    },
+    "simulator": {
+      "title": "SIMULATEUR",
+      "subtitle": "Estimez votre projet en quelques clics",
+      "step1": "01",
+      "step2": "02",
+      "step3": "03",
+      "projectType": "Type de projet",
+      "formula": "Formule",
+      "options": "Options",
+      "types": {
+        "website": "Site Web",
+        "application": "Application",
+        "shopify": "E-commerce",
+        "custom": "Sur Mesure"
+      },
+      "or": "ou",
+      "skipSimulator": "Je préfère décrire mon projet",
+      "backToSimulator": "Revenir au simulateur",
+      "viewFullPricing": "Voir la grille tarifaire complète"
     },
     "form": {
       "heading": "DISCUTONS DE VOTRE PROJET",
+      "headingWithQuote": "ENVOYEZ VOTRE SIMULATION",
       "name": "nom",
       "email": "email",
       "message": "message",
+      "messageOptional": "message (optionnel)",
       "send": "envoyer",
       "sending": "envoi...",
       "success": "Message envoyé.",
