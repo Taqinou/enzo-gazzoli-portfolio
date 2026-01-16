@@ -169,6 +169,9 @@ export const metadata: Metadata = {
     "Maintenance Site Web",
   ],
   authors: [{ name: "Enzo Gazzoli" }],
+  verification: {
+    google: "eyH37y7r0gpLfmh1ubKdrjJD8l__DLmMx-mVYHcx44U",
+  },
   openGraph: {
     title: "Enzo Gazzoli | Creative Fullstack Developer - Nancy",
     description: "Immersive digital experiences and creative development.",
