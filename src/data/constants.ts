@@ -9,6 +9,7 @@ export const PERSONAL = {
 export const SOCIAL_LINKS = {
   github: "https://github.com/Taqinou",
   linkedin: "https://www.linkedin.com/in/enzo-gazzoli",
+  instagram: "https://www.instagram.com/eg.freelance/",
   fiverr: "https://www.fiverr.com/s/Q7Pyl31",
   malt: "https://www.malt.fr/profile/enzogazzoli",
 } as const;
@@ -25,6 +26,7 @@ export const NAV_LINKS = [
   { labelKey: "navLinks.email", href: `mailto:${PERSONAL.email}` },
   { labelKey: "navLinks.github", href: SOCIAL_LINKS.github, target: "_blank" as const },
   { labelKey: "navLinks.linkedin", href: SOCIAL_LINKS.linkedin, target: "_blank" as const },
+  { labelKey: "navLinks.instagram", href: SOCIAL_LINKS.instagram, target: "_blank" as const },
   { labelKey: "navLinks.fiverr", href: SOCIAL_LINKS.fiverr, target: "_blank" as const },
   { labelKey: "navLinks.malt", href: SOCIAL_LINKS.malt, target: "_blank" as const },
 ] as const;

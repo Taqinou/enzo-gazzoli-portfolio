@@ -22,6 +22,7 @@ const jsonLd = {
   sameAs: [
     SOCIAL_LINKS.github,
     SOCIAL_LINKS.linkedin,
+    SOCIAL_LINKS.instagram,
     SOCIAL_LINKS.malt,
     SOCIAL_LINKS.fiverr,
   ],

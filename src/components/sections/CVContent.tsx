@@ -128,11 +128,13 @@ export function CVContent({ variant }: CVContentProps) {
                             <>
                                 <span className="text-[6pt] tracking-[0.3em]">GITHUB.COM/TAQINOU</span>
                                 <span className="text-[6pt] tracking-[0.3em]">LINKEDIN/ENZO-GAZZOLI</span>
+                                <span className="text-[6pt] tracking-[0.3em]">INSTAGRAM/EG.FREELANCE</span>
                             </>
                         ) : (
                             <>
                                 <a href={SOCIAL_LINKS.github} onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">GITHUB.COM/TAQINOU</a>
                                 <a href={SOCIAL_LINKS.linkedin} onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">LINKEDIN/ENZO-GAZZOLI</a>
+                                <a href={SOCIAL_LINKS.instagram} onClick={() => playClick()} className="text-xs tracking-[0.3em] hover:text-blue">INSTAGRAM/EG.FREELANCE</a>
                             </>
                         )}
                     </div>
