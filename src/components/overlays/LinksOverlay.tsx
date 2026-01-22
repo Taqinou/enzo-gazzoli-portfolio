@@ -23,7 +23,7 @@ export default function LinksOverlay({ isOpen, onClose }: LinksOverlayProps) {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 bg-white z-[20000] overflow-y-auto px-4 md:px-0"
+          className="fixed inset-0 bg-white z-[20000] overflow-y-auto px-4 md:px-0 links-overlay"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

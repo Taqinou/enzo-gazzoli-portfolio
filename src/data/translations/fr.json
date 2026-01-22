@@ -36,22 +36,26 @@
     "visit": "visiter",
     "github": "github",
     "01": {
-      "title": "lumiere de soso shop",
-      "description": "une boutique e-commerce immersive pensée pour vendre autrement. architecture headless, panier fluide, paiement intégré."
-    },
-    "02": {
       "title": "sneakerscope",
       "description": "une plateforme analytique avancée dédiée au marché des sneakers. algorithme propriétaire, conseiller IA autonome, rapports en temps réel."
     },
+    "02": {
+      "title": "7eyes",
+      "description": "site d'artiste pour un rappeur français. design immersif, lecteur audio intégré, animations fluides, esthétique sombre."
+    },
     "03": {
+      "title": "lumiere de soso shop",
+      "description": "une boutique e-commerce immersive pensée pour vendre autrement. architecture headless, panier fluide, paiement intégré."
+    },
+    "04": {
       "title": "portfolio web",
       "description": "une interface interactive pensée pour montrer. mouvement subtil, attente proactive, typographie brute."
     },
-    "04": {
+    "05": {
       "title": "apartment aggregator",
       "description": "une plateforme d'agrégation immobilière. centralisation des annonces, comparaison simplifiée, recherche augmentée."
     },
-    "05": {
+    "06": {
       "title": "functional calendar",
       "description": "un outil de gestion temporelle. création intuitive d'événements, interface épurée, flux fluide."
     }

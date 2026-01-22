@@ -27,7 +27,7 @@ export default function StackPanel({ isOpen, onClose, stack }: StackPanelProps) 
                 <motion.div
                     className="fixed top-0 right-0 w-[100vw] sm:w-[50vw] h-full bg-white z-[15000] 
                      border-l border-ink shadow-[-20px_0_60px_rgba(0,0,0,0.1)]
-                     flex flex-col overflow-hidden"
+                     flex flex-col overflow-hidden stack-panel"
                     initial={{ x: "100%" }}
                     animate={{ x: 0 }}
                     exit={{ x: "100%" }}

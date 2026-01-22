@@ -36,22 +36,26 @@
     "visit": "visit",
     "github": "github",
     "01": {
-      "title": "lumiere de soso shop",
-      "description": "an immersive e-commerce boutique designed to sell differently. headless architecture, smooth cart, integrated payment."
-    },
-    "02": {
       "title": "sneakerscope",
       "description": "an advanced analytics platform dedicated to the sneaker market. proprietary algorithm, autonomous AI advisor, real-time reports."
     },
+    "02": {
+      "title": "7eyes",
+      "description": "artist website for a French rapper. immersive design, integrated audio player, smooth animations, dark aesthetic."
+    },
     "03": {
+      "title": "lumiere de soso shop",
+      "description": "an immersive e-commerce boutique designed to sell differently. headless architecture, smooth cart, integrated payment."
+    },
+    "04": {
       "title": "web portfolio",
       "description": "an interactive interface designed to showcase. subtle motion, proactive waiting, raw typography."
     },
-    "04": {
+    "05": {
       "title": "apartment aggregator",
       "description": "a real estate aggregation platform. centralized listings, simplified comparison, augmented search."
     },
-    "05": {
+    "06": {
       "title": "functional calendar",
       "description": "a time management tool. intuitive event creation, clean interface, smooth workflow."
     }
