@@ -52,10 +52,18 @@
       "description": "une interface interactive pensée pour montrer. mouvement subtil, attente proactive, typographie brute."
     },
     "05": {
+      "title": "TH14",
+      "description": "une expérience web immersive rendant hommage à Thierry Henry. design typographique créatif, animations fluides, parcours interactif de sa carrière légendaire."
+    },
+    "06": {
+      "title": "off screen",
+      "description": "une série de plans fixes en boucle, brute et minimaliste. images contemplatives, flou organique, esthétique brute."
+    },
+    "07": {
       "title": "apartment aggregator",
       "description": "une plateforme d'agrégation immobilière. centralisation des annonces, comparaison simplifiée, recherche augmentée."
     },
-    "06": {
+    "08": {
       "title": "functional calendar",
       "description": "un outil de gestion temporelle. création intuitive d'événements, interface épurée, flux fluide."
     }

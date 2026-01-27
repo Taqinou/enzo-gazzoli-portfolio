@@ -52,10 +52,18 @@
       "description": "an interactive interface designed to showcase. subtle motion, proactive waiting, raw typography."
     },
     "05": {
+      "title": "TH14",
+      "description": "an immersive web experience paying tribute to Thierry Henry. creative typography design, smooth animations, interactive journey through his legendary career."
+    },
+    "06": {
+      "title": "off screen",
+      "description": "a series of looping still frames, raw and minimal. contemplative imagery, organic blur, brutalist aesthetic."
+    },
+    "07": {
       "title": "apartment aggregator",
       "description": "a real estate aggregation platform. centralized listings, simplified comparison, augmented search."
     },
-    "06": {
+    "08": {
       "title": "functional calendar",
       "description": "a time management tool. intuitive event creation, clean interface, smooth workflow."
     }
