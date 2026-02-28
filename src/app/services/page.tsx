@@ -345,8 +345,16 @@ export default function ServicesPage() {
             {isSimulatorOpen && currentSubType && (
               <QuoteSummary
                 total={total}
-                duration={currentSubType.duration}
-                durationEn={currentSubType.durationEn}
+                duration={
+                  customDays !== null && customDays !== currentSubType.days
+                    ? `${customDays} jour${customDays > 1 ? "s" : ""}`
+                    : currentSubType.duration
+                }
+                durationEn={
+                  customDays !== null && customDays !== currentSubType.days
+                    ? `${customDays} day${customDays > 1 ? "s" : ""}`
+                    : currentSubType.durationEn
+                }
                 onSendQuote={handleSendQuote}
               />
             )}
