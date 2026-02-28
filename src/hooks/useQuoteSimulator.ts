@@ -18,6 +18,8 @@ export interface QuoteState {
 export interface QuoteSimulatorReturn {
   state: QuoteState;
   total: number;
+  customDays: number | null;
+  setCustomDays: (days: number) => void;
   includedOptions: Set<string>;
   setProjectType: (type: ProjectType | null) => void;
   toggleProjectType: (type: ProjectType) => void;
@@ -41,6 +43,7 @@ function getInitialState(): QuoteState {
 
 export function useQuoteSimulator(): QuoteSimulatorReturn {
   const [state, setState] = useState<QuoteState>(getInitialState);
+  const [customDays, setCustomDaysState] = useState<number | null>(null);
 
   const includedOptions = useMemo(() => {
     if (!state.projectType) return new Set<string>();
@@ -49,8 +52,12 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
 
   const total = useMemo(() => {
     if (!state.projectType) return 0;
-    return calculateTotal(state.projectType, state.subTypeId, state.selectedOptions);
-  }, [state.projectType, state.subTypeId, state.selectedOptions]);
+    return calculateTotal(state.projectType, state.subTypeId, state.selectedOptions, customDays ?? undefined);
+  }, [state.projectType, state.subTypeId, state.selectedOptions, customDays]);
+
+  const setCustomDays = useCallback((days: number) => {
+    setCustomDaysState(Math.max(1, days));
+  }, []);
 
   const setProjectType = useCallback((type: ProjectType | null) => {
     if (type === null) {
@@ -79,6 +86,7 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
         selectedOptions: new Set<string>(),
       };
     });
+    setCustomDaysState(null);
   }, []);
 
   const setSubType = useCallback((id: string) => {
@@ -87,6 +95,7 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
       subTypeId: id,
       selectedOptions: new Set<string>(),
     }));
+    setCustomDaysState(null);
   }, []);
 
   const toggleOption = useCallback((id: string) => {
@@ -173,9 +182,15 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
         ? `Formule: ${subTypeLabel}\n`
         : `Package: ${subTypeLabel}\n`;
 
-      summary += isFr
-        ? `Durée estimée: ${duration}\n\n`
-        : `Estimated duration: ${duration}\n\n`;
+      const daysLine = customDays !== null
+        ? isFr
+          ? `Durée souhaitée: ${customDays}j (recommandé: ${subType.days}j — ${duration})\n\n`
+          : `Desired duration: ${customDays}d (recommended: ${subType.days}d — ${duration})\n\n`
+        : isFr
+          ? `Durée estimée: ${duration}\n\n`
+          : `Estimated duration: ${duration}\n\n`;
+
+      summary += daysLine;
 
       if (includedOptionsList.length > 0) {
         summary += isFr
@@ -195,12 +210,14 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
 
       return summary;
     },
-    [state, includedOptions, total, getCurrentSubType]
+    [state, customDays, includedOptions, total, getCurrentSubType]
   );
 
   return {
     state,
     total,
+    customDays,
+    setCustomDays,
     includedOptions,
     setProjectType,
     toggleProjectType,

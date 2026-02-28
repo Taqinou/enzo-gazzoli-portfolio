@@ -3,11 +3,13 @@
 
 export type ProjectType = "website" | "application" | "shopify" | "custom";
 
+export const TJM = 250; // Taux Journalier Moyen en €
+
 export interface SubType {
   id: string;
   name: string;
   nameEn: string;
-  basePrice: number;
+  days: number;
   duration: string;
   durationEn: string;
   includes: string[];
@@ -32,7 +34,7 @@ export interface ProjectData {
 }
 
 // Project types with their subtypes
-// TJM: 300€/jour (Credibility boost)
+// Prix = days × TJM (250 €/jour)
 export const projects: Record<ProjectType, ProjectData> = {
   website: {
     id: "website",
@@ -42,7 +44,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "landing",
         name: "Landing Page",
         nameEn: "Landing Page",
-        basePrice: 1750, // ~7 jours
+        days: 7,
         duration: "1-2 semaines",
         durationEn: "1-2 weeks",
         includes: ["seo", "form", "analytics"],
@@ -51,7 +53,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "portfolio",
         name: "Portfolio Créatif",
         nameEn: "Creative Portfolio",
-        basePrice: 3000, // ~12 jours
+        days: 12,
         duration: "2-3 semaines",
         durationEn: "2-3 weeks",
         includes: ["seo", "form", "analytics", "animations"],
@@ -60,7 +62,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "corporate",
         name: "Site Vitrine",
         nameEn: "Business Website",
-        basePrice: 4250, // ~17 jours
+        days: 17,
         duration: "3-4 semaines",
         durationEn: "3-4 weeks",
         includes: ["seo", "form", "analytics", "animations", "multilang"],
@@ -75,7 +77,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "mvp",
         name: "MVP",
         nameEn: "MVP",
-        basePrice: 6250, // ~25 jours
+        days: 25,
         duration: "4-6 semaines",
         durationEn: "4-6 weeks",
         includes: ["seo", "form", "auth", "analytics"],
@@ -84,7 +86,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "saas",
         name: "SaaS Complet",
         nameEn: "Full SaaS",
-        basePrice: 12500, // ~50 jours
+        days: 50,
         duration: "8-12 semaines",
         durationEn: "8-12 weeks",
         includes: ["seo", "form", "auth", "analytics", "stripe", "emails"],
@@ -93,7 +95,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "dashboard",
         name: "Dashboard Métier",
         nameEn: "Business Dashboard",
-        basePrice: 8750, // ~35 jours
+        days: 35,
         duration: "6-8 semaines",
         durationEn: "6-8 weeks",
         includes: ["seo", "form", "auth", "analytics"],
@@ -108,7 +110,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "audit",
         name: "Audit Technique",
         nameEn: "Technical Audit",
-        basePrice: 1200, // ~4 jours
+        days: 4,
         duration: "3-5 jours",
         durationEn: "3-5 days",
         includes: [],
@@ -117,7 +119,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "dev",
         name: "Journée Dev",
         nameEn: "Dev Day",
-        basePrice: 300, // 1 jour
+        days: 1,
         duration: "1 jour",
         durationEn: "1 day",
         includes: [],
@@ -132,7 +134,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "headless",
         name: "Boutique Headless",
         nameEn: "Headless Store",
-        basePrice: 7500, // ~30 jours
+        days: 30,
         duration: "5-7 semaines",
         durationEn: "5-7 weeks",
         includes: ["seo", "analytics", "stripe", "animations"],
@@ -270,12 +272,14 @@ export function getOptionsByCategory(category: OptionCategory): PricingOption[] 
 export function calculateTotal(
   projectType: ProjectType,
   subTypeId: string,
-  selectedOptions: Set<string>
+  selectedOptions: Set<string>,
+  overrideDays?: number
 ): number {
   const project = projects[projectType];
   const subType = project.subtypes.find((s) => s.id === subTypeId) || project.subtypes[0];
-  
-  let total = subType.basePrice;
+
+  const days = overrideDays ?? subType.days;
+  let total = days * TJM;
   
   // Add selected options (excluding those already included)
   const includedSet = new Set(subType.includes);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useRef } from "react";
+import { useState, useEffect, FormEvent, useRef } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuoteSimulator } from "@/hooks/useQuoteSimulator";
-import { ProjectType, OptionCategory as OptionCategoryType } from "@/data/pricing";
+import { ProjectType, OptionCategory as OptionCategoryType, TJM, projects } from "@/data/pricing";
 import OptionCategory from "@/components/services/OptionCategory";
 import QuoteSummary from "@/components/services/QuoteSummary";
 
@@ -36,6 +36,8 @@ export default function ServicesPage() {
   const {
     state,
     total,
+    customDays,
+    setCustomDays,
     toggleProjectType,
     setSubType,
     toggleOption,
@@ -50,6 +52,16 @@ export default function ServicesPage() {
   const subTypes = getSubTypes();
   const currentSubType = getCurrentSubType();
   const isSimulatorOpen = state.projectType !== null;
+
+  // Local string state for the days input — allows clearing to retype
+  const [daysInputStr, setDaysInputStr] = useState<string>("");
+
+  // Sync input string whenever the subtype resets (customDays → null)
+  useEffect(() => {
+    if (customDays === null && currentSubType) {
+      setDaysInputStr(String(currentSubType.days));
+    }
+  }, [customDays, currentSubType?.days]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -194,7 +206,8 @@ export default function ServicesPage() {
                         <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
                           <div className="flex flex-col md:items-end gap-1 md:max-w-md pl-8 md:pl-0">
                             <span className="font-serif italic text-xl md:text-2xl text-ink/60">
-                              {t(`services.offers.${offer}.price`)}
+                              {isFr ? "à partir de" : "from"}{" "}
+                              {Math.min(...projects[offer].subtypes.map((s) => s.days * TJM)).toLocaleString(isFr ? "fr-FR" : "en-US")} €
                             </span>
                             <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-xs">
                               {t(`services.offers.${offer}.description`)}
@@ -243,16 +256,59 @@ export default function ServicesPage() {
                                     <span className="font-serif text-lg md:text-xl text-ink">
                                       {isFr ? sub.name : sub.nameEn}
                                     </span>
-                                    <span className="flex items-center gap-4">
-                                      <span className="font-mono text-xs text-ink/50 hidden md:block">
-                                        {isFr ? sub.duration : sub.durationEn}
-                                      </span>
+                                    <span className="flex flex-col items-end">
                                       <span className="font-mono text-sm md:text-base font-bold text-blue">
-                                        {sub.basePrice.toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                        {(state.subTypeId === sub.id && customDays !== null
+                                          ? customDays * TJM
+                                          : sub.days * TJM
+                                        ).toLocaleString(isFr ? "fr-FR" : "en-US")} €
                                       </span>
+                                      {state.subTypeId === sub.id && customDays !== null && customDays !== sub.days && (
+                                        <span className="font-mono text-[10px] text-ink/40">
+                                          {isFr ? "en moyenne" : "avg"} {(sub.days * TJM).toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                        </span>
+                                      )}
                                     </span>
                                   </motion.button>
                                 ))}
+                              </div>
+                            </motion.div>
+
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.15, duration: 0.4 }}
+                              className="mb-10"
+                            >
+                              <h3 className="font-mono text-xs uppercase tracking-widest text-ink/40 mb-4">
+                                {isFr ? "Durée souhaitée" : "Desired duration"}
+                              </h3>
+                              <div className="flex flex-wrap items-center gap-4">
+                                <div className="flex items-center border border-ink/20 focus-within:border-blue transition-colors duration-200">
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    value={daysInputStr}
+                                    onChange={(e) => {
+                                      const str = e.target.value;
+                                      setDaysInputStr(str);
+                                      const num = parseInt(str);
+                                      if (!isNaN(num) && num >= 1) {
+                                        setCustomDays(num);
+                                      }
+                                    }}
+                                    className="w-16 bg-transparent font-mono text-xl font-bold text-blue px-4 py-3 focus:outline-none text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                    aria-label={isFr ? "Nombre de jours" : "Number of days"}
+                                  />
+                                  <span className="font-mono text-xs text-ink/40 uppercase pr-4">
+                                    {isFr ? "jours" : "days"}
+                                  </span>
+                                </div>
+                                <span className="font-mono text-xs text-ink/40">
+                                  {isFr ? "recommandé" : "recommended"} : {currentSubType?.days}j
+                                  <span className="mx-2 opacity-50">—</span>
+                                  {isFr ? currentSubType?.duration : currentSubType?.durationEn}
+                                </span>
                               </div>
                             </motion.div>
 

@@ -133,23 +133,19 @@
     "offers": {
       "website": {
         "title": "WEBSITE",
-        "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized.",
-        "price": "from 1,750€"
+        "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized."
       },
       "application": {
         "title": "APPLICATION",
-        "description": "MVP, SaaS, dashboard. Robust architecture, API, database.",
-        "price": "from 6,250€"
+        "description": "MVP, SaaS, dashboard. Robust architecture, API, database."
       },
       "shopify": {
         "title": "E-COMMERCE",
-        "description": "Headless Shopify Store (Next.js). Max performance and custom design.",
-        "price": "from 7,500€"
+        "description": "Headless Shopify Store (Next.js). Max performance and custom design."
       },
       "custom": {
         "title": "CUSTOM",
-        "description": "Consulting, technical audit, API integration. Tailored to your specific needs.",
-        "price": "300€ / day"
+        "description": "Consulting, technical audit, API integration. Tailored to your specific needs."
       }
     },
     "simulator": {
