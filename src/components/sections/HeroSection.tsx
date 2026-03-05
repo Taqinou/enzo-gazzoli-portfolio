@@ -67,7 +67,7 @@ export default function HeroSection({
       {/* Sidebar - ARCHIVE on left */}
       <div className="row-span-2 overflow-visible flex items-center justify-start pl-3 md:pl-5 relative">
         {/* Language Toggle - Raw Style */}
-        <div className="absolute top-[80px] left-5 z-[101] font-serif italic text-white/60 text-2xl md:text-4xl flex gap-3 pointer-events-auto">
+        <div className={`absolute top-[80px] left-5 z-[101] font-serif italic text-white/60 text-2xl md:text-4xl flex gap-3 transition-opacity duration-300 ${isMobile && isOpen ? "opacity-0 invisible" : ""}`}>
           <button
             onClick={() => {
               setLocale("fr");
@@ -93,14 +93,14 @@ export default function HeroSection({
 
         {/* Archive Button */}
         <motion.button
-          className="font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left bg-transparent border-none p-0 text-left appearance-none"
+          className={`font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left bg-transparent border-none p-0 text-left appearance-none ${isMobile && isOpen ? "pointer-events-none" : ""}`}
           style={{ lineHeight: 0.8 }}
           animate={{
             scale: isOpen ? 0.4 : 1,
             opacity: isOpen ? 0.3 : 1,
           }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          onClick={toggleArchive}
+          onPointerDown={toggleArchive}
           aria-label={t("hero.archive")}
         >
           {t("hero.archive")}
@@ -112,39 +112,33 @@ export default function HeroSection({
         {isOpen && (
             <motion.div
               className={`${isMobile
-                ? "fixed inset-0 z-[100] bg-blue flex flex-col justify-center items-start px-8 pt-40 pb-20 overflow-y-auto max-h-screen"
+                ? "fixed inset-0 z-[500] bg-blue flex flex-col items-start px-8 pt-[10vh] pb-[8vh] overflow-y-auto"
                 : "col-start-2 row-span-2 flex flex-col justify-between items-start pl-[10vw] relative"}`}
               initial={{ opacity: 0 }}
-              onPan={(e, info) => {
-                 // Close if scrolled down (dragged up) significantly
-                 if (isMobile && info.offset.y < -30) {
-                    setIsOpen(false);
-                    playExit();
-                 }
-              }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
-          >
-            {/* Mobile: ARCHIVE button to close */}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+            {/* Mobile: ARCHIVE button to close — dans le flux flex, pas en absolu */}
             {isMobile && (
-              <motion.h2
-                className="absolute top-48 left-8 font-serif text-[15vw] uppercase text-white/40 cursor-pointer tracking-[-0.05em] hover:text-white"
-                style={{ lineHeight: 0.8 }}
-                onClick={toggleArchive}
+              <motion.button
+                className="font-serif text-[15vw] uppercase text-white/40 tracking-[-0.05em] hover:text-white mb-[3vh] shrink-0 bg-transparent border-none p-0 text-left appearance-none cursor-pointer"
+                style={{ lineHeight: 0.8, touchAction: "manipulation" }}
+                onPointerDown={toggleArchive}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
+                aria-label="Fermer l'archive"
               >
                 {t("hero.archive")}
-              </motion.h2>
+              </motion.button>
             )}
 
             {archiveItems.map((item, i) => (
               <motion.div
                 key={item.index}
                 className={`font-serif lowercase text-white cursor-pointer w-fit tracking-[-0.02em] hover:text-ink hover:bg-white hover:px-2.5
-                           ${isMobile ? "text-[clamp(1.8rem,8vw,3.5rem)] my-4" : "text-[clamp(2rem,5vw,6rem)] my-2.5"}`}
+                           ${isMobile ? "text-[clamp(1.8rem,7.5vw,3.2rem)] my-[1.5vh]" : "text-[clamp(2rem,5vw,6rem)] my-2.5"}`}
                 style={{
                   fontWeight: 400,
                   lineHeight: 1,
@@ -163,7 +157,7 @@ export default function HeroSection({
       </AnimatePresence>
 
       {/* CV & Services Links */}
-      <div className="absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] pointer-events-auto flex flex-col items-end gap-1 md:gap-2">
+      <div className={`absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] flex flex-col items-end gap-1 md:gap-2 transition-opacity duration-300 ${isMobile && isOpen ? "opacity-0 invisible" : ""}`}>
         <Link
           href="/cv"
           onPointerDown={handleCvClick}
