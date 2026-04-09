@@ -3,7 +3,6 @@
 import { useState, useEffect, FormEvent, useRef } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Plus } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -359,14 +358,15 @@ export default function ServicesPage() {
               />
             )}
 
-            <div className="mt-20 md:mt-32 border-t border-ink/10 pt-10">
-              <Link 
-                href="/pricing"
-                className="inline-flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-ink/30 hover:text-ink transition-colors duration-300 group"
-              >
-                <span>{t("services.simulator.viewFullPricing")}</span>
-                <span className="group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
+            <div className="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <p className="font-mono text-sm md:text-base uppercase tracking-widest text-ink/50 whitespace-nowrap">
+                TJM — <span className="text-ink font-bold">300 €</span><span className="text-ink/40">/jour</span>
+              </p>
+              <p className="font-serif italic text-xl md:text-2xl text-ink/50">
+                {isFr
+                  ? "Chaque projet est unique — discutons de votre besoin."
+                  : "Every project is unique — let's talk about yours."}
+              </p>
             </div>
           </div>
         </main>

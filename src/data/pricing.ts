@@ -3,7 +3,7 @@
 
 export type ProjectType = "website" | "application" | "shopify" | "custom";
 
-export const TJM = 250; // Taux Journalier Moyen en €
+export const TJM = 300; // Taux Journalier Moyen en €
 
 export interface SubType {
   id: string;
@@ -34,7 +34,7 @@ export interface ProjectData {
 }
 
 // Project types with their subtypes
-// Prix = days × TJM (250 €/jour)
+// Prix = days × TJM (300 €/jour)
 export const projects: Record<ProjectType, ProjectData> = {
   website: {
     id: "website",
