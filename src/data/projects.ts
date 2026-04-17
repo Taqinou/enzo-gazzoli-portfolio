@@ -21,7 +21,7 @@ export const projects: Project[] = [
     title: "7eyes",
     stack: "Next.js / React / Framer Motion / Tailwind",
     linkText: "visiter",
-    linkUrl: "https://7eyes-website.vercel.app",
+    linkUrl: "https://7eyes-website-eight.vercel.app",
   },
   {
     index: "03",
