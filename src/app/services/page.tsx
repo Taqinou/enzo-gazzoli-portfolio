@@ -11,6 +11,7 @@ import { useQuoteSimulator } from "@/hooks/useQuoteSimulator";
 import { ProjectType, OptionCategory as OptionCategoryType, TJM, projects } from "@/data/pricing";
 import OptionCategory from "@/components/services/OptionCategory";
 import QuoteSummary from "@/components/services/QuoteSummary";
+import BlurFade from "@/components/ui/BlurFade";
 
 const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
 const CATEGORIES: OptionCategoryType[] = ["tech", "marketing", "design", "support"];
@@ -145,17 +146,22 @@ export default function ServicesPage() {
               className="absolute inset-0 bg-ink/5 origin-bottom"
               style={{ scaleY: scrollYProgress }}
             />
-            <h1 className="-rotate-90 whitespace-nowrap font-serif text-[12vh] text-ink opacity-20 origin-center select-none tracking-tight">
+            <motion.h1
+              className="whitespace-nowrap font-serif text-[12vh] text-ink origin-center select-none tracking-tight"
+              initial={{ opacity: 0, filter: "blur(12px)", rotate: -90 }}
+              animate={{ opacity: 0.2, filter: "blur(0px)", rotate: -90 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            >
               {t("services.title")}
-            </h1>
+            </motion.h1>
           </div>
 
           <div className="flex flex-col pt-24 md:pt-32 pb-20 px-6 md:px-20 relative">
             
             <motion.h1
               className="md:hidden font-serif text-[15vw] leading-[0.8] mb-16 text-ink opacity-90"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
               {t("services.title")}
@@ -166,7 +172,8 @@ export default function ServicesPage() {
                 const isSelected = state.projectType === offer;
                 
                 return (
-                  <div key={offer}>
+                  <BlurFade key={offer} inView delay={index * 0.08}>
+                  <div>
                     <motion.button
                       onClick={() => handleOfferClick(offer)}
                       className={`
@@ -337,6 +344,7 @@ export default function ServicesPage() {
                       )}
                     </AnimatePresence>
                   </div>
+                  </BlurFade>
                 );
               })}
             </div>

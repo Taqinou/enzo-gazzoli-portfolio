@@ -77,9 +77,14 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
         {/* Menu Phase */}
         {phase === "menu" && (
           <div className="text-center select-none">
-            <h1 className="font-mono text-white text-[15px] font-bold tracking-widest">
+            <motion.h1
+              className="font-mono text-white text-[15px] font-bold tracking-widest"
+              initial={{ opacity: 0, filter: "blur(8px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
               {t("intro.portfolio")}
-            </h1>
+            </motion.h1>
           </div>
         )}
 
@@ -87,7 +92,7 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
         {phase === "sequence" && (
           <div className="font-mono text-white text-center">
             {SEQUENCE.slice(0, visibleLines).map((line, i) => (
-              <div
+              <motion.div
                 key={i}
                 className={`
                   ${i === 0 ? "text-[clamp(2rem,8vw,6rem)] font-bold" : ""}
@@ -96,9 +101,12 @@ export default function IntroOverlay({ onComplete }: IntroOverlayProps) {
                   ${i === 4 ? "text-[clamp(1rem,2vw,1.5rem)] text-white/30 mt-2" : ""}
                   uppercase tracking-[0.1em]
                 `}
+                initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               >
                 {line}
-              </div>
+              </motion.div>
             ))}
           </div>
         )}

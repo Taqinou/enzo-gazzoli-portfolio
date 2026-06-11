@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSound } from "@/hooks/useSound";
 import { archiveItems } from "@/data/projects";
+import BlurFade from "@/components/ui/BlurFade";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
@@ -92,19 +93,21 @@ export default function HeroSection({
         </div>
 
         {/* Archive Button */}
-        <motion.button
-          className={`font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left bg-transparent border-none p-0 text-left appearance-none ${isMobile && isOpen ? "pointer-events-none" : ""}`}
-          style={{ lineHeight: 0.8 }}
-          animate={{
-            scale: isOpen ? 0.4 : 1,
-            opacity: isOpen ? 0.3 : 1,
-          }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          onPointerDown={toggleArchive}
-          aria-label={t("hero.archive")}
-        >
-          {t("hero.archive")}
-        </motion.button>
+        <BlurFade blur={12} yOffset={20} duration={1}>
+          <motion.button
+            className={`font-serif text-[20vw] md:text-[clamp(2.5rem,12vw,15rem)] uppercase text-white cursor-pointer z-20 tracking-[-0.05em] hover:text-ink origin-left bg-transparent border-none p-0 text-left appearance-none ${isMobile && isOpen ? "pointer-events-none" : ""}`}
+            style={{ lineHeight: 0.8 }}
+            animate={{
+              scale: isOpen ? 0.4 : 1,
+              opacity: isOpen ? 0.3 : 1,
+            }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            onPointerDown={toggleArchive}
+            aria-label={t("hero.archive")}
+          >
+            {t("hero.archive")}
+          </motion.button>
+        </BlurFade>
       </div>
 
       {/* Archive List - Mobile: fullscreen overlay / Desktop: inline */}
@@ -144,9 +147,9 @@ export default function HeroSection({
                   lineHeight: 1,
                   marginLeft: isMobile ? 0 : (marginLefts[i] || "0vw"),
                 }}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.05, duration: 0.4 }}
+                initial={{ opacity: 0, y: 10, filter: "blur(8px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ delay: 0.1 + i * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 onPointerDown={() => handleProjectClick(item.index)}
               >
                 {item.label}
@@ -158,20 +161,24 @@ export default function HeroSection({
 
       {/* CV & Services Links */}
       <div className={`absolute top-[60px] md:top-[120px] right-4 md:right-10 z-[101] flex flex-col items-end gap-1 md:gap-2 transition-opacity duration-300 ${isMobile && isOpen ? "opacity-0 invisible" : ""}`}>
-        <Link
-          href="/cv"
-          onPointerDown={handleCvClick}
-          className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
-        >
-          {t("hero.cv")}
-        </Link>
-        <Link
-          href="/services"
-          onPointerDown={handleCvClick}
-          className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
-        >
-          {t("hero.services")}
-        </Link>
+        <BlurFade delay={0.2}>
+          <Link
+            href="/cv"
+            onPointerDown={handleCvClick}
+            className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
+          >
+            {t("hero.cv")}
+          </Link>
+        </BlurFade>
+        <BlurFade delay={0.3}>
+          <Link
+            href="/services"
+            onPointerDown={handleCvClick}
+            className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
+          >
+            {t("hero.services")}
+          </Link>
+        </BlurFade>
       </div>
 
       {/* Footer - Year */}
@@ -179,7 +186,9 @@ export default function HeroSection({
         className="absolute bottom-4 md:bottom-10 right-4 md:right-10 font-mono text-[clamp(3rem,20vw,22rem)] text-white opacity-10 font-black whitespace-nowrap pointer-events-none"
         style={{ lineHeight: 0.8, letterSpacing: "-0.05em" }}
       >
-        {new Date().getFullYear()}
+        <BlurFade delay={0.4} blur={16} duration={1.2}>
+          {new Date().getFullYear()}
+        </BlurFade>
       </div>
     </section>
   );

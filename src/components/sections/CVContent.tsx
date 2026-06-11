@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import BlurFade from "@/components/ui/BlurFade";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useSound } from "@/hooks/useSound";
 import { PERSONAL, SOCIAL_LINKS } from "@/data/constants";
@@ -79,9 +80,9 @@ export function CVContent({ variant }: CVContentProps) {
             </div>
         ) : (
             <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, ease: easeOutExpo }}
+                initial={{ opacity: 0, y: 16, filter: "blur(10px)" }}
+                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                transition={{ duration: 1, ease: easeOutExpo }}
                 className="mt-20 md:mt-0 flex flex-col justify-center md:block h-full md:h-auto"
             >
                 <h1 className="font-serif text-[clamp(3.5rem,15vw,18rem)] leading-[0.7] tracking-[-0.06em] lowercase text-white mb-6 md:mb-10">
@@ -95,7 +96,8 @@ export function CVContent({ variant }: CVContentProps) {
       </section>
 
       {/* INFO BLOCK (BLACK / ASYMMETRIC) & STATUS */}
-      <div 
+      <BlurFade inView disabled={isPrint}>
+      <div
         className={isPrint ? "grid grid-cols-12 gap-5" : "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12"}
         style={isPrint ? { display: "grid", gridTemplateColumns: "repeat(12, 1fr)" } : undefined}
       >
@@ -164,9 +166,11 @@ export function CVContent({ variant }: CVContentProps) {
             </div>
         </section>
       </div>
+      </BlurFade>
 
       {/* CURRICULUM & PROJECTS */}
-      <div 
+      <BlurFade inView disabled={isPrint}>
+      <div
         className={isPrint ? "grid grid-cols-2 gap-5" : "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12"}
         style={isPrint ? { display: "grid", gridTemplateColumns: "repeat(2, 1fr)" } : undefined}
       >
@@ -216,9 +220,11 @@ export function CVContent({ variant }: CVContentProps) {
              </div>
         </section>
       </div>
+      </BlurFade>
 
       {/* STACK & EDUCATION */}
-      <div 
+      <BlurFade inView disabled={isPrint}>
+      <div
         className={isPrint ? "grid grid-cols-4 gap-5" : "grid grid-cols-1 lg:grid-cols-4 gap-8 lg:gap-12"}
         style={isPrint ? { display: "grid", gridTemplateColumns: "repeat(4, 1fr)" } : undefined}
       >
@@ -250,6 +256,7 @@ export function CVContent({ variant }: CVContentProps) {
             <span className={`${isPrint ? "text-black" : "text-ink hidden md:block"} opacity-5 font-black ${isPrint ? "text-[45pt]" : "text-9xl"} leading-none`}>EDU</span>
         </div>
       </div>
+      </BlurFade>
     </div>
   );
 }

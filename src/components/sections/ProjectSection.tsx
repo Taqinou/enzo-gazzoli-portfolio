@@ -77,8 +77,12 @@ const ProjectSection = memo(
                              leading-085 tracking-[-0.05em] bg-transparent border-none appearance-none p-0
                              ${isProjectActive ? "text-white" : "text-ink"}
                              hover:text-blue`}
-                  initial={{ y: "110%", opacity: 0 }}
-                  animate={{ y: isActive ? 0 : "110%", opacity: isActive ? 1 : 0 }}
+                  initial={{ y: "110%", opacity: 0, filter: "blur(10px)" }}
+                  animate={{
+                    y: isActive ? 0 : "110%",
+                    opacity: isActive ? 1 : 0,
+                    filter: isActive ? "blur(0px)" : "blur(10px)",
+                  }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   onClick={toggleProject}
@@ -118,9 +122,9 @@ const ProjectSection = memo(
                     <motion.div
                       className="text-[clamp(1.1rem,4.5vw,6rem)] md:text-[clamp(1.5rem,3.5vw,6rem)] font-mono font-extrabold uppercase
                                tracking-[-0.05em] leading-[0.95] md:leading-[0.9] text-white mb-6 md:mb-10 max-w-[95vw] md:max-w-[90vw] text-center"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 }}
+                      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     >
                       {projectDescription}
                     </motion.div>
@@ -128,9 +132,9 @@ const ProjectSection = memo(
                     {/* Link */}
                     <motion.div
                       className="flex gap-4 md:gap-8 mt-3 md:mt-5"
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 }}
+                      initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <a
                         href={project.linkUrl}
