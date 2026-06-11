@@ -4,7 +4,7 @@ export interface Project {
   // description: string; // Deprecated: content is loaded from translations
   stack: string;
   linkText: string;
-  linkUrl: string;
+  linkUrl?: string;
   githubUrl?: string;
 }
 
@@ -14,7 +14,6 @@ export const projects: Project[] = [
     title: "sneakerscope",
     stack: "Next.js / FastAPI / PostgreSQL / Redis / Gemini AI / Recharts",
     linkText: "visiter",
-    linkUrl: "https://sneakerscope.app",
   },
   {
     index: "02",

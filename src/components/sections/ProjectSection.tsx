@@ -136,15 +136,17 @@ const ProjectSection = memo(
                       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                       transition={{ delay: 0.5, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <a
-                        href={project.linkUrl}
-                        className="font-serif text-lg md:text-xl lowercase border-b border-white
-                                  pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                      >
-                        {linkText}
-                      </a>
+                      {project.linkUrl && (
+                        <a
+                          href={project.linkUrl}
+                          className="font-serif text-lg md:text-xl lowercase border-b border-white
+                                    pb-0.5 inline-block text-white hover:text-ink hover:border-ink transition-colors duration-200"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          {linkText}
+                        </a>
+                      )}
 
                       {project.githubUrl && (
                         <a
