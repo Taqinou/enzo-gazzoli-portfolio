@@ -6,18 +6,10 @@
   "notFound": {
     "label": "rien."
   },
-  "hero": {
-    "archive": "ARCHIVE",
-    "cv": "curriculum vitae."
-  },
   "nav": {
     "index": "INDEX",
     "homeWelcome": "HOME // WELCOME_INDEX",
     "scroll": "SCROLL"
-  },
-  "identity": {
-    "info": "INFOINF0",
-    "exit": "EXITEXIT"
   },
   "ellipse": {
     "title": "DEVELOPPEUR FULLSTACK",
@@ -179,6 +171,63 @@
       "sending": "envoi...",
       "success": "Message envoyé.",
       "error": "Erreur lors de l'envoi."
+    }
+  },
+  "themeToggle": {
+    "toMinimalLabel": "min.",
+    "toDefaultLabel": "art.",
+    "toMinimalAriaLabel": "Passer au thème minimaliste",
+    "toDefaultAriaLabel": "Revenir au thème artistique"
+  },
+  "resume": {
+    "heroTitle": "Salut, moi c'est Enzo 👋",
+    "heroSubtitle": "Développeur fullstack freelance basé à Nancy. Je conçois des sites et applications web sur mesure, performants et soignés.",
+    "avatarAlt": "Portrait d'Enzo Gazzoli",
+    "aboutTitle": "À propos",
+    "workTitle": "Expérience",
+    "educationTitle": "Formation",
+    "skillsTitle": "Compétences",
+    "projectsChip": "Mes projets",
+    "projectsTitle": "Découvrez mes derniers projets",
+    "projectsSubtitle": "Du site vitrine à l'application complète, une sélection de projets réalisés ces dernières années.",
+    "projectWebsite": "Site",
+    "projectSource": "Code",
+    "contactChip": "Contact",
+    "contactTitle": "Entrons en contact",
+    "contactLead": "Une question ou un projet en tête ? Écrivez-moi sur",
+    "contactLinkedin": "LinkedIn",
+    "contactOr": "ou par",
+    "contactEmail": "email",
+    "contactTail": "— je réponds rapidement.",
+    "dockAriaLabel": "Navigation principale",
+    "dockHome": "Accueil",
+    "dockProjects": "Projets",
+    "dockGithub": "GitHub",
+    "dockLinkedin": "LinkedIn",
+    "dockEmail": "Email",
+    "experience": {
+      "freelance": {
+        "title": "Développeur indépendant",
+        "subtitle": "Sites & applications web sur mesure",
+        "period": "2025 — aujourd'hui",
+        "description": "Conception intégrale de solutions web finies dans le détail : de l'architecture technique au design d'interface, en adaptation totale à votre univers et vos objectifs."
+      },
+      "internship": {
+        "title": "Stage technique",
+        "subtitle": "Automatisation Python (Excel → PDF)",
+        "period": "2024",
+        "description": "Développement d'un pont technique en Python : automatisation du passage de la donnée Excel vers le format PDF pour donner une forme finale et propre à l'information brute."
+      }
+    },
+    "education": {
+      "licence": {
+        "degree": "Licence informatique",
+        "period": "2025"
+      },
+      "bac": {
+        "degree": "Baccalauréat général",
+        "period": "2022"
+      }
     }
   }
 }

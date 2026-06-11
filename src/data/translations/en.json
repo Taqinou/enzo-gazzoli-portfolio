@@ -6,18 +6,10 @@
   "notFound": {
     "label": "nothing."
   },
-  "hero": {
-    "archive": "ARCHIVE",
-    "cv": "curriculum vitae."
-  },
   "nav": {
     "index": "INDEX",
     "homeWelcome": "HOME // WELCOME_INDEX",
     "scroll": "SCROLL"
-  },
-  "identity": {
-    "info": "INFOINF0",
-    "exit": "EXITEXIT"
   },
   "ellipse": {
     "title": "FULLSTACK DEVELOPER",
@@ -179,6 +171,63 @@
       "sending": "sending...",
       "success": "Message sent.",
       "error": "Error sending message."
+    }
+  },
+  "themeToggle": {
+    "toMinimalLabel": "min.",
+    "toDefaultLabel": "art.",
+    "toMinimalAriaLabel": "Switch to minimal theme",
+    "toDefaultAriaLabel": "Back to artistic theme"
+  },
+  "resume": {
+    "heroTitle": "Hi, I'm Enzo 👋",
+    "heroSubtitle": "Freelance fullstack developer based in Nancy, France. I craft custom, polished and performant websites and web apps.",
+    "avatarAlt": "Portrait of Enzo Gazzoli",
+    "aboutTitle": "About",
+    "workTitle": "Work Experience",
+    "educationTitle": "Education",
+    "skillsTitle": "Skills",
+    "projectsChip": "My Projects",
+    "projectsTitle": "Check out my latest work",
+    "projectsSubtitle": "From showcase websites to full web apps, here is a selection of projects from the past few years.",
+    "projectWebsite": "Website",
+    "projectSource": "Source",
+    "contactChip": "Contact",
+    "contactTitle": "Get in Touch",
+    "contactLead": "Have a question or a project in mind? Reach out on",
+    "contactLinkedin": "LinkedIn",
+    "contactOr": "or via",
+    "contactEmail": "email",
+    "contactTail": "— I reply quickly.",
+    "dockAriaLabel": "Main navigation",
+    "dockHome": "Home",
+    "dockProjects": "Projects",
+    "dockGithub": "GitHub",
+    "dockLinkedin": "LinkedIn",
+    "dockEmail": "Email",
+    "experience": {
+      "freelance": {
+        "title": "Independent Developer",
+        "subtitle": "Custom websites & web apps",
+        "period": "2025 — Present",
+        "description": "End-to-end design of polished web solutions: from technical architecture to interface design, fully adapted to your brand and goals."
+      },
+      "internship": {
+        "title": "Technical Internship",
+        "subtitle": "Python automation (Excel → PDF)",
+        "period": "2024",
+        "description": "Built a technical bridge in Python: automating the conversion of Excel data to PDF to give raw information a clean, final form."
+      }
+    },
+    "education": {
+      "licence": {
+        "degree": "Computer Science Degree (Licence)",
+        "period": "2025"
+      },
+      "bac": {
+        "degree": "General Baccalaureate",
+        "period": "2022"
+      }
     }
   }
 }

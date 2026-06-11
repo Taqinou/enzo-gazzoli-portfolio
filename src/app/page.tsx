@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { AnimatePresence, motion } from "framer-motion";
 import BackgroundName from "@/components/ui/BackgroundName";
 import IntroOverlay from "@/components/overlays/IntroOverlay";
 import TopRibbon from "@/components/layout/TopRibbon";
@@ -10,24 +11,66 @@ import HeroSection from "@/components/sections/HeroSection";
 import ProjectSection from "@/components/sections/ProjectSection";
 import LinksTrigger from "@/components/ui/LinksTrigger";
 import ScrollProgress from "@/components/ui/ScrollProgress";
-import { projects } from "@/data/projects";
+import MinimalHome from "@/components/minimal/MinimalHome";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useHomeState } from "@/hooks/useHomeState";
+import { useTheme } from "@/hooks/useTheme";
+import { projects } from "@/data/projects";
 
 // Lazy load overlays for better initial load performance
 const EllipsePanel = dynamic(() => import("@/components/overlays/EllipsePanel"), { ssr: false });
 const LinksOverlay = dynamic(() => import("@/components/overlays/LinksOverlay"), { ssr: false });
 const StackPanel = dynamic(() => import("@/components/overlays/StackPanel"), { ssr: false });
 
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const;
+
 export default function Home() {
+  const { theme } = useTheme();
+  const [introPlayed, setIntroPlayed] = useState(false);
+
   return (
-    <Suspense fallback={<div className="h-screen bg-blue" />}>
-      <HomeContent />
-    </Suspense>
+    <>
+      <AnimatePresence mode="wait">
+        {theme === "minimal" ? (
+          <motion.div
+            key="minimal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+          >
+            <MinimalHome />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="default"
+            data-theme-root="default"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
+          >
+            <Suspense fallback={<div className="h-screen bg-blue" />}>
+              <DefaultHome
+                initialIntroComplete={introPlayed}
+                onIntroComplete={() => setIntroPlayed(true)}
+              />
+            </Suspense>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <ThemeToggle visible={theme === "minimal" || introPlayed} />
+    </>
   );
 }
 
-function HomeContent() {
-  const { state, actions, refs } = useHomeState();
+interface DefaultHomeProps {
+  initialIntroComplete: boolean;
+  onIntroComplete: () => void;
+}
+
+function DefaultHome({ initialIntroComplete, onIntroComplete }: DefaultHomeProps) {
+  const { state, actions, refs } = useHomeState({ initialIntroComplete });
 
   const {
     introComplete,
@@ -57,6 +100,11 @@ function HomeContent() {
   } = actions;
 
   const { mainPageRef, projectRefs } = refs;
+
+  // Remonte l'info "intro jouée" (couvre aussi ?skipIntro=true)
+  useEffect(() => {
+    if (introComplete) onIntroComplete();
+  }, [introComplete, onIntroComplete]);
 
   return (
     <>

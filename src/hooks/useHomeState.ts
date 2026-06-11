@@ -5,14 +5,18 @@ import { useSound } from "@/hooks/useSound";
 import { projects } from "@/data/projects";
 import { ANIMATION } from "@/data/constants";
 
-export function useHomeState() {
+interface UseHomeStateOptions {
+  initialIntroComplete?: boolean;
+}
+
+export function useHomeState(options?: UseHomeStateOptions) {
   const searchParams = useSearchParams();
   const skipIntroParam = searchParams.get("skipIntro") === "true";
   const { t } = useTranslation();
   const { playScrollTick } = useSound();
 
   // State
-  const [introComplete, setIntroComplete] = useState(skipIntroParam);
+  const [introComplete, setIntroComplete] = useState(skipIntroParam || (options?.initialIntroComplete ?? false));
   const [ellipsePanelOpen, setEllipsePanelOpen] = useState(false);
   const [linksOverlayOpen, setLinksOverlayOpen] = useState(false);
   const [stackPanelOpen, setStackPanelOpen] = useState(false);

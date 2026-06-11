@@ -6,6 +6,7 @@ export interface Project {
   linkText: string;
   linkUrl?: string;
   githubUrl?: string;
+  imageUrl?: string;
 }
 
 export const projects: Project[] = [
@@ -21,6 +22,7 @@ export const projects: Project[] = [
     stack: "Next.js / React / Framer Motion / Tailwind",
     linkText: "visiter",
     linkUrl: "https://7eyes-website-eight.vercel.app",
+    imageUrl: "/images/projects/02-7eyes.webp",
   },
   {
     index: "03",
@@ -28,6 +30,7 @@ export const projects: Project[] = [
     stack: "Next.js / React / Framer Motion / TypeScript / Shopify API",
     linkText: "visiter",
     linkUrl: "https://boutique.lumieredesoso.fr",
+    imageUrl: "/images/projects/03-lumiere-de-soso.webp",
   },
   {
     index: "04",
@@ -36,6 +39,7 @@ export const projects: Project[] = [
     linkText: "visiter",
     linkUrl: "https://enzo-gazzoli.com",
     githubUrl: "https://github.com/Taqinou/enzo-gazzoli-portfolio",
+    imageUrl: "/images/projects/04-portfolio-web.webp",
   },
   {
     index: "05",
@@ -44,6 +48,7 @@ export const projects: Project[] = [
     linkText: "visiter",
     linkUrl: "https://th-14.vercel.app/",
     githubUrl: "https://github.com/Taqinou/TH-14-PROJECT",
+    imageUrl: "/images/projects/05-th14.webp",
   },
   {
     index: "06",
@@ -59,6 +64,7 @@ export const projects: Project[] = [
     stack: "Next.js / MongoDB / React Leaflet / NextAuth / Zod",
     linkText: "github",
     linkUrl: "https://github.com/Toto028-GT/ProjetTechno-Web",
+    imageUrl: "/images/projects/07-apartment-aggregator.png",
   },
   {
     index: "08",
@@ -66,6 +72,7 @@ export const projects: Project[] = [
     stack: "Node.js / Express / MongoDB / JWT / Jest",
     linkText: "github",
     linkUrl: "https://github.com/JusteHugoStudent/ACL-2025-OpenForWork",
+    imageUrl: "/images/projects/08-functional-calendar.png",
   },
 ];
 

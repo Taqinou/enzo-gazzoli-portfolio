@@ -1,8 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Playfair_Display } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { Providers } from "@/components/core/Providers";
 import { PERSONAL, SOCIAL_LINKS, SITE_CONFIG } from "@/data/constants";
 import "./globals.css";
+
+// Posé dans <head> AVANT le premier paint : lit le thème persisté et applique
+// la classe .theme-minimal sur <html> pour éviter tout FOUC (flash du thème
+// artistique). suppressHydrationWarning est déjà présent sur <html>.
+const themeInitScript = `try{if(localStorage.getItem("theme")==="minimal"){document.documentElement.classList.add("theme-minimal");}}catch(e){}`;
 
 // JSON-LD structured data for SEO
 const jsonLd = {
@@ -31,6 +36,12 @@ const jsonLd = {
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-serif",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -214,12 +225,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className={`${playfair.variable} antialiased`}>
+      <body className={`${playfair.variable} ${inter.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -100,3 +100,55 @@ body.cursor-question,
     scroll-behavior: auto !important;
   }
 }
+
+/* ===================== THEME MINIMAL ===================== */
+
+/* Tokens shadcn (light only) — triplets HSL, disponibles partout */
+:root {
+  --mn-background: 0 0% 100%;
+  --mn-foreground: 210 11.1% 3.53%;
+  --mn-muted: 0 0% 96.1%;
+  --mn-muted-foreground: 0 0% 45.1%;
+  --mn-border: 0 0% 89.8%;
+  --mn-primary: 0 0% 9%;
+  --mn-primary-foreground: 0 0% 98%;
+}
+
+/* Overrides des variables historiques sous la classe posée sur <html> */
+.theme-minimal {
+  --bg: #ffffff;
+  --ink: #08090a;
+  /* Échelle globale du thème minimal : toutes les tailles en rem grossissent de ~6 % */
+  font-size: 106.25%;
+}
+
+/* Neutralise le curseur crosshair signature du thème artistique */
+.theme-minimal * {
+  cursor: auto;
+}
+
+.theme-minimal a,
+.theme-minimal a *,
+.theme-minimal button,
+.theme-minimal button * {
+  cursor: pointer;
+}
+
+/* Sélection sobre (remplace le jaune) */
+.theme-minimal ::selection {
+  background-color: hsl(var(--mn-primary));
+  color: hsl(var(--mn-primary-foreground));
+}
+
+/* Scroll natif fluide pour les ancres du dock */
+.theme-minimal {
+  scroll-behavior: smooth;
+}
+
+/* Anti-FOUC : avant l'hydratation (classe theme-hydrated absente, posée par
+   ThemeProvider au mount), masque l'arbre du thème artistique rendu par le
+   serveur — dont IntroOverlay (fixed inset-0 bg-blue) — pour les visiteurs
+   ayant persisté le thème minimal (classe posée par le script inline). */
+.theme-minimal:not(.theme-hydrated) [data-theme-root="default"] {
+  visibility: hidden;
+}
