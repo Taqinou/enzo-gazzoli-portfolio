@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { options, TJM } from "@/data/pricing";
+import { options, projects } from "@/data/pricing";
 
 export default function PricingPage() {
   return (
@@ -41,18 +41,34 @@ export default function PricingPage() {
           <h2 className="font-mono text-xs uppercase tracking-widest mb-8 opacity-40">01. Mon approche</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             <div>
-              <p className="font-mono text-xs uppercase tracking-widest text-ink/30 mb-3">Taux journalier</p>
-              <p className="font-serif text-6xl md:text-7xl leading-none mb-4">
-                {TJM} <span className="text-3xl opacity-50">€/j</span>
-              </p>
-              <p className="font-mono text-xs text-ink/40 uppercase tracking-wider">HT — Freelance</p>
+              <p className="font-mono text-xs uppercase tracking-widest text-ink/30 mb-4">Forfaits projet</p>
+              <ul className="flex flex-col gap-3 mb-4">
+                {[
+                  { label: "Site vitrine", min: projects.website.fromPrice, max: projects.website.priceMax },
+                  { label: "Application", min: projects.application.fromPrice, max: projects.application.priceMax },
+                  { label: "E-commerce", min: projects.shopify.fromPrice, max: projects.shopify.priceMax },
+                ].map((f) => (
+                  <li
+                    key={f.label}
+                    className="flex items-baseline justify-between gap-6 border-b border-ink/5 pb-2"
+                  >
+                    <span className="font-serif text-2xl md:text-3xl">{f.label}</span>
+                    <span className="font-mono text-sm font-bold text-blue whitespace-nowrap">
+                      {f.max !== null
+                        ? `${(f.min ?? 0).toLocaleString("fr-FR")} – ${f.max.toLocaleString("fr-FR")} €`
+                        : `à partir de ${(f.min ?? 0).toLocaleString("fr-FR")} €`}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="font-mono text-xs text-ink/40 uppercase tracking-wider">HT — Forfait projet</p>
             </div>
             <div className="flex flex-col justify-center gap-4">
               <p className="font-serif italic text-xl md:text-2xl text-ink/70 leading-snug">
                 &ldquo;Chaque projet est unique.&rdquo;
               </p>
               <p className="font-mono text-xs text-ink/40 leading-relaxed">
-                Je ne vends pas de forfaits au kilo. Le simulateur ci-dessous vous donne un ordre de grandeur — la vraie estimation se fait après un échange sur vos objectifs, vos contraintes et votre calendrier.
+                Pas de tarif au kilo. Ces forfaits sont des points de départ — l&apos;estimation finale se fait après un échange sur vos objectifs, vos contraintes et votre calendrier.
               </p>
               <Link
                 href="/services"
@@ -79,7 +95,7 @@ export default function PricingPage() {
             ))}
           </div>
           <p className="mt-8 font-mono text-[10px] uppercase text-ink/25 tracking-wider">
-            Ces options s&apos;ajoutent à la base calculée selon le TJM et la durée estimée du projet.
+            Ces options s&apos;ajoutent au forfait de base selon le périmètre du projet.
           </p>
         </section>
 

@@ -3,13 +3,12 @@
 
 export type ProjectType = "website" | "application" | "shopify" | "custom";
 
-export const TJM = 300; // Taux Journalier Moyen en €
-
 export interface SubType {
   id: string;
   name: string;
   nameEn: string;
-  days: number;
+  price: number; // Forfait de base en € (HT)
+  days: number; // Délai indicatif (n'impacte plus le prix)
   duration: string;
   durationEn: string;
   includes: string[];
@@ -30,20 +29,25 @@ export type OptionCategory = "tech" | "marketing" | "design" | "support";
 export interface ProjectData {
   id: ProjectType;
   icon: string;
+  fromPrice: number | null; // Plancher affiché ("à partir de") — null = "sur devis"
+  priceMax: number | null; // Si défini : affiche une fourchette (fromPrice – priceMax) au lieu des sous-formules
   subtypes: SubType[];
 }
 
 // Project types with their subtypes
-// Prix = days × TJM (300 €/jour)
+// Forfaits value-based : prix défini par formule, indépendant du temps passé.
 export const projects: Record<ProjectType, ProjectData> = {
   website: {
     id: "website",
     icon: "Globe",
+    fromPrice: 2500,
+    priceMax: null,
     subtypes: [
       {
         id: "landing",
         name: "Landing Page",
         nameEn: "Landing Page",
+        price: 2500,
         days: 7,
         duration: "1-2 semaines",
         durationEn: "1-2 weeks",
@@ -53,6 +57,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "portfolio",
         name: "Portfolio Créatif",
         nameEn: "Creative Portfolio",
+        price: 3500,
         days: 12,
         duration: "2-3 semaines",
         durationEn: "2-3 weeks",
@@ -62,6 +67,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "corporate",
         name: "Site Vitrine",
         nameEn: "Business Website",
+        price: 5000,
         days: 17,
         duration: "3-4 semaines",
         durationEn: "3-4 weeks",
@@ -72,11 +78,14 @@ export const projects: Record<ProjectType, ProjectData> = {
   application: {
     id: "application",
     icon: "Zap",
+    fromPrice: 7500,
+    priceMax: 20000,
     subtypes: [
       {
         id: "mvp",
         name: "MVP",
         nameEn: "MVP",
+        price: 7500,
         days: 25,
         duration: "4-6 semaines",
         durationEn: "4-6 weeks",
@@ -86,6 +95,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "saas",
         name: "SaaS Complet",
         nameEn: "Full SaaS",
+        price: 15000,
         days: 50,
         duration: "8-12 semaines",
         durationEn: "8-12 weeks",
@@ -95,6 +105,7 @@ export const projects: Record<ProjectType, ProjectData> = {
         id: "dashboard",
         name: "Dashboard Métier",
         nameEn: "Business Dashboard",
+        price: 10500,
         days: 35,
         duration: "6-8 semaines",
         durationEn: "6-8 weeks",
@@ -105,11 +116,14 @@ export const projects: Record<ProjectType, ProjectData> = {
   custom: {
     id: "custom",
     icon: "Wrench",
+    fromPrice: null,
+    priceMax: null,
     subtypes: [
       {
         id: "audit",
         name: "Audit Technique",
         nameEn: "Technical Audit",
+        price: 1200,
         days: 4,
         duration: "3-5 jours",
         durationEn: "3-5 days",
@@ -117,11 +131,12 @@ export const projects: Record<ProjectType, ProjectData> = {
       },
       {
         id: "dev",
-        name: "Journée Dev",
-        nameEn: "Dev Day",
+        name: "Mission ponctuelle",
+        nameEn: "One-off Task",
+        price: 500,
         days: 1,
-        duration: "1 jour",
-        durationEn: "1 day",
+        duration: "à définir",
+        durationEn: "to be defined",
         includes: [],
       },
     ],
@@ -129,11 +144,14 @@ export const projects: Record<ProjectType, ProjectData> = {
   shopify: {
     id: "shopify",
     icon: "ShoppingBag",
+    fromPrice: 9000,
+    priceMax: 25000,
     subtypes: [
       {
         id: "headless",
         name: "Boutique Headless",
         nameEn: "Headless Store",
+        price: 9000,
         days: 30,
         duration: "5-7 semaines",
         durationEn: "5-7 weeks",
@@ -143,7 +161,7 @@ export const projects: Record<ProjectType, ProjectData> = {
   },
 };
 
-// Options at ~37€/h (300€/8h)
+// Options additionnelles (forfait fixe par option)
 export const options: PricingOption[] = [
   { 
     id: "auth", 
@@ -272,24 +290,22 @@ export function getOptionsByCategory(category: OptionCategory): PricingOption[] 
 export function calculateTotal(
   projectType: ProjectType,
   subTypeId: string,
-  selectedOptions: Set<string>,
-  overrideDays?: number
+  selectedOptions: Set<string>
 ): number {
   const project = projects[projectType];
   const subType = project.subtypes.find((s) => s.id === subTypeId) || project.subtypes[0];
 
-  const days = overrideDays ?? subType.days;
-  let total = days * TJM;
-  
+  let total = subType.price;
+
   // Add selected options (excluding those already included)
   const includedSet = new Set(subType.includes);
-  
+
   options.forEach((opt) => {
     if (selectedOptions.has(opt.id) && !includedSet.has(opt.id)) {
       total += opt.price;
     }
   });
-  
+
   return total;
 }
 

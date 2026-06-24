@@ -52,8 +52,8 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
 
   const total = useMemo(() => {
     if (!state.projectType) return 0;
-    return calculateTotal(state.projectType, state.subTypeId, state.selectedOptions, customDays ?? undefined);
-  }, [state.projectType, state.subTypeId, state.selectedOptions, customDays]);
+    return calculateTotal(state.projectType, state.subTypeId, state.selectedOptions);
+  }, [state.projectType, state.subTypeId, state.selectedOptions]);
 
   const setCustomDays = useCallback((days: number) => {
     setCustomDaysState(Math.max(1, days));

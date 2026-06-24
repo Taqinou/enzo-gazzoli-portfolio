@@ -138,7 +138,16 @@
       "custom": {
         "title": "SUR MESURE",
         "description": "Consulting, audit technique, intégration API. Selon vos besoins spécifiques."
-      }
+      },
+      "onRequest": "sur devis"
+    },
+    "valueLine": "Code testé, fiable, livré dans les délais.",
+    "custom": {
+      "note": "Chaque mission sur mesure est différente. Décrivez votre besoin, je vous réponds sous 24 h.",
+      "cta": "Décrire mon projet"
+    },
+    "range": {
+      "note": "Le tarif final dépend du périmètre, des intégrations et du calendrier. Parlons-en pour un devis précis."
     },
     "simulator": {
       "title": "SIMULATEUR",

@@ -138,7 +138,16 @@
       "custom": {
         "title": "CUSTOM",
         "description": "Consulting, technical audit, API integration. Tailored to your specific needs."
-      }
+      },
+      "onRequest": "on request"
+    },
+    "valueLine": "Tested, reliable code, shipped on time.",
+    "custom": {
+      "note": "Every custom engagement is different. Tell me what you need — I'll reply within 24h.",
+      "cta": "Describe my project"
+    },
+    "range": {
+      "note": "The final price depends on scope, integrations and timeline. Let's talk for an accurate quote."
     },
     "simulator": {
       "title": "SIMULATOR",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, FormEvent, useRef } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { motion, useScroll, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Plus } from "lucide-react";
@@ -8,60 +8,31 @@ import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuoteSimulator } from "@/hooks/useQuoteSimulator";
-import { ProjectType, OptionCategory as OptionCategoryType, TJM, projects } from "@/data/pricing";
-import OptionCategory from "@/components/services/OptionCategory";
-import QuoteSummary from "@/components/services/QuoteSummary";
+import { ProjectType, projects } from "@/data/pricing";
 import BlurFade from "@/components/ui/BlurFade";
 
 const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
-const CATEGORIES: OptionCategoryType[] = ["tech", "marketing", "design", "support"];
 
 export default function ServicesPage() {
   const router = useRouter();
   const { playClick, playExit } = useSound();
   const { t } = useTranslation();
   const { locale } = useLanguage();
-  
+
   const containerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [quoteSummary, setQuoteSummary] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const {
-    state,
-    total,
-    customDays,
-    setCustomDays,
-    toggleProjectType,
-    setSubType,
-    toggleOption,
-    isOptionSelected,
-    isOptionIncluded,
-    getSubTypes,
-    getCurrentSubType,
-    generateSummary,
-  } = useQuoteSimulator();
+  const { state, toggleProjectType, setSubType, getSubTypes } = useQuoteSimulator();
 
   const isFr = locale === "fr";
   const subTypes = getSubTypes();
-  const currentSubType = getCurrentSubType();
-  const isSimulatorOpen = state.projectType !== null;
-
-  // Local string state for the days input — allows clearing to retype
-  const [daysInputStr, setDaysInputStr] = useState<string>("");
-
-  // Sync input string whenever the subtype resets (customDays → null)
-  useEffect(() => {
-    if (customDays === null && currentSubType) {
-      setDaysInputStr(String(currentSubType.days));
-    }
-  }, [customDays, currentSubType?.days]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -76,14 +47,16 @@ export default function ServicesPage() {
     toggleProjectType(type);
   };
 
-  const handleSendQuote = () => {
+  const handleOfferCta = (offer: ProjectType) => {
     playClick();
-    const summary = generateSummary(locale);
-    setQuoteSummary(summary);
-    
-    setTimeout(() => {
-      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 100);
+    const label = t(`services.simulator.types.${offer}`);
+    setFormData((prev) => ({
+      ...prev,
+      message: isFr
+        ? `Bonjour, je suis intéressé par une prestation « ${label} ». `
+        : `Hi, I'm interested in a "${label}" project. `,
+    }));
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -92,26 +65,19 @@ export default function ServicesPage() {
     setStatus("sending");
 
     try {
-      const payload: { name: string; email: string; message: string; quoteSummary?: string } = {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      };
-
-      if (quoteSummary) {
-        payload.quoteSummary = quoteSummary;
-      }
-
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
       });
 
       if (response.ok) {
         setStatus("success");
         setFormData({ name: "", email: "", message: "" });
-        setQuoteSummary(null);
         setTimeout(() => setStatus("idle"), 5000);
       } else {
         setStatus("error");
@@ -124,8 +90,8 @@ export default function ServicesPage() {
   };
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="min-h-screen overflow-x-hidden"
     >
       <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference">
@@ -140,9 +106,9 @@ export default function ServicesPage() {
 
       <section className="bg-bg text-ink min-h-screen relative">
         <main className="relative grid grid-cols-1 md:grid-cols-[clamp(60px,12vw,200px)_1fr]">
-          
+
           <div className="hidden md:flex sticky top-0 h-screen flex-col items-center justify-center border-r border-ink/10">
-            <motion.div 
+            <motion.div
               className="absolute inset-0 bg-ink/5 origin-bottom"
               style={{ scaleY: scrollYProgress }}
             />
@@ -157,7 +123,7 @@ export default function ServicesPage() {
           </div>
 
           <div className="flex flex-col pt-24 md:pt-32 pb-20 px-6 md:px-20 relative">
-            
+
             <motion.h1
               className="md:hidden font-serif text-[15vw] leading-[0.8] mb-16 text-ink opacity-90"
               initial={{ opacity: 0, x: -20, filter: "blur(10px)" }}
@@ -170,7 +136,9 @@ export default function ServicesPage() {
             <div className="flex flex-col">
               {OFFERS.map((offer, index) => {
                 const isSelected = state.projectType === offer;
-                
+                const fromPrice = projects[offer].fromPrice;
+                const priceMax = projects[offer].priceMax;
+
                 return (
                   <BlurFade key={offer} inView delay={index * 0.08}>
                   <div>
@@ -208,12 +176,22 @@ export default function ServicesPage() {
                             {t(`services.offers.${offer}.title`)}
                           </h2>
                         </div>
-                        
+
                         <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
                           <div className="flex flex-col md:items-end gap-1 md:max-w-md pl-8 md:pl-0">
                             <span className="font-serif italic text-xl md:text-2xl text-ink/60">
-                              {isFr ? "à partir de" : "from"}{" "}
-                              {Math.min(...projects[offer].subtypes.map((s) => s.days * TJM)).toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                              {fromPrice === null ? (
+                                t("services.offers.onRequest")
+                              ) : priceMax !== null ? (
+                                <>
+                                  {fromPrice.toLocaleString(isFr ? "fr-FR" : "en-US")} – {priceMax.toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                </>
+                              ) : (
+                                <>
+                                  {isFr ? "à partir de" : "from"}{" "}
+                                  {fromPrice.toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                </>
+                              )}
                             </span>
                             <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-xs">
                               {t(`services.offers.${offer}.description`)}
@@ -233,25 +211,41 @@ export default function ServicesPage() {
                           className="overflow-hidden bg-ink/[0.02] border-b border-ink/20"
                         >
                           <div className="py-8 md:py-12 px-4 md:px-8">
-                            <motion.div
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.1, duration: 0.4 }}
-                              className="mb-10"
-                            >
-                              <h3 className="font-mono text-xs uppercase tracking-widest text-ink/40 mb-6">
-                                {isFr ? "Choisir une formule" : "Choose a package"}
-                              </h3>
+                            {offer === "custom" || priceMax !== null ? (
+                              <div className="flex flex-col gap-6 max-w-xl">
+                                <p className="font-serif text-xl md:text-2xl text-ink/70 leading-snug">
+                                  {offer === "custom" ? t("services.custom.note") : t("services.range.note")}
+                                </p>
+                                <button
+                                  onClick={() => handleOfferCta(offer)}
+                                  className="self-start bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
+                                >
+                                  {t("services.custom.cta")}
+                                </button>
+                              </div>
+                            ) : (
                               <div className="flex flex-col gap-2">
                                 {subTypes.map((sub, i) => (
                                   <motion.button
                                     key={sub.id}
-                                    onClick={() => { playClick(); setSubType(sub.id); }}
+                                    onClick={() => {
+                                      playClick();
+                                      setSubType(sub.id);
+                                      const name = isFr ? sub.name : sub.nameEn;
+                                      const price = sub.price.toLocaleString(isFr ? "fr-FR" : "en-US");
+                                      setFormData((prev) => ({
+                                        ...prev,
+                                        message: isFr
+                                          ? `Bonjour, je suis intéressé par la formule « ${name} » (à partir de ${price} €). `
+                                          : `Hi, I'm interested in the "${name}" package (from ${price} €). `,
+                                      }));
+                                      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                                    }}
                                     initial={{ opacity: 0, x: -10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.15 + i * 0.05, duration: 0.3 }}
+                                    transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
                                     className={`
-                                      flex items-center justify-between py-4 px-5 text-left
+                                      group/sub flex items-center justify-between py-4 px-5 text-left
                                       border transition-all duration-300
                                       ${state.subTypeId === sub.id
                                         ? "border-blue bg-blue/5"
@@ -262,83 +256,18 @@ export default function ServicesPage() {
                                     <span className="font-serif text-lg md:text-xl text-ink">
                                       {isFr ? sub.name : sub.nameEn}
                                     </span>
-                                    <span className="flex flex-col items-end">
+                                    <span className="flex items-center gap-3">
                                       <span className="font-mono text-sm md:text-base font-bold text-blue">
-                                        {(state.subTypeId === sub.id && customDays !== null
-                                          ? customDays * TJM
-                                          : sub.days * TJM
-                                        ).toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                        {sub.price.toLocaleString(isFr ? "fr-FR" : "en-US")} €
                                       </span>
-                                      {state.subTypeId === sub.id && customDays !== null && customDays !== sub.days && (
-                                        <span className="font-mono text-[10px] text-ink/40">
-                                          {isFr ? "en moyenne" : "avg"} {(sub.days * TJM).toLocaleString(isFr ? "fr-FR" : "en-US")} €
-                                        </span>
-                                      )}
+                                      <span className="font-mono text-blue opacity-0 -translate-x-1 transition-all duration-300 group-hover/sub:opacity-100 group-hover/sub:translate-x-0">
+                                        →
+                                      </span>
                                     </span>
                                   </motion.button>
                                 ))}
                               </div>
-                            </motion.div>
-
-                            <motion.div
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.15, duration: 0.4 }}
-                              className="mb-10"
-                            >
-                              <h3 className="font-mono text-xs uppercase tracking-widest text-ink/40 mb-4">
-                                {isFr ? "Durée souhaitée" : "Desired duration"}
-                              </h3>
-                              <div className="flex flex-wrap items-center gap-4">
-                                <div className="flex items-center border border-ink/20 focus-within:border-blue transition-colors duration-200">
-                                  <input
-                                    type="number"
-                                    min={1}
-                                    value={daysInputStr}
-                                    onChange={(e) => {
-                                      const str = e.target.value;
-                                      setDaysInputStr(str);
-                                      const num = parseInt(str);
-                                      if (!isNaN(num) && num >= 1) {
-                                        setCustomDays(num);
-                                      }
-                                    }}
-                                    className="w-16 bg-transparent font-mono text-xl font-bold text-blue px-4 py-3 focus:outline-none text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                                    aria-label={isFr ? "Nombre de jours" : "Number of days"}
-                                  />
-                                  <span className="font-mono text-xs text-ink/40 uppercase pr-4">
-                                    {isFr ? "jours" : "days"}
-                                  </span>
-                                </div>
-                                <span className="font-mono text-xs text-ink/40">
-                                  {isFr ? "recommandé" : "recommended"} : {currentSubType?.days}j
-                                  <span className="mx-2 opacity-50">—</span>
-                                  {isFr ? currentSubType?.duration : currentSubType?.durationEn}
-                                </span>
-                              </div>
-                            </motion.div>
-
-                            <motion.div
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.2, duration: 0.4 }}
-                            >
-                              <h3 className="font-mono text-xs uppercase tracking-widest text-ink/40 mb-6">
-                                {isFr ? "Ajouter des options" : "Add options"}
-                              </h3>
-                              <div className="border-t border-ink/10">
-                                  {CATEGORIES.map((category) => (
-                                    <OptionCategory
-                                      key={category}
-                                      category={category}
-                                      isOptionSelected={isOptionSelected}
-                                      isOptionIncluded={isOptionIncluded}
-                                      onToggle={toggleOption}
-                                      defaultOpen={false}
-                                    />
-                                  ))}
-                              </div>
-                            </motion.div>
+                            )}
                           </div>
                         </motion.div>
                       )}
@@ -349,26 +278,9 @@ export default function ServicesPage() {
               })}
             </div>
 
-            {isSimulatorOpen && currentSubType && (
-              <QuoteSummary
-                total={total}
-                duration={
-                  customDays !== null && customDays !== currentSubType.days
-                    ? `${customDays} jour${customDays > 1 ? "s" : ""}`
-                    : currentSubType.duration
-                }
-                durationEn={
-                  customDays !== null && customDays !== currentSubType.days
-                    ? `${customDays} day${customDays > 1 ? "s" : ""}`
-                    : currentSubType.durationEn
-                }
-                onSendQuote={handleSendQuote}
-              />
-            )}
-
             <div className="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <p className="font-mono text-sm md:text-base uppercase tracking-widest text-ink/50 whitespace-nowrap">
-                TJM — <span className="text-ink font-bold">300 €</span><span className="text-ink/40">/jour</span>
+              <p className="font-mono text-sm md:text-base uppercase tracking-widest text-ink/50">
+                {t("services.valueLine")}
               </p>
               <p className="font-serif italic text-xl md:text-2xl text-ink/50">
                 {isFr
@@ -389,31 +301,8 @@ export default function ServicesPage() {
             transition={{ duration: 0.8 }}
           >
             <h2 className="font-mono text-sm md:text-base font-bold uppercase tracking-widest mb-8 text-white">
-              {quoteSummary ? t("services.form.headingWithQuote") : t("services.form.heading")}
+              {t("services.form.heading")}
             </h2>
-
-            <AnimatePresence mode="wait">
-              {quoteSummary && (
-                <motion.div
-                  key="quote-preview"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="mb-12 overflow-hidden"
-                >
-                  <div className="bg-white/10 border border-white/20 p-6 font-mono text-sm whitespace-pre-wrap text-white/80">
-                    {quoteSummary}
-                  </div>
-                  <button
-                    onClick={() => { playClick(); setQuoteSummary(null); }}
-                    className="mt-4 font-mono text-xs uppercase tracking-wider text-white/50 hover:text-white transition-colors"
-                  >
-                    {isFr ? "× Effacer la simulation" : "× Clear simulation"}
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
 
             <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col gap-12 max-w-2xl">
               <div className="relative group">
@@ -442,8 +331,8 @@ export default function ServicesPage() {
                 <textarea
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  placeholder={quoteSummary ? t("services.form.messageOptional") : t("services.form.message")}
-                  required={!quoteSummary}
+                  placeholder={t("services.form.message")}
+                  required
                   rows={3}
                   className="w-full bg-transparent border-b border-white/20 py-4 font-serif text-2xl md:text-3xl leading-tight text-white placeholder:text-white/60 focus:outline-none focus:border-white transition-all duration-300 resize-none rounded-none"
                 />
