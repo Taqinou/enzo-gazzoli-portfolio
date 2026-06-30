@@ -125,19 +125,19 @@
     "offers": {
       "website": {
         "title": "WEBSITE",
-        "description": "Landing page, portfolio, showcase site, blog. Custom design, responsive, SEO optimized."
+        "description": "A custom-built site, fast and well-ranked, that truly reflects you."
       },
       "application": {
         "title": "APPLICATION",
-        "description": "MVP, SaaS, dashboard. Robust architecture, API, database."
+        "description": "Robust applications — MVP, SaaS, dashboards — built on a solid architecture, ready to integrate AI when your product needs it."
       },
       "shopify": {
         "title": "E-COMMERCE",
-        "description": "Headless Shopify Store (Next.js). Max performance and custom design."
+        "description": "A lightning-fast store, built to sell: smooth navigation, relevant recommendations, and search that finds what shoppers want."
       },
       "custom": {
         "title": "CUSTOM",
-        "description": "Consulting, technical audit, API integration. Tailored to your specific needs."
+        "description": "AI integration, automation, technical consulting: solutions shaped around your needs."
       },
       "onRequest": "on request"
     },

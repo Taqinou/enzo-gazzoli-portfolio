@@ -125,19 +125,19 @@
     "offers": {
       "website": {
         "title": "SITE VITRINE",
-        "description": "Landing page, portfolio, site vitrine, blog. Design sur mesure, responsive, optimisé SEO."
+        "description": "Un site sur mesure, rapide et bien référencé, qui vous ressemble."
       },
       "application": {
         "title": "APPLICATION",
-        "description": "MVP, SaaS, dashboard. Architecture robuste, API, base de données."
+        "description": "Des applications robustes — MVP, SaaS, dashboards — sur une architecture solide, prêtes à intégrer l'IA quand le produit en a besoin."
       },
       "shopify": {
         "title": "E-COMMERCE",
-        "description": "Boutique Shopify Headless (Next.js). Performance maximale et design sur mesure."
+        "description": "Une boutique ultra-rapide, pensée pour vendre : navigation fluide, recommandations pertinentes, une recherche qui trouve du premier coup."
       },
       "custom": {
         "title": "SUR MESURE",
-        "description": "Consulting, audit technique, intégration API. Selon vos besoins spécifiques."
+        "description": "Intégration d'IA, automatisation, conseil technique : des solutions façonnées autour de votre besoin."
       },
       "onRequest": "sur devis"
     },
