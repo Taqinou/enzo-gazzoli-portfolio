@@ -28,6 +28,8 @@ export default {
         // preflight Tailwind (html/body) et la classe `font-sans` du thème
         // par défaut (ex. /pricing) basculeraient de system-ui vers Inter.
         "mn-sans": ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
+        // Clé dédiée à l'aile studio (langage tech moderne), même contrainte.
+        studio: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
       },
       animation: {
         spin: "spin 12s linear infinite",

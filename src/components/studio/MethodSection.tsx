@@ -1,48 +1,50 @@
 "use client";
 
-import BlurFade from "@/components/ui/BlurFade";
+import Reveal from "@/components/studio/Reveal";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const STEPS = ["01", "02", "03", "04"] as const;
 
-// Méthode en 4 étapes : gros chiffres serif de fond à faible opacité
-// (langage des chiffres d'archive), label mono + description serif.
+// Méthode en 4 étapes (langage tech moderne) : timeline horizontale sobre,
+// numéros en badges, connecteurs fins.
 export default function MethodSection() {
   const { t } = useTranslation();
 
   return (
-    <section
-      id="method"
-      className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 scroll-mt-20"
-    >
-      <BlurFade inView>
-        <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-4">
+    <section id="method" className="relative max-w-5xl mx-auto px-6 py-20 md:py-28 scroll-mt-24">
+      <Reveal>
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-blue mb-4">
           {t("studio.method.label")}
         </p>
-        <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-12 md:mb-20">
+        <h2 className="font-studio font-bold tracking-[-0.03em] text-3xl md:text-5xl text-ink">
           {t("studio.method.heading")}
         </h2>
-      </BlurFade>
+      </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14 md:gap-y-20">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 mt-12">
         {STEPS.map((step, index) => (
-          <BlurFade key={step} inView delay={(index % 2) * 0.1}>
-            <div className="relative min-h-[160px] md:min-h-[200px] flex flex-col justify-end border-t border-ink/20 pt-6">
-              <span
-                aria-hidden="true"
-                className="absolute top-0 right-0 font-serif text-[6rem] md:text-[9rem] leading-[0.8] text-ink opacity-[0.04] select-none pointer-events-none"
-              >
-                {step}
-              </span>
-              <span className="font-mono text-xs text-ink/30 mb-3">{step}</span>
-              <h3 className="font-serif lowercase text-2xl md:text-4xl tracking-[-0.05em] mb-3">
+          <Reveal key={step} delay={index * 0.08}>
+            <div className="relative">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex items-center justify-center w-9 h-9 rounded-full border border-blue/30 bg-blue/[0.06] font-mono text-[11px] font-bold text-blue shrink-0">
+                  {step}
+                </span>
+                {/* Connecteur (sauf dernière étape) */}
+                {index < STEPS.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="hidden md:block h-px grow bg-gradient-to-r from-ink/15 to-transparent"
+                  />
+                )}
+              </div>
+              <h3 className="font-studio font-semibold text-lg text-ink lowercase tracking-[-0.01em] mt-5">
                 {t(`studio.method.steps.${step}.title`)}
               </h3>
-              <p className="font-serif italic text-base md:text-lg text-ink/60 leading-snug max-w-md">
+              <p className="font-studio text-sm text-ink/55 leading-relaxed mt-2">
                 {t(`studio.method.steps.${step}.description`)}
               </p>
             </div>
-          </BlurFade>
+          </Reveal>
         ))}
       </div>
     </section>

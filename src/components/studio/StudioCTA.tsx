@@ -1,67 +1,69 @@
 "use client";
 
 import Link from "next/link";
-import BlurFade from "@/components/ui/BlurFade";
+import { ArrowRight } from "lucide-react";
+import Reveal from "@/components/studio/Reveal";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PERSONAL } from "@/data/constants";
 
-// CTA final : section bleue pleine largeur (miroir de la section contact de
-// /services), renvoie vers le formulaire existant /services#contact.
+// CTA final en grande carte bleue (pattern « CTA card » des sites tech) :
+// glow interne, titre oversized avec accent serif italic, bouton pill blanc.
 export default function StudioCTA() {
   const { t } = useTranslation();
   const { playClick } = useSound();
 
   return (
-    <section className="relative bg-blue text-white px-6 md:px-20 py-24 md:py-40 overflow-hidden">
-      {/* Texte décoratif de fond en text-stroke (langage overlays du site) */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-end pointer-events-none select-none"
-      >
-        <span className="font-serif italic lowercase text-[30vw] leading-[0.7] tracking-[-0.07em] text-stroke-white opacity-40 translate-x-[10%]">
-          ?
-        </span>
-      </div>
+    <section className="relative max-w-5xl mx-auto px-6 py-20 md:py-28">
+      <Reveal>
+        <div className="relative rounded-3xl bg-blue text-white overflow-hidden px-7 py-16 md:px-16 md:py-24 text-center">
+          {/* Glow + grille fine internes */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.22),transparent_55%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.06)_1px,transparent_1px)] bg-[size:48px_48px] [mask-image:radial-gradient(ellipse_80%_70%_at_50%_30%,black,transparent)]"
+          />
 
-      <div className="relative z-10">
-        <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[14vw] md:text-[8vw]">
-          <BlurFade inView blur={10} yOffset={20}>
-            <span className="block">{t("studio.cta.hookLine1")}</span>
-          </BlurFade>
-          <BlurFade inView delay={0.15} blur={10} yOffset={20}>
-            <span className="block italic">{t("studio.cta.hookLine2")}</span>
-          </BlurFade>
-        </h2>
-
-        <BlurFade inView delay={0.3}>
-          <p className="font-serif italic text-lg md:text-2xl text-white/70 max-w-xl mt-8 md:mt-10 leading-snug">
-            {t("studio.cta.subline")}
-          </p>
-        </BlurFade>
-
-        <BlurFade inView delay={0.45}>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10 mt-10 md:mt-14">
-            <Link
-              href="/services#contact"
-              onClick={() => playClick()}
-              className="bg-white text-blue px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-transparent hover:text-white border border-white transition-colors duration-300"
-            >
-              {t("studio.cta.button")}
-            </Link>
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
-              {t("studio.cta.or")}{" "}
-              <a
-                href={`mailto:${PERSONAL.email}`}
-                onClick={() => playClick()}
-                className="font-serif italic lowercase normal-case text-base md:text-lg tracking-normal text-white underline decoration-1 underline-offset-4 hover:text-white/70 transition-colors duration-300"
-              >
-                {PERSONAL.email}
-              </a>
+          <div className="relative">
+            <h2 className="font-studio font-bold tracking-[-0.03em] leading-[1.05] text-4xl md:text-6xl">
+              {t("studio.cta.hookLine1")}{" "}
+              <span className="font-serif italic font-normal">
+                {t("studio.cta.hookLine2")}
+              </span>
+            </h2>
+            <p className="font-studio text-base md:text-lg text-white/70 max-w-md mx-auto mt-5">
+              {t("studio.cta.subline")}
             </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 mt-9">
+              <Link
+                href="/services#contact"
+                onClick={() => playClick()}
+                className="group inline-flex items-center gap-2 rounded-full bg-white text-blue font-studio text-sm font-semibold px-7 py-3.5 hover:bg-ink hover:text-white transition-colors duration-300"
+              >
+                {t("studio.cta.button")}
+                <ArrowRight
+                  size={16}
+                  className="transition-transform duration-300 group-hover:translate-x-0.5"
+                />
+              </Link>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-white/50">
+                {t("studio.cta.or")}{" "}
+                <a
+                  href={`mailto:${PERSONAL.email}`}
+                  onClick={() => playClick()}
+                  className="font-studio font-medium normal-case text-[13px] tracking-normal text-white underline decoration-white/40 underline-offset-4 hover:decoration-white transition-colors duration-300"
+                >
+                  {PERSONAL.email}
+                </a>
+              </p>
+            </div>
           </div>
-        </BlurFade>
-      </div>
+        </div>
+      </Reveal>
     </section>
   );
 }

@@ -89,6 +89,35 @@ body.cursor-question,
   color: transparent !important;
 }
 
+/* ===================== AILE STUDIO ===================== */
+
+/* Reveal CSS pur (composant studio/Reveal.tsx) : indépendant de
+   framer-motion, dont les animations au mount restent figées dans cet
+   environnement. La classe .in est posée par IntersectionObserver ;
+   le fill-mode both garantit l'état final même à durée quasi nulle
+   (prefers-reduced-motion ci-dessous). */
+.studio-reveal {
+  opacity: 0;
+}
+
+.studio-reveal.in {
+  animation: studio-reveal-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes studio-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
 /* Reduced motion support for accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,

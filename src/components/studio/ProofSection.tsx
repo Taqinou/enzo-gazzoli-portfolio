@@ -1,63 +1,65 @@
 "use client";
 
-import BlurFade from "@/components/ui/BlurFade";
+import Reveal from "@/components/studio/Reveal";
 import { useTranslation } from "@/hooks/useTranslation";
 import { testimonials } from "@/data/testimonials";
 
 const FACTS = ["01", "02", "03"] as const;
 
-// Section preuve : témoignages honnêtes (les placeholders sont rendus comme
-// « en cours de collecte », jamais comme de fausses citations) + faits réels.
+// Section preuve : faits réels en tiles + témoignages honnêtes (les
+// placeholders sont rendus « en cours de collecte », jamais de fausse citation).
 export default function ProofSection() {
   const { t } = useTranslation();
 
   return (
-    <section className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32">
-      <BlurFade inView>
-        <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-4">
+    <section className="relative max-w-5xl mx-auto px-6 py-20 md:py-28">
+      <Reveal>
+        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-blue mb-4">
           {t("studio.proof.label")}
         </p>
-        <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-12 md:mb-16">
+        <h2 className="font-studio font-bold tracking-[-0.03em] text-3xl md:text-5xl text-ink">
           {t("studio.proof.heading")}
         </h2>
-      </BlurFade>
+      </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 mb-14 md:mb-20">
+      {/* Faits réels */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12">
+        {FACTS.map((fact, index) => (
+          <Reveal key={fact} delay={index * 0.06}>
+            <div className="h-full rounded-2xl border border-ink/10 bg-white p-6">
+              <span className="font-mono text-[10px] font-bold text-blue">{fact}</span>
+              <p className="font-studio font-medium text-[15px] text-ink/80 leading-snug mt-3 lowercase">
+                {t(`studio.proof.facts.${fact}`)}
+              </p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+
+      {/* Témoignages */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         {testimonials.map((testimonial, index) => (
-          <BlurFade key={testimonial.id} inView delay={index * 0.1}>
+          <Reveal key={testimonial.id} delay={0.1 + index * 0.06}>
             {testimonial.status === "verified" ? (
-              <figure className="border border-ink p-6 md:p-8 h-full flex flex-col gap-4">
-                <blockquote className="font-serif italic text-xl md:text-2xl leading-snug">
+              <figure className="h-full rounded-2xl border border-ink/10 bg-white p-7 flex flex-col gap-4">
+                <blockquote className="font-serif italic text-lg md:text-xl text-ink/85 leading-snug">
                   « {t(testimonial.quoteKey)} »
                 </blockquote>
-                <figcaption className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/50 mt-auto">
+                <figcaption className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-ink/45 mt-auto">
                   — {t(testimonial.authorKey)}
                 </figcaption>
               </figure>
             ) : (
-              <div className="border border-dashed border-ink/30 p-6 md:p-8 h-full flex flex-col gap-4">
-                <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
+              <div className="h-full rounded-2xl border border-dashed border-ink/20 bg-transparent p-7 flex flex-col gap-4">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/40">
                   {t("studio.proof.pending")}
                 </p>
-                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/30 mt-auto">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-ink/30 mt-auto">
                   — {t(testimonial.authorKey)}
                 </p>
               </div>
             )}
-          </BlurFade>
-        ))}
-      </div>
-
-      <div className="flex flex-col border-t border-ink/20">
-        {FACTS.map((fact, index) => (
-          <BlurFade key={fact} inView delay={index * 0.06}>
-            <div className="flex items-baseline gap-4 md:gap-6 py-4 md:py-5 border-b border-ink/20">
-              <span className="font-mono text-xs text-ink/30">{fact}</span>
-              <p className="font-serif lowercase text-lg md:text-2xl tracking-[-0.02em]">
-                {t(`studio.proof.facts.${fact}`)}
-              </p>
-            </div>
-          </BlurFade>
+          </Reveal>
         ))}
       </div>
     </section>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import BlurFade from "@/components/ui/BlurFade";
+import { ArrowRight } from "lucide-react";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { PERSONAL, SOCIAL_LINKS } from "@/data/constants";
@@ -13,35 +13,40 @@ const SOCIALS = [
   { labelKey: "navLinks.malt", href: SOCIAL_LINKS.malt },
 ] as const;
 
-// Pied de page studio : la porte visible vers l'aile folio (/archive),
-// puis micro-footer mono (sociaux, localisation, colophon).
+// Footer studio : la porte vers l'aile folio (/archive) en accent serif —
+// le pont visuel entre les deux ailes — puis micro-footer sobre.
 export default function StudioFooter() {
   const { t } = useTranslation();
   const { playClick, playMechanicalClack } = useSound();
 
   return (
-    <footer className="relative bg-bg text-ink px-6 md:px-20 pt-20 md:pt-32 pb-10">
-      <BlurFade inView>
-        <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-6">
-          {t("studio.footer.archiveLead")}
-        </p>
+    <footer className="relative max-w-5xl mx-auto px-6 pb-10">
+      {/* Porte vers l'archive */}
+      <div className="rounded-2xl border border-ink/10 bg-white px-7 py-8 md:px-10 md:py-10 flex flex-col md:flex-row md:items-center justify-between gap-5">
+        <div>
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/40 mb-2">
+            {t("studio.footer.archiveLead")}
+          </p>
+          <p className="font-serif italic lowercase text-2xl md:text-3xl text-ink tracking-[-0.02em]">
+            {t("studio.footer.archiveLink")}
+          </p>
+        </div>
         <Link
           href="/archive"
           onClick={() => playMechanicalClack(120, 0.5)}
-          className="group inline-block font-serif lowercase italic tracking-[-0.05em] leading-085 text-[11vw] md:text-[6vw] hover:text-blue transition-colors duration-300"
+          className="group inline-flex items-center gap-2 self-start md:self-auto rounded-full border border-ink/15 font-studio text-sm font-medium text-ink px-6 py-3 hover:border-blue/40 hover:text-blue transition-colors duration-300 shrink-0"
         >
-          {t("studio.footer.archiveLink")}{" "}
-          <span
-            aria-hidden="true"
-            className="inline-block not-italic transition-transform duration-300 ease-out-expo group-hover:translate-x-3"
-          >
-            →
-          </span>
+          {t("studio.nav.archive").toLowerCase()}
+          <ArrowRight
+            size={15}
+            className="transition-transform duration-300 group-hover:translate-x-0.5"
+          />
         </Link>
-      </BlurFade>
+      </div>
 
-      <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 border-t border-ink/20 mt-16 md:mt-24 pt-6">
-        <div className="flex flex-wrap items-baseline gap-4 md:gap-6">
+      {/* Micro-footer */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-ink/10 mt-10 pt-6">
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           {SOCIALS.map((social) => (
             <a
               key={social.labelKey}
@@ -49,15 +54,15 @@ export default function StudioFooter() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => playClick()}
-              className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-ink/50 hover:text-blue transition-colors duration-300"
+              className="font-studio text-[13px] font-medium lowercase text-ink/50 hover:text-blue transition-colors duration-300"
             >
-              {t(social.labelKey)}
+              {t(social.labelKey).toLowerCase()}
             </a>
           ))}
         </div>
-        <div className="flex items-baseline gap-4 md:gap-6 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-ink/40">
+        <div className="flex items-center gap-4 font-mono text-[10px] font-bold uppercase tracking-[0.12em] text-ink/35">
           <span>{PERSONAL.location}</span>
-          <span className="opacity-40">|</span>
+          <span className="opacity-50">·</span>
           <span>{t("studio.footer.colophon")}</span>
         </div>
       </div>
