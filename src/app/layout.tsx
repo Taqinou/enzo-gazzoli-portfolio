@@ -6,8 +6,10 @@ import "./globals.css";
 
 // Posé dans <head> AVANT le premier paint : lit le thème persisté et applique
 // la classe .theme-minimal sur <html> pour éviter tout FOUC (flash du thème
-// artistique). suppressHydrationWarning est déjà présent sur <html>.
-const themeInitScript = `try{if(localStorage.getItem("theme")==="minimal"){document.documentElement.classList.add("theme-minimal");}}catch(e){}`;
+// artistique). Scopé à /archive : le thème minimal est une feature exclusive
+// de l'archive, la home studio reste toujours en DA artistique.
+// suppressHydrationWarning est déjà présent sur <html>.
+const themeInitScript = `try{if(location.pathname.indexOf("/archive")===0&&localStorage.getItem("theme")==="minimal"){document.documentElement.classList.add("theme-minimal");}}catch(e){}`;
 
 // JSON-LD structured data for SEO
 const jsonLd = {

@@ -38,7 +38,7 @@ export default function ServicesPage() {
     e.preventDefault();
     playExit();
     setTimeout(() => {
-      router.push("/?skipIntro=true");
+      router.push("/");
     }, 80);
   };
 
@@ -96,7 +96,7 @@ export default function ServicesPage() {
     >
       <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference">
         <a
-          href="/?skipIntro=true"
+          href="/"
           onClick={handleBack}
           className="font-serif text-xl md:text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors duration-300"
         >

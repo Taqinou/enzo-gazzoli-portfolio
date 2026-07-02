@@ -20,7 +20,7 @@ export default function NotFound() {
 
   const handleClick = () => {
     playClick();
-    router.push("/?skipIntro=true");
+    router.push("/");
   };
 
   return (

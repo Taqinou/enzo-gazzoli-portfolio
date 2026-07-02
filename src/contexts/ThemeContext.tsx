@@ -8,6 +8,7 @@ import {
   useCallback,
   ReactNode,
 } from "react";
+import { usePathname } from "next/navigation";
 
 export type Theme = "default" | "minimal";
 
@@ -19,23 +20,28 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-function applyThemeClass(theme: Theme) {
-  document.documentElement.classList.toggle("theme-minimal", theme === "minimal");
+// Le thème minimal est une feature exclusive de l'archive (/archive) : la home
+// studio et les pages secondaires restent toujours en DA artistique.
+function isMinimalAllowed(pathname: string): boolean {
+  return pathname.startsWith("/archive");
 }
 
-// La classe .theme-minimal est posée sur <html> AVANT le premier paint par le
-// script inline de layout.tsx : on initialise donc le state de façon synchrone
-// depuis le DOM (et non depuis localStorage dans un useEffect post-mount, ce
-// qui garantissait un FOUC du thème artistique + IntroOverlay).
+// La préférence persiste dans localStorage (également lue par le script inline
+// anti-FOUC de layout.tsx, qui ne pose la classe que sur /archive) : on
+// initialise le state de façon synchrone depuis localStorage pour que l'archive
+// s'ouvre directement dans le bon thème, sans FOUC ni flash de l'IntroOverlay.
 function getInitialTheme(): Theme {
   if (typeof window === "undefined") return "default";
-  return document.documentElement.classList.contains("theme-minimal")
-    ? "minimal"
-    : "default";
+  try {
+    return localStorage.getItem("theme") === "minimal" ? "minimal" : "default";
+  } catch {
+    return "default";
+  }
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+  const pathname = usePathname();
 
   // Marqueur post-hydratation : tant qu'il est absent, le CSS masque l'arbre
   // du thème par défaut rendu par le serveur pour les visiteurs "minimal"
@@ -44,6 +50,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     document.documentElement.classList.add("theme-hydrated");
   }, []);
 
+  // Applique/retire la classe selon le thème ET la route : la préférence
+  // "minimal" persiste entre les visites mais ne fuit jamais hors de /archive.
+  useEffect(() => {
+    document.documentElement.classList.toggle(
+      "theme-minimal",
+      theme === "minimal" && isMinimalAllowed(pathname)
+    );
+  }, [theme, pathname]);
+
   const setTheme = useCallback((newTheme: Theme) => {
     setThemeState(newTheme);
     try {
@@ -51,7 +66,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore
     }
-    applyThemeClass(newTheme);
   }, []);
 
   const toggleTheme = useCallback(() => {
@@ -62,7 +76,6 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       } catch {
         // ignore
       }
-      applyThemeClass(next);
       return next;
     });
   }, []);

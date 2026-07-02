@@ -15,7 +15,7 @@ export default function CVPage() {
     e.preventDefault();
     playExit();
     setTimeout(() => {
-      router.push("/?skipIntro=true");
+      router.push("/");
     }, 80);
   };
 
@@ -68,7 +68,7 @@ export default function CVPage() {
       {/* --- WEB NAV --- */}
       <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-10 py-8 z-[100] mix-blend-difference pointer-events-none">
         <a
-          href="/?skipIntro=true"
+          href="/"
           onClick={handleBack}
           className="font-serif text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors"
         >
