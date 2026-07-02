@@ -118,6 +118,52 @@ body.cursor-question,
   }
 }
 
+/* Variante « mask » : reveal typographique par masque (kinetic sobre) —
+   la ligne monte de sous sa boîte (overflow hidden), signature des heros
+   éditoriaux actuels. */
+.studio-mask {
+  overflow: hidden;
+}
+
+.studio-mask > * {
+  display: block;
+  transform: translateY(115%);
+}
+
+.studio-mask.in > * {
+  animation: studio-mask-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes studio-mask-in {
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Marquee mono (bande défilante de labels) : le contenu est dupliqué dans
+   le markup, la piste défile de -50% en boucle. */
+.studio-marquee {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.studio-marquee-track {
+  display: inline-flex;
+  width: max-content;
+  animation: studio-marquee 30s linear infinite;
+}
+
+.studio-marquee:hover .studio-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes studio-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Reduced motion support for accessibility */
 @media (prefers-reduced-motion: reduce) {
   *,

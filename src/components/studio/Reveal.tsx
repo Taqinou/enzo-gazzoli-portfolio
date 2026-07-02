@@ -7,14 +7,16 @@ interface RevealProps {
   className?: string;
   /** Delay before the reveal starts (seconds) */
   delay?: number;
+  /** "fade" = blur+fade+y ; "mask" = la ligne monte de sous sa boîte */
+  variant?: "fade" | "mask";
 }
 
 // Reveal CSS pur (keyframes + IntersectionObserver) pour l'aile studio.
 // Remplace BlurFade ici : les animations framer-motion au mount/inView
 // restent figées dans cet environnement (React 19 + hydratation différée du
-// LanguageProvider) — le CSS, lui, est garanti. Voir .studio-reveal dans
-// globals.css ; respecte prefers-reduced-motion côté CSS.
-const Reveal = memo(({ children, className, delay = 0 }: RevealProps) => {
+// LanguageProvider) — le CSS, lui, est garanti. Voir .studio-reveal et
+// .studio-mask dans globals.css ; respecte prefers-reduced-motion côté CSS.
+const Reveal = memo(({ children, className, delay = 0, variant = "fade" }: RevealProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const Reveal = memo(({ children, className, delay = 0 }: RevealProps) => {
   return (
     <div
       ref={ref}
-      className={`studio-reveal ${className ?? ""}`}
+      className={`${variant === "mask" ? "studio-mask" : "studio-reveal"} ${className ?? ""}`}
       style={delay ? ({ "--reveal-delay": `${delay}s` } as React.CSSProperties) : undefined}
     >
       {children}

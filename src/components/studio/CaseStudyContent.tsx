@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import Reveal from "@/components/studio/Reveal";
+import Scramble from "@/components/studio/Scramble";
+import SmoothScroll from "@/components/studio/SmoothScroll";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getCaseStudy, getNextCaseStudy } from "@/data/caseStudies";
@@ -15,8 +16,9 @@ interface CaseStudyContentProps {
   slug: string;
 }
 
-// Page d'étude de cas (langage tech moderne) : nav pill retour, header
-// typographique, méta en pills, sections narratives, next-case en carte.
+// Étude de cas dans la grammaire du site : nav mix-blend-difference, titre
+// serif géant révélé par masque, numéro filigrane, méta mono, sections
+// éditoriales, étude suivante en serif italic.
 export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
   const router = useRouter();
   const { t } = useTranslation();
@@ -36,89 +38,103 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
   };
 
   return (
+    <SmoothScroll>
     <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
-      {/* Nav retour flottante */}
-      <header className="fixed top-4 inset-x-4 md:inset-x-0 z-[50]">
-        <nav className="max-w-4xl mx-auto flex items-center justify-between rounded-full border border-ink/10 bg-bg/80 backdrop-blur-xl pl-3 pr-2 py-2 shadow-[0_8px_32px_-16px_rgba(0,0,0,0.15)]">
-          <a
-            href="/"
-            onClick={handleBack}
-            className="group inline-flex items-center gap-2 rounded-full font-studio text-[13px] font-medium text-ink/60 hover:text-ink px-3 py-1.5 hover:bg-ink/[0.04] transition-colors duration-200"
-          >
-            <ArrowLeft
-              size={15}
-              className="transition-transform duration-300 group-hover:-translate-x-0.5"
-            />
-            {t("caseStudies.backToStudio")}
-          </a>
-          <Link
-            href="/services#contact"
-            onClick={() => playClick()}
-            className="rounded-full bg-blue text-white font-studio text-[13px] font-semibold px-5 py-2 hover:bg-ink transition-colors duration-300"
-          >
-            {t("studio.cta.button")}
-          </Link>
-        </nav>
-      </header>
+      {/* Nav retour (pattern /services, /cv) */}
+      <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference">
+        <a
+          href="/"
+          onClick={handleBack}
+          className="font-serif text-xl md:text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors duration-300"
+        >
+          {t("caseStudies.backToStudio")}
+        </a>
+        <Link
+          href="/services#contact"
+          onClick={() => playClick()}
+          className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white pointer-events-auto transition-colors duration-300"
+        >
+          {t("studio.cta.button")}
+        </Link>
+      </nav>
 
-      {/* Header de l'étude */}
-      <header className="relative max-w-4xl mx-auto px-6 pt-36 md:pt-44 pb-10 overflow-hidden">
+      {/* Hero de l'étude */}
+      <header className="relative px-6 md:px-20 pt-32 md:pt-44 pb-12 md:pb-16 overflow-hidden">
+        <span
+          aria-hidden="true"
+          className="absolute top-10 right-0 font-mono font-black text-ink opacity-[0.04] text-[clamp(10rem,28vw,24rem)] leading-[0.8] tracking-[-0.05em] select-none pointer-events-none"
+        >
+          {caseStudy.projectIndex}
+        </span>
+
         <Reveal>
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-blue mb-5">
-            {t("studio.work.label")} / {caseStudy.projectIndex}
+          <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-5">
+            <Scramble text={`${t("studio.work.label")} / ${caseStudy.projectIndex}`} />
           </p>
-          <h1 className="font-studio font-bold tracking-[-0.04em] leading-[1.02] text-4xl md:text-6xl text-ink lowercase">
-            {t(`caseStudies.${slug}.title`)}
-          </h1>
         </Reveal>
 
-        <Reveal delay={0.15}>
-          <p className="font-serif italic text-xl md:text-2xl text-ink/60 mt-5 max-w-2xl leading-snug">
+        <h1 className="font-serif lowercase tracking-[-0.05em] leading-[0.95] text-[13vw] md:text-[8vw]">
+          <Reveal variant="mask" delay={0.1}>
+            <span>{t(`caseStudies.${slug}.title`)}.</span>
+          </Reveal>
+        </h1>
+
+        <Reveal delay={0.25}>
+          <p className="font-serif italic text-xl md:text-3xl text-ink/60 mt-6 max-w-2xl leading-snug">
             {t(`caseStudies.${slug}.tagline`)}
           </p>
         </Reveal>
 
-        <Reveal delay={0.3}>
-          <div className="flex flex-wrap items-center gap-2 mt-8">
-            <span className="rounded-full border border-ink/10 bg-white px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-ink/55">
-              {t("caseStudies.year")} · {caseStudy.year}
-            </span>
-            <span className="rounded-full border border-ink/10 bg-white px-3.5 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-ink/55 lowercase normal-case">
-              {t(`caseStudies.${slug}.role`)}
-            </span>
-            {caseStudy.stack.map((tech) => (
-              <span
-                key={tech}
-                className="rounded-full border border-ink/10 bg-white px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.08em] text-ink/45"
-              >
-                {tech}
-              </span>
-            ))}
+        <Reveal delay={0.4}>
+          <dl className="flex flex-wrap gap-x-10 md:gap-x-16 gap-y-4 mt-10 md:mt-12 border-t border-ink/20 pt-6">
+            <div>
+              <dt className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-1">
+                {t("caseStudies.year")}
+              </dt>
+              <dd className="font-serif text-lg md:text-xl">{caseStudy.year}</dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-1">
+                {t("caseStudies.role")}
+              </dt>
+              <dd className="font-serif text-lg md:text-xl lowercase">
+                {t(`caseStudies.${slug}.role`)}
+              </dd>
+            </div>
+            <div>
+              <dt className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-ink/40 mb-1">
+                {t("caseStudies.stack")}
+              </dt>
+              <dd className="font-mono text-[11px] font-bold uppercase tracking-[0.1em] pt-1.5">
+                {caseStudy.stack.join(" / ")}
+              </dd>
+            </div>
             {caseStudy.liveUrl && (
-              <a
-                href={caseStudy.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => playClick()}
-                className="group inline-flex items-center gap-1.5 rounded-full bg-blue/[0.08] border border-blue/25 px-3.5 py-1.5 font-studio text-[12px] font-semibold text-blue hover:bg-blue hover:text-white transition-colors duration-300"
-              >
-                {t("caseStudies.visit")}
-                <ArrowUpRight size={13} />
-              </a>
+              <div className="md:ml-auto">
+                <a
+                  href={caseStudy.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => playClick()}
+                  className="inline-block font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-blue underline decoration-1 underline-offset-8 hover:text-ink transition-colors duration-300 pt-2"
+                >
+                  {t("caseStudies.visit")} ↗
+                </a>
+              </div>
             )}
-          </div>
+          </dl>
         </Reveal>
       </header>
 
       {/* Visuel principal */}
       {caseStudy.imageUrl && (
-        <Reveal className="max-w-4xl mx-auto px-6 pb-12">
-          <div className="relative aspect-video rounded-2xl border border-ink/10 overflow-hidden shadow-[0_24px_80px_-32px_rgba(0,0,255,0.25)]">
+        <Reveal className="px-6 md:px-20 pb-14 md:pb-20">
+          <div className="relative aspect-video border border-ink overflow-hidden shadow-[20px_20px_0px_var(--blue)] md:-rotate-1">
             <Image
               src={caseStudy.imageUrl}
               alt={t(`caseStudies.${slug}.title`)}
               fill
-              sizes="(max-width: 1024px) 100vw, 896px"
+              sizes="100vw"
               priority
               className="object-cover"
             />
@@ -127,16 +143,16 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
       )}
 
       {/* Sections narratives */}
-      <main className="max-w-3xl mx-auto px-6 pb-16 md:pb-24">
-        <div className="flex flex-col gap-10 md:gap-14">
+      <main className="px-6 md:px-20 pb-20 md:pb-32">
+        <div className="flex flex-col gap-14 md:gap-20 max-w-3xl">
           {SECTIONS.map((section, index) => (
             <Reveal key={section} delay={index === 0 ? 0 : 0.08}>
-              <section className="rounded-2xl border border-ink/10 bg-white p-7 md:p-9">
-                <h2 className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-blue mb-4">
+              <section className="border-t border-ink/20 pt-6">
+                <h2 className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-5">
                   ({String(index + 1).padStart(2, "0")}) —{" "}
                   {t(`caseStudies.sections.${section}`)}
                 </h2>
-                <p className="font-studio text-[15px] md:text-base text-ink/75 leading-relaxed">
+                <p className="font-serif text-xl md:text-2xl leading-normal text-ink/80">
                   {t(`caseStudies.${slug}.${section}`)}
                 </p>
               </section>
@@ -146,35 +162,33 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
       </main>
 
       {/* Étude suivante + mini-CTA */}
-      <footer className="max-w-4xl mx-auto px-6 pb-16 md:pb-24">
+      <footer className="bg-blue text-white px-6 md:px-20 py-16 md:py-24 overflow-hidden">
         <Reveal>
+          <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white/50 mb-4">
+            {t("caseStudies.next")}
+          </p>
           <Link
             href={`/work/${nextCaseStudy.slug}`}
             onClick={() => playClick()}
-            className="group flex items-center justify-between rounded-2xl border border-ink/10 bg-white px-7 py-8 md:px-10 transition-all duration-300 hover:border-blue/30 hover:shadow-[0_12px_48px_-16px_rgba(0,0,255,0.18)]"
+            className="group inline-block font-serif lowercase italic tracking-[-0.05em] leading-085 text-[10vw] md:text-[5vw] hover:text-ink transition-colors duration-300"
           >
-            <div>
-              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/40 mb-2">
-                {t("caseStudies.next")}
-              </p>
-              <p className="font-studio font-semibold text-2xl md:text-3xl text-ink lowercase tracking-[-0.02em] group-hover:text-blue transition-colors duration-300">
-                {t(`caseStudies.${nextCaseStudy.slug}.title`)}
-              </p>
-            </div>
-            <ArrowRight
-              size={22}
-              className="text-ink/30 transition-all duration-300 group-hover:text-blue group-hover:translate-x-1"
-            />
+            {t(`caseStudies.${nextCaseStudy.slug}.title`)}.{" "}
+            <span
+              aria-hidden="true"
+              className="inline-block not-italic transition-transform duration-300 ease-out-expo group-hover:translate-x-3"
+            >
+              →
+            </span>
           </Link>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-10">
-            <p className="font-serif italic text-lg text-ink/55">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 border-t border-white/20 mt-12 md:mt-16 pt-8">
+            <p className="font-serif italic text-lg md:text-xl text-white/70">
               {t("caseStudies.miniCta")}
             </p>
             <Link
               href="/services#contact"
               onClick={() => playClick()}
-              className="rounded-full bg-blue text-white font-studio text-sm font-semibold px-6 py-3 hover:bg-ink transition-colors duration-300"
+              className="inline-block self-start bg-white text-blue px-6 py-3 font-mono text-xs uppercase tracking-wider font-bold hover:bg-transparent hover:text-white border border-white transition-colors duration-300"
             >
               {t("studio.cta.button")}
             </Link>
@@ -185,5 +199,6 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
       {/* Texture grain globale */}
       <div className="fixed inset-0 pointer-events-none z-[200] opacity-[0.03] grayscale contrast-150 mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
+    </SmoothScroll>
   );
 }

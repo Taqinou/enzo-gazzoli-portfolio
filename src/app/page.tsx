@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SmoothScroll from "@/components/studio/SmoothScroll";
 import StudioNav from "@/components/studio/StudioNav";
 import StudioHero from "@/components/studio/StudioHero";
 import OfferSection from "@/components/studio/OfferSection";
@@ -24,26 +25,28 @@ export const metadata: Metadata = {
   },
 };
 
-// Vitrine studio : page à scroll normal (le scroll-snap reste la signature de
-// l'aile /archive — le contraste entre les deux ailes est voulu).
+// Vitrine studio : scroll fluide cinématographique (Lenis), page à scroll
+// normal (le scroll-snap reste la signature de l'aile /archive).
 export default function StudioHome() {
   return (
-    <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
-      <StudioNav />
+    <SmoothScroll>
+      <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
+        <StudioNav />
 
-      <main>
-        <StudioHero />
-        <OfferSection />
-        <CaseStudiesSection />
-        <MethodSection />
-        <ProofSection />
-        <StudioCTA />
-      </main>
+        <main>
+          <StudioHero />
+          <OfferSection />
+          <CaseStudiesSection />
+          <MethodSection />
+          <ProofSection />
+          <StudioCTA />
+        </main>
 
-      <StudioFooter />
+        <StudioFooter />
 
-      {/* Texture grain globale (pattern /services) */}
-      <div className="fixed inset-0 pointer-events-none z-[200] opacity-[0.03] grayscale contrast-150 mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-    </div>
+        {/* Texture grain globale (pattern /services) */}
+        <div className="fixed inset-0 pointer-events-none z-[200] opacity-[0.03] grayscale contrast-150 mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+      </div>
+    </SmoothScroll>
   );
 }

@@ -12,6 +12,11 @@ export default {
         bg: "var(--bg)",
         ink: "var(--ink)",
         blue: "var(--blue)",
+        // Aile studio (dark-first) : fond quasi-noir, surface, filets et
+        // déclinaison lisible du bleu signature pour le texte sur dark.
+        "st-bg": "#050507",
+        "st-surface": "#0c0c11",
+        "st-accent": "#5c5cff",
         "mn-background": "hsl(var(--mn-background))",
         "mn-foreground": "hsl(var(--mn-foreground))",
         "mn-muted": "hsl(var(--mn-muted))",

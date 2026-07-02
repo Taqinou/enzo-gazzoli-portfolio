@@ -1,97 +1,83 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, AppWindow, Globe, ShoppingBag, Sparkles } from "lucide-react";
 import Reveal from "@/components/studio/Reveal";
+import Scramble from "@/components/studio/Scramble";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { ProjectType } from "@/data/pricing";
 
-// Bento grid de l'offre : les intitulés viennent des clés services.offers.*
-// existantes (zéro doublon), chaque carte renvoie vers /services.
-const OFFERS: {
-  type: ProjectType;
-  icon: typeof Globe;
-  span: string;
-}[] = [
-  { type: "website", icon: Globe, span: "md:col-span-3" },
-  { type: "application", icon: AppWindow, span: "md:col-span-2" },
-  { type: "shopify", icon: ShoppingBag, span: "md:col-span-2" },
-  { type: "custom", icon: Sparkles, span: "md:col-span-3" },
+// Anti-grid assumé : rangées décalées (le « scattered chaos » de l'archive),
+// numéros mono géants, hover = rotation + hard shadow bleue + clack.
+const OFFERS: { type: ProjectType; offset: string; tilt: string }[] = [
+  { type: "website", offset: "md:ml-0", tilt: "hover:-rotate-1" },
+  { type: "application", offset: "md:ml-[10vw]", tilt: "hover:rotate-1" },
+  { type: "shopify", offset: "md:ml-[3vw]", tilt: "hover:-rotate-1" },
+  { type: "custom", offset: "md:ml-[14vw]", tilt: "hover:rotate-1" },
 ];
 
 export default function OfferSection() {
   const { t } = useTranslation();
-  const { playClick } = useSound();
+  const { playClick, playMechanicalClack } = useSound();
 
   return (
-    <section className="relative max-w-5xl mx-auto px-6 py-20 md:py-28">
+    <section className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 overflow-hidden">
       <Reveal>
-        <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-blue mb-4">
-          {t("studio.offer.label")}
+        <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-4">
+          <Scramble text={t("studio.offer.label")} />
         </p>
-        <h2 className="font-studio font-bold tracking-[-0.03em] text-3xl md:text-5xl text-ink">
+        <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-4">
           {t("studio.offer.heading")}
         </h2>
-        <p className="font-studio text-base md:text-lg text-ink/55 mt-4 max-w-lg">
+        <p className="font-serif italic text-lg md:text-xl text-ink/50 mb-14 md:mb-20 max-w-lg">
           {t("studio.offer.lede")}
         </p>
       </Reveal>
 
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-12">
-        {OFFERS.map((offer, index) => {
-          const Icon = offer.icon;
-          return (
-            <Reveal key={offer.type} delay={index * 0.06} className={offer.span}>
-              <Link
-                href="/services"
-                onClick={() => playClick()}
-                className="group relative flex flex-col justify-between h-full min-h-[220px] rounded-2xl border border-ink/10 bg-white p-7 overflow-hidden transition-all duration-300 hover:border-blue/30 hover:shadow-[0_12px_48px_-16px_rgba(0,0,255,0.18)]"
+      <div className="flex flex-col gap-6 md:gap-10">
+        {OFFERS.map((offer, index) => (
+          <Reveal key={offer.type} delay={(index % 2) * 0.08}>
+            <Link
+              href="/services"
+              onClick={() => playClick()}
+              onMouseEnter={() => playMechanicalClack(200, 0.15)}
+              className={`group relative flex flex-col md:flex-row md:items-center gap-3 md:gap-10 border border-ink bg-bg px-6 py-7 md:px-10 md:py-9 md:max-w-[70vw] ${offer.offset} ${offer.tilt} transition-all duration-300 ease-out-expo hover:shadow-[16px_16px_0px_var(--blue)] hover:bg-white`}
+            >
+              <span
+                aria-hidden="true"
+                className="absolute -top-6 right-4 md:-top-10 md:right-8 font-mono font-black text-[4rem] md:text-[7rem] leading-none text-ink/[0.06] tracking-[-0.05em] select-none pointer-events-none transition-colors duration-300 group-hover:text-blue/10"
               >
-                {/* Numéro en filigrane */}
+                {String(index + 1).padStart(2, "0")}
+              </span>
+
+              <h3 className="relative font-serif text-[8vw] md:text-[3vw] leading-[0.95] text-ink group-hover:text-blue transition-colors duration-300 shrink-0 group-hover:italic">
+                {t(`services.offers.${offer.type}.title`)}
+              </h3>
+
+              <div className="relative flex items-center justify-between gap-6 md:ml-auto">
+                <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-md">
+                  {t(`services.offers.${offer.type}.description`)}
+                </p>
                 <span
                   aria-hidden="true"
-                  className="absolute -top-4 -right-2 font-studio font-bold text-[7rem] leading-none text-ink/[0.03] select-none transition-colors duration-300 group-hover:text-blue/[0.05]"
+                  className="font-mono text-blue text-xl opacity-0 -translate-x-2 transition-all duration-300 ease-out-expo group-hover:opacity-100 group-hover:translate-x-0"
                 >
-                  {String(index + 1).padStart(2, "0")}
+                  →
                 </span>
-
-                <div className="relative flex items-center justify-between">
-                  <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-ink/10 bg-bg text-ink/70 transition-colors duration-300 group-hover:text-blue group-hover:border-blue/25">
-                    <Icon size={18} strokeWidth={1.75} />
-                  </span>
-                  <ArrowUpRight
-                    size={18}
-                    className="text-ink/25 transition-all duration-300 group-hover:text-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </div>
-
-                <div className="relative mt-10">
-                  <h3 className="font-studio font-semibold text-lg md:text-xl text-ink lowercase tracking-[-0.01em]">
-                    {t(`services.offers.${offer.type}.title`).toLowerCase()}
-                  </h3>
-                  <p className="font-studio text-sm text-ink/55 leading-relaxed mt-2 max-w-sm">
-                    {t(`services.offers.${offer.type}.description`)}
-                  </p>
-                </div>
-              </Link>
-            </Reveal>
-          );
-        })}
+              </div>
+            </Link>
+          </Reveal>
+        ))}
       </div>
 
-      <Reveal delay={0.2}>
-        <div className="flex justify-center mt-10">
+      <Reveal delay={0.15}>
+        <div className="mt-14 md:mt-20">
           <Link
             href="/services"
             onClick={() => playClick()}
-            className="group inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white font-studio text-sm font-medium text-ink px-6 py-3 hover:border-blue/40 hover:text-blue transition-colors duration-300"
+            className="inline-block bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
           >
             {t("studio.offer.cta")}
-            <ArrowUpRight
-              size={15}
-              className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-            />
           </Link>
         </div>
       </Reveal>
