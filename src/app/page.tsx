@@ -1,39 +1,49 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import StudioNav from "@/components/studio/StudioNav";
+import StudioHero from "@/components/studio/StudioHero";
+import OfferSection from "@/components/studio/OfferSection";
+import CaseStudiesSection from "@/components/studio/CaseStudiesSection";
+import MethodSection from "@/components/studio/MethodSection";
+import ProofSection from "@/components/studio/ProofSection";
+import StudioCTA from "@/components/studio/StudioCTA";
+import StudioFooter from "@/components/studio/StudioFooter";
 
 export const metadata: Metadata = {
   title: "enzo gazzoli — studio.",
   description:
-    "Independent web studio in Nancy, France. Design & development of websites, e-commerce and web applications — Next.js, React, immersive experiences.",
+    "Independent web studio in Nancy, France. Design & development of showcase websites, e-commerce and web applications — Next.js, React, tailored experiences that stand out.",
+  openGraph: {
+    title: "enzo gazzoli — studio.",
+    description:
+      "Independent web studio — websites, e-commerce and web applications, from strategy to deployment.",
+    url: "https://enzo-gazzoli.com",
+    type: "website",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
-// Placeholder provisoire — remplacé par la vraie home studio (étape 3).
+// Vitrine studio : page à scroll normal (le scroll-snap reste la signature de
+// l'aile /archive — le contraste entre les deux ailes est voulu).
 export default function StudioHome() {
   return (
-    <main className="min-h-screen bg-bg text-ink flex flex-col items-center justify-center gap-12 px-6">
-      <h1 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[clamp(3rem,12vw,9rem)]">
-        studio.
-      </h1>
-      <nav className="flex flex-col md:flex-row items-center gap-6 md:gap-10">
-        <Link
-          href="/archive"
-          className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:text-blue transition-colors duration-300"
-        >
-          Archive
-        </Link>
-        <Link
-          href="/services"
-          className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:text-blue transition-colors duration-300"
-        >
-          Services
-        </Link>
-        <Link
-          href="/cv"
-          className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] hover:text-blue transition-colors duration-300"
-        >
-          CV
-        </Link>
-      </nav>
-    </main>
+    <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
+      <StudioNav />
+
+      <main>
+        <StudioHero />
+        <OfferSection />
+        <CaseStudiesSection />
+        <MethodSection />
+        <ProofSection />
+        <StudioCTA />
+      </main>
+
+      <StudioFooter />
+
+      {/* Texture grain globale (pattern /services) */}
+      <div className="fixed inset-0 pointer-events-none z-[200] opacity-[0.03] grayscale contrast-150 mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+    </div>
   );
 }

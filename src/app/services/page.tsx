@@ -292,7 +292,7 @@ export default function ServicesPage() {
         </main>
       </section>
 
-      <section className="bg-blue text-white py-20 md:py-32 px-6 md:px-20 relative">
+      <section id="contact" className="bg-blue text-white py-20 md:py-32 px-6 md:px-20 relative scroll-mt-10">
         <div className="max-w-4xl mx-auto md:ml-[calc(clamp(60px,12vw,200px)+5rem)]">
           <motion.div
             initial={{ opacity: 0 }}
