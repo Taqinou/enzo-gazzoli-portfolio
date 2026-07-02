@@ -179,6 +179,15 @@ export default function HeroSection({
             {t("hero.services")}
           </Link>
         </BlurFade>
+        <BlurFade delay={0.4}>
+          <Link
+            href="/"
+            onPointerDown={handleCvClick}
+            className="font-serif text-[8.5vw] md:text-[clamp(1.4rem,5vw,3.5rem)] lowercase italic text-white/70 hover:text-white transition-colors duration-300"
+          >
+            {t("hero.studio")}
+          </Link>
+        </BlurFade>
       </div>
 
       {/* Footer - Year */}

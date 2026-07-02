@@ -22,6 +22,7 @@ export const SITE_CONFIG = {
 
 // Navigation links for overlay
 export const NAV_LINKS = [
+  { labelKey: "navLinks.studio", href: "/" },
   { labelKey: "navLinks.cv", href: "/cv" },
   { labelKey: "navLinks.email", href: `mailto:${PERSONAL.email}` },
   { labelKey: "navLinks.github", href: SOCIAL_LINKS.github, target: "_blank" as const },

@@ -35,6 +35,35 @@ const jsonLd = {
   ],
 };
 
+// JSON-LD du studio (posture business : on fait appel à un studio, pas
+// seulement à une personne)
+const studioJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "Enzo Gazzoli — Studio",
+  url: SITE_CONFIG.url,
+  email: `mailto:${PERSONAL.email}`,
+  description:
+    "Independent web studio in Nancy, France. Design & development of showcase websites, e-commerce and web applications — Next.js, React, tailored digital experiences.",
+  founder: {
+    "@type": "Person",
+    name: PERSONAL.name,
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Nancy",
+    addressCountry: "FR",
+  },
+  areaServed: ["FR", "Remote"],
+  sameAs: [
+    SOCIAL_LINKS.github,
+    SOCIAL_LINKS.linkedin,
+    SOCIAL_LINKS.instagram,
+    SOCIAL_LINKS.malt,
+    SOCIAL_LINKS.fiverr,
+  ],
+};
+
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-serif",
@@ -58,7 +87,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://enzo-gazzoli.com"),
   title: "enzo gazzoli.",
   description:
-    "Portfolio of Enzo Gazzoli, a freelance creative fullstack web developer based in Nancy, France. Specializing in Next.js, immersive web experiences, and digital design.",
+    "Independent web studio of Enzo Gazzoli in Nancy, France. Design & development of showcase websites, e-commerce and web applications — Next.js, React, immersive digital experiences.",
   keywords: [
     // EN - General
     "Creative Developer",
@@ -187,8 +216,9 @@ export const metadata: Metadata = {
     google: "eyH37y7r0gpLfmh1ubKdrjJD8l__DLmMx-mVYHcx44U",
   },
   openGraph: {
-    title: "Enzo Gazzoli | Creative Fullstack Developer - Nancy",
-    description: "Immersive digital experiences and creative development.",
+    title: "Enzo Gazzoli | Web Studio & Creative Developer - Nancy",
+    description:
+      "Independent web studio — websites, e-commerce and web applications, from strategy to deployment.",
     url: "https://enzo-gazzoli.com",
     siteName: "Enzo Gazzoli Portfolio",
     locale: "fr_FR",
@@ -231,6 +261,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(studioJsonLd) }}
         />
       </head>
       <body className={`${playfair.variable} ${inter.variable} antialiased`}>
