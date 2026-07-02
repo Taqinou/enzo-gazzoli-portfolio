@@ -103,7 +103,8 @@
     "cv": "curriculum vitae.",
     "services": "services.",
     "languageFrAriaLabel": "Passer en français",
-    "languageEnAriaLabel": "Passer en anglais"
+    "languageEnAriaLabel": "Passer en anglais",
+    "studio": "studio."
   },
   "navLinks": {
     "cv": "CV",
@@ -112,7 +113,8 @@
     "linkedin": "LINKEDIN",
     "instagram": "INSTAGRAM",
     "fiverr": "FIVERR",
-    "malt": "MALT"
+    "malt": "MALT",
+    "studio": "STUDIO"
   },
   "identity": {
     "info": "INFOINF0",
@@ -237,6 +239,147 @@
         "degree": "Baccalauréat général",
         "period": "2022"
       }
+    }
+  },
+  "studio": {
+    "nav": {
+      "work": "TRAVAUX",
+      "method": "MÉTHODE",
+      "services": "SERVICES",
+      "archive": "ARCHIVE",
+      "contact": "CONTACT",
+      "wordmark": "enzo gazzoli.",
+      "ariaLabel": "Navigation studio"
+    },
+    "hero": {
+      "eyebrow": "STUDIO INDÉPENDANT — DESIGN & DÉVELOPPEMENT WEB — NANCY (FR)",
+      "thesisLine1": "je conçois & développe",
+      "thesisLine2": "des sites qui marquent.",
+      "subline": "sites vitrines, e-commerce et applications web — de la stratégie au déploiement, pour des marques qui veulent se démarquer.",
+      "ctaPrimary": "démarrer un projet",
+      "ctaSecondary": "voir les travaux",
+      "backdrop": "studio"
+    },
+    "offer": {
+      "label": "(01) — L'OFFRE",
+      "heading": "ce que je fais.",
+      "lede": "quatre façons de travailler ensemble, du site vitrine à l'application complète.",
+      "itemCta": "explorer",
+      "cta": "voir l'offre détaillée & simuler un devis"
+    },
+    "work": {
+      "label": "(02) — TRAVAUX",
+      "heading": "études de cas.",
+      "lede": "quelques projets racontés du problème au résultat.",
+      "viewCase": "lire l'étude de cas",
+      "typoCoverAlt": "Cover typographique du projet"
+    },
+    "method": {
+      "label": "(03) — MÉTHODE",
+      "heading": "comment on travaille.",
+      "steps": {
+        "01": {
+          "title": "cadrage",
+          "description": "on clarifie l'objectif, le public et le périmètre. pas une ligne de code avant d'avoir compris votre besoin."
+        },
+        "02": {
+          "title": "design",
+          "description": "direction artistique et prototype : vous validez le rendu avant que je construise."
+        },
+        "03": {
+          "title": "développement",
+          "description": "un code propre, rapide et testé — avec des points d'étape réguliers pour rester alignés."
+        },
+        "04": {
+          "title": "mise en ligne & suivi",
+          "description": "déploiement, mesure, itérations. je reste disponible après la livraison."
+        }
+      }
+    },
+    "proof": {
+      "label": "(04) — CONFIANCE",
+      "heading": "ils m'ont fait confiance.",
+      "pending": "témoignage en cours de collecte.",
+      "quotes": {
+        "7eyes": "[témoignage à venir]",
+        "lumiere": "[témoignage à venir]"
+      },
+      "authors": {
+        "7eyes": "7eyes — artiste",
+        "lumiere": "lumière de soso — fondatrice"
+      },
+      "facts": {
+        "01": "des projets en production, consultables en ligne",
+        "02": "react / next.js / typescript — une stack moderne et pérenne",
+        "03": "basé à nancy, disponible partout à distance"
+      }
+    },
+    "cta": {
+      "hookLine1": "un projet",
+      "hookLine2": "en tête ?",
+      "subline": "une idée, un cahier des charges ou juste une envie — parlons-en.",
+      "button": "démarrer un projet",
+      "or": "ou par email :"
+    },
+    "footer": {
+      "archiveLead": "envie de voir l'envers du décor ?",
+      "archiveLink": "l'archive / le lab",
+      "colophon": "conçu & développé à nancy."
+    }
+  },
+  "caseStudies": {
+    "backToStudio": "studio.",
+    "role": "RÔLE",
+    "year": "ANNÉE",
+    "stack": "STACK",
+    "visit": "voir en ligne",
+    "next": "étude suivante",
+    "miniCta": "un projet similaire ? parlons-en.",
+    "sections": {
+      "context": "CONTEXTE",
+      "problem": "PROBLÈME",
+      "approach": "APPROCHE",
+      "results": "RÉSULTATS"
+    },
+    "sneakerscope": {
+      "title": "sneakerscope",
+      "tagline": "l'analytique du marché sneakers, en temps réel.",
+      "role": "design, développement fullstack, data & IA",
+      "context": "le marché de la revente de sneakers bouge vite : les prix varient d'heure en heure selon les drops, la hype et les plateformes. les revendeurs et collectionneurs naviguent à l'instinct, sans outil sérieux pour agréger la donnée.",
+      "problem": "comment transformer un flux massif et volatil de données de vente en décisions simples ? il fallait collecter, nettoyer et analyser la donnée en continu, puis la restituer de façon lisible — sans exiger de l'utilisateur des compétences d'analyste.",
+      "approach": "j'ai conçu la plateforme de bout en bout : pipeline de collecte FastAPI + PostgreSQL, cache Redis pour les données chaudes, algorithme propriétaire de scoring et un conseiller IA (Gemini) qui répond en langage naturel. côté front : Next.js et Recharts pour des rapports en temps réel.",
+      "results": "une plateforme complète, de la donnée brute au conseil personnalisé — et un terrain d'expérimentation produit continu : scoring, IA appliquée, visualisation de données. [métriques d'usage à compléter]",
+      "metaDescription": "Étude de cas SneakerScope : une plateforme analytique temps réel du marché sneakers — Next.js, FastAPI, PostgreSQL, Redis et IA (Gemini)."
+    },
+    "7eyes": {
+      "title": "7eyes",
+      "tagline": "un site immersif à l'image d'un artiste.",
+      "role": "direction artistique, design, développement",
+      "context": "7eyes, rappeur français, avait besoin d'une présence en ligne à la hauteur de son univers : sombre, précise, immersive. pas une simple carte de visite — une extension de son identité artistique.",
+      "problem": "traduire une identité musicale en expérience web : donner à écouter, à voir et à ressentir, sans sacrifier la performance ni la lisibilité.",
+      "approach": "un design immersif construit autour de l'écoute : lecteur audio intégré, animations fluides (Framer Motion), esthétique sombre et typographie affirmée. développé en Next.js, pensé mobile d'abord.",
+      "results": "un site en production qui sert de vitrine officielle à l'artiste — écoute, univers visuel et actualité au même endroit. [retours & chiffres à compléter]",
+      "metaDescription": "Étude de cas 7eyes : un site d'artiste immersif pour un rappeur français — lecteur audio intégré, esthétique sombre, Next.js et Framer Motion."
+    },
+    "lumiere-de-soso": {
+      "title": "lumière de soso",
+      "tagline": "une boutique headless pensée pour vendre autrement.",
+      "role": "design, développement, intégration e-commerce",
+      "context": "lumière de soso, marque artisanale, voulait vendre en ligne sans ressembler à un template de plus. l'enjeu : une boutique qui raconte la marque, tout en restant simple à gérer au quotidien.",
+      "problem": "concilier une expérience d'achat sur-mesure avec la robustesse d'une plateforme éprouvée : paiement, stock, commandes — sans réinventer la roue côté back-office.",
+      "approach": "architecture headless : Shopify comme moteur e-commerce (produits, panier, paiement), Next.js pour une vitrine entièrement sur-mesure. panier fluide, animations discrètes, parcours d'achat sans friction.",
+      "results": "une boutique en production : la marque gère son catalogue dans Shopify, les clients achètent dans une expérience unique à la marque. [chiffres de vente à compléter]",
+      "metaDescription": "Étude de cas Lumière de Soso : une boutique e-commerce headless sur-mesure — Shopify API, Next.js, TypeScript et Framer Motion."
+    },
+    "th14": {
+      "title": "th14",
+      "tagline": "un hommage typographique à thierry henry.",
+      "role": "concept, design, développement créatif",
+      "context": "projet auto-initié : rendre hommage à la carrière de thierry henry à travers une expérience web narrative. un terrain de jeu pour pousser le design typographique et l'animation.",
+      "problem": "raconter une carrière légendaire de façon interactive : rythmer la narration, guider le scroll, faire ressentir les moments clés — uniquement avec de la typographie, du mouvement et de l'espace.",
+      "approach": "narration au scroll orchestrée avec GSAP et Framer Motion, design typographique affirmé, transitions travaillées. chaque section correspond à une époque de sa carrière.",
+      "results": "une pièce de portfolio qui démontre la maîtrise de l'animation web et du storytelling interactif — et un laboratoire de techniques réutilisées ensuite sur des projets clients.",
+      "metaDescription": "Étude de cas TH14 : une expérience web narrative en hommage à Thierry Henry — design typographique, GSAP et Framer Motion."
     }
   }
 }

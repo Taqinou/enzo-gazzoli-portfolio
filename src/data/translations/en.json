@@ -103,7 +103,8 @@
     "cv": "curriculum vitae.",
     "services": "services.",
     "languageFrAriaLabel": "Switch to French",
-    "languageEnAriaLabel": "Switch to English"
+    "languageEnAriaLabel": "Switch to English",
+    "studio": "studio."
   },
   "navLinks": {
     "cv": "CV",
@@ -112,7 +113,8 @@
     "linkedin": "LINKEDIN",
     "instagram": "INSTAGRAM",
     "fiverr": "FIVERR",
-    "malt": "MALT"
+    "malt": "MALT",
+    "studio": "STUDIO"
   },
   "identity": {
     "info": "INFOINF0",
@@ -237,6 +239,147 @@
         "degree": "General Baccalaureate",
         "period": "2022"
       }
+    }
+  },
+  "studio": {
+    "nav": {
+      "work": "WORK",
+      "method": "METHOD",
+      "services": "SERVICES",
+      "archive": "ARCHIVE",
+      "contact": "CONTACT",
+      "wordmark": "enzo gazzoli.",
+      "ariaLabel": "Studio navigation"
+    },
+    "hero": {
+      "eyebrow": "INDEPENDENT STUDIO — WEB DESIGN & DEVELOPMENT — NANCY (FR)",
+      "thesisLine1": "i design & build",
+      "thesisLine2": "websites that resonate.",
+      "subline": "showcase websites, e-commerce and web applications — from strategy to deployment, for brands that want to stand out.",
+      "ctaPrimary": "start a project",
+      "ctaSecondary": "see the work",
+      "backdrop": "studio"
+    },
+    "offer": {
+      "label": "(01) — THE OFFER",
+      "heading": "what i do.",
+      "lede": "four ways to work together, from showcase website to full application.",
+      "itemCta": "explore",
+      "cta": "see the full offer & simulate a quote"
+    },
+    "work": {
+      "label": "(02) — WORK",
+      "heading": "case studies.",
+      "lede": "a few projects told from problem to result.",
+      "viewCase": "read the case study",
+      "typoCoverAlt": "Typographic project cover"
+    },
+    "method": {
+      "label": "(03) — METHOD",
+      "heading": "how we work.",
+      "steps": {
+        "01": {
+          "title": "scoping",
+          "description": "we clarify the goal, the audience and the scope. not a single line of code before i understand your need."
+        },
+        "02": {
+          "title": "design",
+          "description": "art direction and prototype: you approve the look before i build."
+        },
+        "03": {
+          "title": "development",
+          "description": "clean, fast, tested code — with regular checkpoints to stay aligned."
+        },
+        "04": {
+          "title": "launch & follow-up",
+          "description": "deployment, measurement, iterations. i remain available after delivery."
+        }
+      }
+    },
+    "proof": {
+      "label": "(04) — TRUST",
+      "heading": "they trusted me.",
+      "pending": "testimonial being collected.",
+      "quotes": {
+        "7eyes": "[testimonial coming soon]",
+        "lumiere": "[testimonial coming soon]"
+      },
+      "authors": {
+        "7eyes": "7eyes — artist",
+        "lumiere": "lumière de soso — founder"
+      },
+      "facts": {
+        "01": "projects in production, available online",
+        "02": "react / next.js / typescript — a modern, future-proof stack",
+        "03": "based in nancy, available remotely anywhere"
+      }
+    },
+    "cta": {
+      "hookLine1": "a project",
+      "hookLine2": "in mind?",
+      "subline": "an idea, a brief or just an itch — let's talk.",
+      "button": "start a project",
+      "or": "or by email:"
+    },
+    "footer": {
+      "archiveLead": "want to see behind the scenes?",
+      "archiveLink": "the archive / the lab",
+      "colophon": "designed & built in nancy."
+    }
+  },
+  "caseStudies": {
+    "backToStudio": "studio.",
+    "role": "ROLE",
+    "year": "YEAR",
+    "stack": "STACK",
+    "visit": "view live",
+    "next": "next case study",
+    "miniCta": "a similar project? let's talk.",
+    "sections": {
+      "context": "CONTEXT",
+      "problem": "PROBLEM",
+      "approach": "APPROACH",
+      "results": "RESULTS"
+    },
+    "sneakerscope": {
+      "title": "sneakerscope",
+      "tagline": "real-time analytics for the sneaker market.",
+      "role": "design, fullstack development, data & AI",
+      "context": "the sneaker resale market moves fast: prices shift by the hour with drops, hype and platforms. resellers and collectors navigate by instinct, without a serious tool to aggregate the data.",
+      "problem": "how do you turn a massive, volatile stream of sales data into simple decisions? the data had to be collected, cleaned and analysed continuously, then rendered readable — without requiring analyst skills from the user.",
+      "approach": "i designed the platform end to end: a FastAPI + PostgreSQL collection pipeline, Redis cache for hot data, a proprietary scoring algorithm and an AI advisor (Gemini) that answers in natural language. on the front: Next.js and Recharts for real-time reports.",
+      "results": "a complete platform, from raw data to personalised advice — and a continuous product playground: scoring, applied AI, data visualisation. [usage metrics to be added]",
+      "metaDescription": "SneakerScope case study: a real-time sneaker market analytics platform — Next.js, FastAPI, PostgreSQL, Redis and AI (Gemini)."
+    },
+    "7eyes": {
+      "title": "7eyes",
+      "tagline": "an immersive website shaped after an artist.",
+      "role": "art direction, design, development",
+      "context": "7eyes, a french rapper, needed an online presence that lived up to his world: dark, precise, immersive. not a mere business card — an extension of his artistic identity.",
+      "problem": "translating a musical identity into a web experience: something to listen to, look at and feel, without sacrificing performance or readability.",
+      "approach": "an immersive design built around listening: integrated audio player, fluid animations (Framer Motion), dark aesthetics and assertive typography. built with Next.js, mobile-first.",
+      "results": "a production website serving as the artist's official showcase — music, visual universe and news in one place. [feedback & figures to be added]",
+      "metaDescription": "7eyes case study: an immersive artist website for a french rapper — integrated audio player, dark aesthetics, Next.js and Framer Motion."
+    },
+    "lumiere-de-soso": {
+      "title": "lumière de soso",
+      "tagline": "a headless store built to sell differently.",
+      "role": "design, development, e-commerce integration",
+      "context": "lumière de soso, an artisanal brand, wanted to sell online without looking like yet another template. the challenge: a store that tells the brand's story while staying easy to run day to day.",
+      "problem": "reconciling a custom shopping experience with the robustness of a proven platform: payments, stock, orders — without reinventing the back-office wheel.",
+      "approach": "headless architecture: Shopify as the e-commerce engine (products, cart, payments), Next.js for a fully custom storefront. fluid cart, discreet animations, frictionless purchase journey.",
+      "results": "a store in production: the brand manages its catalogue in Shopify, customers shop in an experience unique to the brand. [sales figures to be added]",
+      "metaDescription": "Lumière de Soso case study: a custom headless e-commerce store — Shopify API, Next.js, TypeScript and Framer Motion."
+    },
+    "th14": {
+      "title": "th14",
+      "tagline": "a typographic tribute to thierry henry.",
+      "role": "concept, design, creative development",
+      "context": "a self-initiated project: paying tribute to thierry henry's career through a narrative web experience. a playground to push typographic design and animation.",
+      "problem": "telling a legendary career interactively: pacing the narrative, guiding the scroll, making key moments felt — with nothing but typography, motion and space.",
+      "approach": "scroll-driven storytelling orchestrated with GSAP and Framer Motion, assertive typographic design, polished transitions. each section maps to an era of his career.",
+      "results": "a portfolio piece that demonstrates mastery of web animation and interactive storytelling — and a lab for techniques later reused on client projects.",
+      "metaDescription": "TH14 case study: a narrative web experience honouring Thierry Henry — typographic design, GSAP and Framer Motion."
     }
   }
 }
