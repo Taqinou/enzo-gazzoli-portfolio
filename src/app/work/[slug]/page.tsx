@@ -12,6 +12,9 @@ export function generateStaticParams() {
   return caseStudies.map((caseStudy) => ({ slug: caseStudy.slug }));
 }
 
+// Liste fermée de slugs : tout autre slug → 404 (aucun rendu à la demande)
+export const dynamicParams = false;
+
 // La metadata est servie en FR (cohérent avec l'OG locale fr_FR du layout) ;
 // le contenu de la page suit ensuite la locale du visiteur côté client.
 export async function generateMetadata({
