@@ -261,21 +261,21 @@
       "backdrop": "studio"
     },
     "offer": {
-      "label": "(01) — L'OFFRE",
+      "label": "L'OFFRE",
       "heading": "ce que je fais.",
       "lede": "quatre façons de travailler ensemble, du site vitrine à l'application complète.",
       "itemCta": "explorer",
       "cta": "voir l'offre détaillée & simuler un devis"
     },
     "work": {
-      "label": "(02) — TRAVAUX",
+      "label": "TRAVAUX",
       "heading": "études de cas.",
       "lede": "quelques projets racontés du problème au résultat.",
       "viewCase": "lire l'étude de cas",
       "typoCoverAlt": "Cover typographique du projet"
     },
     "method": {
-      "label": "(03) — MÉTHODE",
+      "label": "MÉTHODE",
       "heading": "comment on travaille.",
       "steps": {
         "01": {
@@ -297,21 +297,19 @@
       }
     },
     "proof": {
-      "label": "(04) — CONFIANCE",
-      "heading": "ils m'ont fait confiance.",
+      "label": "CONFIANCE",
       "pending": "témoignage en cours de collecte.",
+      "prevLabel": "témoignage précédent",
+      "nextLabel": "témoignage suivant",
       "quotes": {
+        "sample": "enzo a saisi l'univers du projet mieux que je ne l'aurais fait moi-même, et l'a livré sans un accroc.",
         "7eyes": "[témoignage à venir]",
         "lumiere": "[témoignage à venir]"
       },
       "authors": {
+        "sample": "exemple — à remplacer par un vrai retour",
         "7eyes": "7eyes — artiste",
         "lumiere": "lumière de soso — fondatrice"
-      },
-      "facts": {
-        "01": "des projets en production, consultables en ligne",
-        "02": "react / next.js / typescript — une stack moderne et pérenne",
-        "03": "basé à nancy, disponible partout à distance"
       }
     },
     "cta": {
@@ -319,7 +317,9 @@
       "hookLine2": "en tête ?",
       "subline": "une idée, un cahier des charges ou juste une envie — parlons-en.",
       "button": "démarrer un projet",
-      "or": "ou par email :"
+      "or": "ou par email :",
+      "availability": "disponible pour de nouveaux projets",
+      "responseTime": "réponse sous 24h"
     },
     "footer": {
       "archiveLead": "envie de voir l'envers du décor ?",
@@ -348,7 +348,7 @@
       "context": "le marché de la revente de sneakers bouge vite : les prix varient d'heure en heure selon les drops, la hype et les plateformes. les revendeurs et collectionneurs naviguent à l'instinct, sans outil sérieux pour agréger la donnée.",
       "problem": "comment transformer un flux massif et volatil de données de vente en décisions simples ? il fallait collecter, nettoyer et analyser la donnée en continu, puis la restituer de façon lisible — sans exiger de l'utilisateur des compétences d'analyste.",
       "approach": "j'ai conçu la plateforme de bout en bout : pipeline de collecte FastAPI + PostgreSQL, cache Redis pour les données chaudes, algorithme propriétaire de scoring et un conseiller IA (Gemini) qui répond en langage naturel. côté front : Next.js et Recharts pour des rapports en temps réel.",
-      "results": "une plateforme complète, de la donnée brute au conseil personnalisé — et un terrain d'expérimentation produit continu : scoring, IA appliquée, visualisation de données. [métriques d'usage à compléter]",
+      "results": "une plateforme complète, de la donnée brute au conseil personnalisé — et un terrain d'expérimentation produit continu : scoring, IA appliquée, visualisation de données.",
       "metaDescription": "Étude de cas SneakerScope : une plateforme analytique temps réel du marché sneakers — Next.js, FastAPI, PostgreSQL, Redis et IA (Gemini)."
     },
     "7eyes": {
@@ -358,7 +358,7 @@
       "context": "7eyes, rappeur français, avait besoin d'une présence en ligne à la hauteur de son univers : sombre, précise, immersive. pas une simple carte de visite — une extension de son identité artistique.",
       "problem": "traduire une identité musicale en expérience web : donner à écouter, à voir et à ressentir, sans sacrifier la performance ni la lisibilité.",
       "approach": "un design immersif construit autour de l'écoute : lecteur audio intégré, animations fluides (Framer Motion), esthétique sombre et typographie affirmée. développé en Next.js, pensé mobile d'abord.",
-      "results": "un site en production qui sert de vitrine officielle à l'artiste — écoute, univers visuel et actualité au même endroit. [retours & chiffres à compléter]",
+      "results": "un site en production qui sert de vitrine officielle à l'artiste — écoute, univers visuel et actualité au même endroit.",
       "metaDescription": "Étude de cas 7eyes : un site d'artiste immersif pour un rappeur français — lecteur audio intégré, esthétique sombre, Next.js et Framer Motion."
     },
     "lumiere-de-soso": {
@@ -368,7 +368,7 @@
       "context": "lumière de soso, marque artisanale, voulait vendre en ligne sans ressembler à un template de plus. l'enjeu : une boutique qui raconte la marque, tout en restant simple à gérer au quotidien.",
       "problem": "concilier une expérience d'achat sur-mesure avec la robustesse d'une plateforme éprouvée : paiement, stock, commandes — sans réinventer la roue côté back-office.",
       "approach": "architecture headless : Shopify comme moteur e-commerce (produits, panier, paiement), Next.js pour une vitrine entièrement sur-mesure. panier fluide, animations discrètes, parcours d'achat sans friction.",
-      "results": "une boutique en production : la marque gère son catalogue dans Shopify, les clients achètent dans une expérience unique à la marque. [chiffres de vente à compléter]",
+      "results": "une boutique en production : la marque gère son catalogue dans Shopify, les clients achètent dans une expérience unique à la marque.",
       "metaDescription": "Étude de cas Lumière de Soso : une boutique e-commerce headless sur-mesure — Shopify API, Next.js, TypeScript et Framer Motion."
     },
     "th14": {
@@ -380,6 +380,26 @@
       "approach": "narration au scroll orchestrée avec GSAP et Framer Motion, design typographique affirmé, transitions travaillées. chaque section correspond à une époque de sa carrière.",
       "results": "une pièce de portfolio qui démontre la maîtrise de l'animation web et du storytelling interactif — et un laboratoire de techniques réutilisées ensuite sur des projets clients.",
       "metaDescription": "Étude de cas TH14 : une expérience web narrative en hommage à Thierry Henry — design typographique, GSAP et Framer Motion."
+    },
+    "studio": {
+      "title": "studio",
+      "tagline": "ce site — la vitrine de mon studio, du folio à la posture studio.",
+      "role": "concept, direction artistique, développement",
+      "context": "repositionner mon propre site : passer d'un portfolio d'artiste à la vitrine d'un studio qui résout des problèmes clients — sans rien perdre du soin ni de l'exécution.",
+      "problem": "construire une identité forte et un parcours fluide (offre, méthode, études de cas, contact) qui inspire confiance à un prospect, tout en gardant une signature créative reconnaissable.",
+      "approach": "une direction artistique éditoriale (Playfair, accents bleus, crème), un scroll cinématographique (Lenis) et des transitions sur-mesure : morph des travaux vers l'étude de cas, encrage du texte au scroll, hero atmosphérique.",
+      "results": "le site que vous parcourez : une vitrine studio cohérente, du hero au contact, pensée pour transformer un visiteur en projet.",
+      "metaDescription": "Étude de cas : le site studio d'enzo gazzoli — direction artistique éditoriale, scroll cinématographique, transitions sur-mesure."
+    },
+    "off-screen": {
+      "title": "off screen",
+      "tagline": "une expérience visuelle contemplative, brute et minimaliste.",
+      "role": "concept, design, développement créatif",
+      "context": "projet auto-initié : une série de plans fixes en boucle, pensée comme une respiration visuelle. un exercice de retenue — montrer peu, mais juste.",
+      "problem": "créer une ambiance contemplative sans narration ni interface bavarde : tenir l'attention par le rythme, le grain et le silence plutôt que par le contenu.",
+      "approach": "plans fixes enchaînés en boucle, flou organique, esthétique brute et typographie minimale. le mouvement est lent, volontairement, pour installer une atmosphère.",
+      "results": "une pièce atmosphérique qui explore la sobriété radicale — un contrepoint aux projets clients, et un terrain d'essai sur le tempo et la matière.",
+      "metaDescription": "Étude de cas off screen : une expérience visuelle contemplative, brute et minimaliste — Next.js, React, Framer Motion."
     }
   }
 }

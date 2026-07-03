@@ -14,6 +14,17 @@ export interface Testimonial {
 }
 
 export const testimonials: Testimonial[] = [
+  // ⚠️ EXEMPLE D'APERÇU — à SUPPRIMER (ou remplacer par un vrai retour).
+  // Seul rôle : montrer le rendu du bloc mono-citation en dev. Tant qu'il
+  // n'existe aucun témoignage "verified", la section ProofSection ne s'affiche
+  // pas du tout. Remplace ce sample par une vraie citation (id/quote/author
+  // réels) quand tu l'auras collectée, puis retire cette entrée d'exemple.
+  {
+    id: "sample",
+    quoteKey: "studio.proof.quotes.sample",
+    authorKey: "studio.proof.authors.sample",
+    status: "verified",
+  },
   {
     id: "7eyes",
     quoteKey: "studio.proof.quotes.7eyes",

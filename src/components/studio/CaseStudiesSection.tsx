@@ -1,59 +1,62 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Reveal from "@/components/studio/Reveal";
-import Scramble from "@/components/studio/Scramble";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
-import { caseStudies } from "@/data/caseStudies";
+import { caseStudies, type CaseStudy } from "@/data/caseStudies";
+import { morphOrigin } from "@/lib/morphOrigin";
+import { homeScroll } from "@/lib/homeScroll";
 
-// Liste serif géante (même langage que l'archive) avec preview d'image
-// flottante qui suit le curseur au hover — le pattern d'agence créative
-// actuel. Suivi AMORTI (lerp via rAF, zéro setState par mousemove) : le
-// retard doux du cadre est ce qui donne le feel « premium ».
+// Galerie « rideaux verticaux » : 4 panneaux-images côte à côte. Au repos on ne
+// voit que l'image (+ numéro/titre discrets) ; au survol le panneau s'élargit
+// et révèle les infos. Chaque image porte un `view-transition-name` unique →
+// au clic, le navigateur morph l'image vers le hero de la page /work (View
+// Transitions natives, activées dans next.config). Le repli sneakerscope est
+// une cover bleue typographique.
 export default function CaseStudiesSection() {
   const { t } = useTranslation();
-  const { playClick, playScrollTick } = useSound();
+  const { playClick } = useSound();
+  const router = useRouter();
 
-  const previewRef = useRef<HTMLDivElement>(null);
-  const targetRef = useRef({ x: 0, y: 0 });
-  const currentRef = useRef({ x: 0, y: 0 });
-  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  const title = (cs: CaseStudy) => t(`caseStudies.${cs.slug}.title`);
+  const tagline = (cs: CaseStudy) => t(`caseStudies.${cs.slug}.tagline`);
 
-  const activeCase = caseStudies.find((cs) => cs.slug === activeSlug);
-
-  useEffect(() => {
-    let rafId: number;
-    const loop = () => {
-      const el = previewRef.current;
-      if (el) {
-        const current = currentRef.current;
-        const target = targetRef.current;
-        current.x += (target.x - current.x) * 0.12;
-        current.y += (target.y - current.y) * 0.12;
-        el.style.transform = `translate(${current.x + 24}px, ${current.y - 120}px) rotate(2deg)`;
-      }
-      rafId = requestAnimationFrame(loop);
-    };
-    rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    targetRef.current = { x: e.clientX, y: e.clientY };
+  // Mémorise la position (viewport) de la vignette → le hero de /work s'anime
+  // depuis là. Aucun clone : le vrai hero se déplie lui-même.
+  const handleOpen = (e: React.MouseEvent<HTMLAnchorElement>, cs: CaseStudy) => {
+    e.preventDefault();
+    playClick();
+    // Mémorise la position de la home → restaurée au retour (bouton « studio. »).
+    homeScroll.y = window.scrollY;
+    const target = e.currentTarget.querySelector<HTMLElement>("[data-morph]");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (target && !reduce) {
+      morphOrigin.rect = target.getBoundingClientRect();
+      morphOrigin.slug = cs.slug;
+    }
+    router.push(`/work/${cs.slug}`);
   };
 
+  // Miniatures : fond bleu + gros numéro AU CENTRE (pas de screenshots).
+  const visual = (cs: CaseStudy) => (
+    <div className="absolute inset-0 bg-blue overflow-hidden flex items-center justify-center">
+      <span
+        aria-hidden="true"
+        className="font-mono font-black text-[6rem] md:text-[8rem] leading-none text-white select-none"
+        style={{ opacity: 0.16 }}
+      >
+        {cs.projectIndex}
+      </span>
+    </div>
+  );
+
   return (
-    <section
-      id="work"
-      className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 scroll-mt-20"
-      onMouseMove={handleMouseMove}
-    >
+    <section id="work" className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 scroll-mt-20">
       <Reveal>
         <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-4">
-          <Scramble text={t("studio.work.label")} />
+          {t("studio.work.label")}
         </p>
         <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-4">
           {t("studio.work.heading")}
@@ -63,71 +66,59 @@ export default function CaseStudiesSection() {
         </p>
       </Reveal>
 
-      <div className="flex flex-col border-t border-ink/20">
-        {caseStudies.map((caseStudy, index) => (
-          <Reveal key={caseStudy.slug} delay={(index % 2) * 0.06}>
+      {/* Rideaux : pile verticale jusqu'à 1024px (mobile ET tablette — sinon 6
+          panneaux à ~90px illisibles), panneaux extensibles seulement à lg+. */}
+      <div className="flex flex-col lg:flex-row gap-3 lg:h-[74vh]">
+        {caseStudies.map((cs, i) => (
+          <Reveal key={cs.slug} delay={i * 0.06} className="lg:grow lg:basis-0 lg:hover:grow-[2.6] lg:transition-all lg:duration-700 lg:ease-out-expo lg:min-w-0">
             <Link
-              href={`/work/${caseStudy.slug}`}
-              onClick={() => playClick()}
-              onMouseEnter={(e) => {
-                // Premier survol : on cale la position amortie sur le curseur
-                // pour éviter que le cadre ne glisse depuis l'origine.
-                if (!activeSlug) {
-                  targetRef.current = { x: e.clientX, y: e.clientY };
-                  currentRef.current = { x: e.clientX, y: e.clientY };
-                }
-                setActiveSlug(caseStudy.slug);
-                playScrollTick();
-              }}
-              onMouseLeave={() => setActiveSlug(null)}
-              className="group grid grid-cols-[44px_1fr] md:grid-cols-[64px_1fr_auto] gap-x-4 md:gap-x-8 gap-y-2 items-baseline py-7 md:py-10 border-b border-ink/20 transition-all duration-300 ease-out-expo hover:border-ink hover:pl-3 md:hover:pl-6"
+              href={`/work/${cs.slug}`}
+              onClick={(e) => handleOpen(e, cs)}
+              className="group relative flex h-64 lg:h-full w-full overflow-hidden rounded-2xl border border-ink/10 shadow-[0_30px_60px_-40px_rgba(5,5,20,0.5)]"
             >
-              <span className="font-mono text-[11px] font-bold text-ink/30 group-hover:text-blue transition-colors duration-300">
-                {caseStudy.projectIndex}
-              </span>
-              <h3 className="font-serif lowercase text-[9vw] md:text-[4.2vw] leading-[0.95] tracking-[-0.05em] text-ink group-hover:text-blue group-hover:italic transition-colors duration-300">
-                {t(`caseStudies.${caseStudy.slug}.title`)}.
-              </h3>
-              <div className="col-start-2 md:col-start-3 flex md:flex-col items-baseline md:items-end gap-3 md:gap-1">
-                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/40">
-                  {caseStudy.year}
-                </span>
-                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.15em] text-ink/40 hidden md:block">
-                  {caseStudy.stack.slice(0, 2).join(" / ")}
-                </span>
+              {/* image (cible du morph FLIP au clic) */}
+              <div data-morph className="absolute inset-0">
+                {visual(cs)}
+              </div>
+
+              {/* scrim bas pour lisibilité */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-[linear-gradient(to_top,rgba(5,5,20,0.72)_0%,rgba(5,5,20,0.15)_38%,transparent_60%)]"
+              />
+
+              {/* contenu — largeur du panneau (w-full) : le titre wrappe si
+                  besoin (break-words) au lieu d'être coupé. Les infos hover sont
+                  en display (md:hidden → md:group-hover:block) : masquées, elles
+                  ne prennent aucune place → pas de reflow des panneaux voisins. */}
+              <div className="relative z-10 mt-auto w-full p-5 md:p-6">
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/70 mb-2">
+                  {cs.projectIndex} — {cs.year}
+                </p>
+                <h3 className="font-serif lowercase tracking-[-0.03em] text-white text-2xl leading-[1.1] break-words">
+                  {title(cs)}.
+                </h3>
+
+                {/* infos révélées : visibles quand empilé (mobile + tablette),
+                    masquées puis révélées au survol seulement en rideaux (lg+). */}
+                <div className="max-w-md lg:hidden lg:group-hover:block">
+                  <p className="font-serif italic text-white/85 text-base md:text-lg mt-3 leading-snug">
+                    {tagline(cs)}
+                  </p>
+                  <p className="hidden md:block font-mono text-[10px] uppercase tracking-[0.12em] text-white/50 mt-4">
+                    {cs.stack.slice(0, 4).join(" / ")}
+                  </p>
+                  <span className="inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-white mt-5">
+                    {t("studio.work.viewCase")}
+                    <span aria-hidden="true" className="transition-transform duration-300 ease-out-expo group-hover:translate-x-1">
+                      →
+                    </span>
+                  </span>
+                </div>
               </div>
             </Link>
           </Reveal>
         ))}
-      </div>
-
-      {/* Preview flottante (desktop) — suit le curseur, ne capte rien */}
-      <div
-        ref={previewRef}
-        aria-hidden="true"
-        className={`hidden md:block fixed top-0 left-0 z-[60] w-[340px] pointer-events-none transition-opacity duration-300 ease-out-expo will-change-transform ${activeCase ? "opacity-100" : "opacity-0"}`}
-      >
-        {activeCase &&
-          (activeCase.imageUrl ? (
-            <div className="relative aspect-[4/3] border border-ink shadow-[12px_12px_0px_var(--blue)] overflow-hidden bg-bg">
-              <Image
-                src={activeCase.imageUrl}
-                alt=""
-                fill
-                sizes="340px"
-                className="object-cover"
-              />
-            </div>
-          ) : (
-            <div className="relative aspect-[4/3] border border-ink shadow-[12px_12px_0px_var(--blue)] bg-blue flex items-center justify-center overflow-hidden">
-              <span className="absolute -bottom-6 -right-2 font-mono font-black text-[7rem] leading-none text-white/10 select-none">
-                {activeCase.projectIndex}
-              </span>
-              <span className="relative font-serif italic lowercase text-white text-3xl tracking-[-0.03em]">
-                {t(`caseStudies.${activeCase.slug}.title`)}.
-              </span>
-            </div>
-          ))}
       </div>
     </section>
   );

@@ -1,30 +1,46 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import BlurWords from "@/components/studio/BlurWords";
 import Reveal from "@/components/studio/Reveal";
-import Scramble from "@/components/studio/Scramble";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
-import type { ProjectType } from "@/data/pricing";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { projects, type ProjectType } from "@/data/pricing";
 
-// Anti-grid assumé : rangées décalées (le « scattered chaos » de l'archive),
-// numéros mono géants, hover = rotation + hard shadow bleue + clack.
-const OFFERS: { type: ProjectType; offset: string; tilt: string }[] = [
-  { type: "website", offset: "md:ml-0", tilt: "hover:-rotate-1" },
-  { type: "application", offset: "md:ml-[10vw]", tilt: "hover:rotate-1" },
-  { type: "shopify", offset: "md:ml-[3vw]", tilt: "hover:-rotate-1" },
-  { type: "custom", offset: "md:ml-[14vw]", tilt: "hover:rotate-1" },
-];
+const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
 
+// Index + volet détail : à gauche les 4 offres, à droite le volet qui se
+// défloute vers l'offre survolée (description Playfair, formules réelles de
+// pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
+// sous la ligne active. DA raffinée.
 export default function OfferSection() {
   const { t } = useTranslation();
+  const { locale } = useLanguage();
   const { playClick, playMechanicalClack } = useSound();
 
+  const [activeD, setActiveD] = useState(0);
+
+  const num = (i: number) => String(i + 1).padStart(2, "0");
+  const title = (type: ProjectType) => t(`services.offers.${type}.title`);
+  const desc = (type: ProjectType) => t(`services.offers.${type}.description`);
+  const formulas = (type: ProjectType) =>
+    projects[type].subtypes.map((s) => (locale === "en" ? s.nameEn : s.name));
+  const priceLabel = (type: ProjectType) => {
+    const fp = projects[type].fromPrice;
+    if (fp == null) return t("services.offers.onRequest");
+    const formatted = String(fp).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    return `${locale === "en" ? "from" : "à partir de"} ${formatted} €`;
+  };
+
+  const activeType = OFFERS[activeD];
+
   return (
-    <section className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 overflow-hidden">
+    <section id="offer" className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 overflow-hidden scroll-mt-20">
       <Reveal>
         <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-4">
-          <Scramble text={t("studio.offer.label")} />
+          {t("studio.offer.label")}
         </p>
         <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-4">
           {t("studio.offer.heading")}
@@ -34,40 +50,94 @@ export default function OfferSection() {
         </p>
       </Reveal>
 
-      <div className="flex flex-col gap-6 md:gap-10">
-        {OFFERS.map((offer, index) => (
-          <Reveal key={offer.type} delay={(index % 2) * 0.08}>
+      <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-10 md:gap-16 items-start">
+        {/* index */}
+        <div className="border-b border-ink/[0.12]">
+          {OFFERS.map((type, i) => (
             <Link
+              key={type}
               href="/services"
+              onMouseEnter={() => {
+                setActiveD(i);
+                playMechanicalClack(200, 0.12);
+              }}
+              onFocus={() => setActiveD(i)}
               onClick={() => playClick()}
-              onMouseEnter={() => playMechanicalClack(200, 0.15)}
-              className={`group relative flex flex-col md:flex-row md:items-center gap-3 md:gap-10 border border-ink bg-bg px-6 py-7 md:px-10 md:py-9 md:max-w-[70vw] ${offer.offset} ${offer.tilt} transition-all duration-300 ease-out-expo hover:shadow-[16px_16px_0px_var(--blue)] hover:bg-white`}
+              className="group relative flex items-baseline gap-4 border-t border-ink/[0.12] py-4 md:py-5"
             >
               <span
-                aria-hidden="true"
-                className="absolute -top-6 right-4 md:-top-10 md:right-8 font-mono font-black text-[4rem] md:text-[7rem] leading-none text-ink/[0.06] tracking-[-0.05em] select-none pointer-events-none transition-colors duration-300 group-hover:text-blue/10"
+                className={`font-mono text-[11px] font-bold tabular-nums transition-colors duration-300 ${
+                  activeD === i ? "text-blue" : "text-ink/40"
+                }`}
               >
-                {String(index + 1).padStart(2, "0")}
+                {num(i)}
               </span>
+              <span
+                className={`font-serif lowercase tracking-[-0.03em] text-[7vw] md:text-[2.3vw] leading-tight transition-all duration-300 ease-out-expo ${
+                  activeD === i ? "text-ink italic md:translate-x-1.5" : "text-ink/40"
+                }`}
+              >
+                {title(type)}
+              </span>
+              <span
+                aria-hidden="true"
+                className={`absolute -bottom-px left-0 h-px bg-blue transition-all duration-500 ease-out-expo ${
+                  activeD === i ? "w-full" : "w-0"
+                }`}
+              />
+            </Link>
+          ))}
+        </div>
 
-              <h3 className="relative font-serif text-[8vw] md:text-[3vw] leading-[0.95] text-ink group-hover:text-blue transition-colors duration-300 shrink-0 group-hover:italic">
-                {t(`services.offers.${offer.type}.title`)}
-              </h3>
+        {/* volet détail */}
+        <Link
+          href="/services"
+          onClick={() => playClick()}
+          className="group block md:min-h-[20rem] md:sticky md:top-28"
+        >
+          {/* key={activeD} → remonte le bloc à chaque offre : la description se
+              re-défloute mot à mot. min-h fige la hauteur (≈ colonne de gauche)
+              pour que la section ne bouge plus au survol. */}
+          <div key={activeD} className="relative">
+            {/* numéro géant en filigrane (5 % via opacité d'élément) */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute -top-8 right-0 md:-top-12 font-mono font-black text-ink text-[8rem] md:text-[13rem] leading-none tracking-[-0.05em] select-none"
+              style={{ opacity: 0.05 }}
+            >
+              {num(activeD)}
+            </span>
 
-              <div className="relative flex items-center justify-between gap-6 md:ml-auto">
-                <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-md">
-                  {t(`services.offers.${offer.type}.description`)}
-                </p>
+            <p className="relative font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-blue mb-5">
+              {num(activeD)} — {title(activeType)}
+            </p>
+            <p className="relative font-serif italic text-[7vw] md:text-[2.7vw] leading-[1.06] text-ink">
+              <BlurWords text={desc(activeType)} step={0.03} />
+            </p>
+
+            <div className="relative mt-10 flex flex-wrap items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {formulas(activeType).map((name) => (
+                  <span
+                    key={name}
+                    className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink/55 border border-ink/15 rounded-full px-3 py-1.5"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+              <p className="inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.12em] text-ink/70">
+                {priceLabel(activeType)}
                 <span
                   aria-hidden="true"
-                  className="font-mono text-blue text-xl opacity-0 -translate-x-2 transition-all duration-300 ease-out-expo group-hover:opacity-100 group-hover:translate-x-0"
+                  className="font-serif text-xl text-blue transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
                 >
                   →
                 </span>
-              </div>
-            </Link>
-          </Reveal>
-        ))}
+              </p>
+            </div>
+          </div>
+        </Link>
       </div>
 
       <Reveal delay={0.15}>
@@ -75,9 +145,15 @@ export default function OfferSection() {
           <Link
             href="/services"
             onClick={() => playClick()}
-            className="inline-block bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
+            className="group inline-flex items-center gap-2.5 rounded-full bg-ink text-white font-mn-sans text-[15px] font-medium px-8 py-4 shadow-[0_10px_30px_-10px_rgba(5,5,20,0.5)] hover:bg-blue transition-colors duration-300"
           >
             {t("studio.offer.cta")}
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+            >
+              →
+            </span>
           </Link>
         </div>
       </Reveal>

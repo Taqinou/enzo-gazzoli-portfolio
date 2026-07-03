@@ -9,9 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        bg: "var(--bg)",
-        ink: "var(--ink)",
-        blue: "var(--blue)",
+        // Tokens en canaux RGB (--x-rgb) + placeholder <alpha-value> : permet
+        // l'alpha Tailwind (text-ink/40, border-ink/[0.12], bg-blue/10…). Les
+        // hex --bg/--ink/--blue restent définis pour les usages var() bruts
+        // (hard shadows, gradients, curseurs SVG). Voir globals.css.
+        bg: "rgb(var(--bg-rgb) / <alpha-value>)",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
+        blue: "rgb(var(--blue-rgb) / <alpha-value>)",
         // Aile studio (dark-first) : fond quasi-noir, surface, filets et
         // déclinaison lisible du bleu signature pour le texte sur dark.
         "st-bg": "#050507",

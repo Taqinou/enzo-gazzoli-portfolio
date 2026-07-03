@@ -261,21 +261,21 @@
       "backdrop": "studio"
     },
     "offer": {
-      "label": "(01) — THE OFFER",
+      "label": "THE OFFER",
       "heading": "what i do.",
       "lede": "four ways to work together, from showcase website to full application.",
       "itemCta": "explore",
       "cta": "see the full offer & simulate a quote"
     },
     "work": {
-      "label": "(02) — WORK",
+      "label": "WORK",
       "heading": "case studies.",
       "lede": "a few projects told from problem to result.",
       "viewCase": "read the case study",
       "typoCoverAlt": "Typographic project cover"
     },
     "method": {
-      "label": "(03) — METHOD",
+      "label": "METHOD",
       "heading": "how we work.",
       "steps": {
         "01": {
@@ -297,21 +297,19 @@
       }
     },
     "proof": {
-      "label": "(04) — TRUST",
-      "heading": "they trusted me.",
+      "label": "TRUST",
       "pending": "testimonial being collected.",
+      "prevLabel": "previous testimonial",
+      "nextLabel": "next testimonial",
       "quotes": {
+        "sample": "enzo grasped the project's world better than I could have myself, and shipped it without a hitch.",
         "7eyes": "[testimonial coming soon]",
         "lumiere": "[testimonial coming soon]"
       },
       "authors": {
+        "sample": "sample — replace with a real quote",
         "7eyes": "7eyes — artist",
         "lumiere": "lumière de soso — founder"
-      },
-      "facts": {
-        "01": "projects in production, available online",
-        "02": "react / next.js / typescript — a modern, future-proof stack",
-        "03": "based in nancy, available remotely anywhere"
       }
     },
     "cta": {
@@ -319,7 +317,9 @@
       "hookLine2": "in mind?",
       "subline": "an idea, a brief or just an itch — let's talk.",
       "button": "start a project",
-      "or": "or by email:"
+      "or": "or by email:",
+      "availability": "available for new projects",
+      "responseTime": "reply within 24h"
     },
     "footer": {
       "archiveLead": "want to see behind the scenes?",
@@ -348,7 +348,7 @@
       "context": "the sneaker resale market moves fast: prices shift by the hour with drops, hype and platforms. resellers and collectors navigate by instinct, without a serious tool to aggregate the data.",
       "problem": "how do you turn a massive, volatile stream of sales data into simple decisions? the data had to be collected, cleaned and analysed continuously, then rendered readable — without requiring analyst skills from the user.",
       "approach": "i designed the platform end to end: a FastAPI + PostgreSQL collection pipeline, Redis cache for hot data, a proprietary scoring algorithm and an AI advisor (Gemini) that answers in natural language. on the front: Next.js and Recharts for real-time reports.",
-      "results": "a complete platform, from raw data to personalised advice — and a continuous product playground: scoring, applied AI, data visualisation. [usage metrics to be added]",
+      "results": "a complete platform, from raw data to personalised advice — and a continuous product playground: scoring, applied AI, data visualisation.",
       "metaDescription": "SneakerScope case study: a real-time sneaker market analytics platform — Next.js, FastAPI, PostgreSQL, Redis and AI (Gemini)."
     },
     "7eyes": {
@@ -358,7 +358,7 @@
       "context": "7eyes, a french rapper, needed an online presence that lived up to his world: dark, precise, immersive. not a mere business card — an extension of his artistic identity.",
       "problem": "translating a musical identity into a web experience: something to listen to, look at and feel, without sacrificing performance or readability.",
       "approach": "an immersive design built around listening: integrated audio player, fluid animations (Framer Motion), dark aesthetics and assertive typography. built with Next.js, mobile-first.",
-      "results": "a production website serving as the artist's official showcase — music, visual universe and news in one place. [feedback & figures to be added]",
+      "results": "a production website serving as the artist's official showcase — music, visual universe and news in one place.",
       "metaDescription": "7eyes case study: an immersive artist website for a french rapper — integrated audio player, dark aesthetics, Next.js and Framer Motion."
     },
     "lumiere-de-soso": {
@@ -368,7 +368,7 @@
       "context": "lumière de soso, an artisanal brand, wanted to sell online without looking like yet another template. the challenge: a store that tells the brand's story while staying easy to run day to day.",
       "problem": "reconciling a custom shopping experience with the robustness of a proven platform: payments, stock, orders — without reinventing the back-office wheel.",
       "approach": "headless architecture: Shopify as the e-commerce engine (products, cart, payments), Next.js for a fully custom storefront. fluid cart, discreet animations, frictionless purchase journey.",
-      "results": "a store in production: the brand manages its catalogue in Shopify, customers shop in an experience unique to the brand. [sales figures to be added]",
+      "results": "a store in production: the brand manages its catalogue in Shopify, customers shop in an experience unique to the brand.",
       "metaDescription": "Lumière de Soso case study: a custom headless e-commerce store — Shopify API, Next.js, TypeScript and Framer Motion."
     },
     "th14": {
@@ -380,6 +380,26 @@
       "approach": "scroll-driven storytelling orchestrated with GSAP and Framer Motion, assertive typographic design, polished transitions. each section maps to an era of his career.",
       "results": "a portfolio piece that demonstrates mastery of web animation and interactive storytelling — and a lab for techniques later reused on client projects.",
       "metaDescription": "TH14 case study: a narrative web experience honouring Thierry Henry — typographic design, GSAP and Framer Motion."
+    },
+    "studio": {
+      "title": "studio",
+      "tagline": "this site — my studio's showcase, from folio to studio stance.",
+      "role": "concept, art direction, development",
+      "context": "repositioning my own site: moving from an artist's portfolio to the front door of a studio that solves client problems — without losing any of the craft or execution.",
+      "problem": "building a strong identity and a fluid journey (offer, method, case studies, contact) that earns a prospect's trust, while keeping a recognisable creative signature.",
+      "approach": "an editorial art direction (Playfair, blue accents, cream), cinematic scrolling (Lenis) and bespoke transitions: work-to-case-study morph, scroll-inked text, atmospheric hero.",
+      "results": "the site you're browsing: a coherent studio showcase, from hero to contact, designed to turn a visitor into a project.",
+      "metaDescription": "Case study: enzo gazzoli's studio site — editorial art direction, cinematic scrolling, bespoke transitions."
+    },
+    "off-screen": {
+      "title": "off screen",
+      "tagline": "a contemplative, raw and minimalist visual experience.",
+      "role": "concept, design, creative development",
+      "context": "a self-initiated project: a series of looping still shots, conceived as a visual breath. an exercise in restraint — showing little, but exactly right.",
+      "problem": "creating a contemplative mood with no narrative and no chatty interface: holding attention through rhythm, grain and silence rather than content.",
+      "approach": "looping still shots, organic blur, raw aesthetics and minimal typography. the motion is slow, deliberately, to set an atmosphere.",
+      "results": "an atmospheric piece exploring radical restraint — a counterpoint to client work, and a testbed for tempo and texture.",
+      "metaDescription": "off screen case study: a contemplative, raw and minimalist visual experience — Next.js, React, Framer Motion."
     }
   }
 }

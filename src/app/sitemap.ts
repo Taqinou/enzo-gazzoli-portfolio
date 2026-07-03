@@ -32,17 +32,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
             priority: 0.8,
         },
         ...caseStudyUrls,
-        {
-            url: `${baseUrl}/archive`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.6,
-        },
-        {
-            url: `${baseUrl}/pricing`,
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.4,
-        },
+        // /archive et /pricing désactivés (dossiers privés _archive / _pricing).
     ];
 }

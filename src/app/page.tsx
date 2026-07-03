@@ -30,7 +30,9 @@ export const metadata: Metadata = {
 export default function StudioHome() {
   return (
     <SmoothScroll>
-      <div className="min-h-screen bg-bg text-ink overflow-x-hidden">
+      {/* overflow-x-clip (pas -hidden) : clippe l'horizontal SANS créer de
+          conteneur de scroll → position:sticky des sections fonctionne */}
+      <div className="min-h-screen bg-bg text-ink overflow-x-clip">
         <StudioNav />
 
         <main>

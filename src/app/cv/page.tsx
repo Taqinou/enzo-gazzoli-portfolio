@@ -66,17 +66,17 @@ export default function CVPage() {
       </div>
 
       {/* --- WEB NAV --- */}
-      <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-10 py-8 z-[100] mix-blend-difference pointer-events-none">
+      <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline gap-4 px-6 md:px-10 py-6 md:py-8 z-[100] mix-blend-difference pointer-events-none">
         <a
           href="/"
           onClick={handleBack}
-          className="font-serif text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors"
+          className="font-serif text-xl md:text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors"
         >
           {t("cv.index")}
         </a>
         <button
           onClick={handleDownload}
-          className="font-serif text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors"
+          className="font-serif text-xl md:text-2xl italic lowercase text-white/50 hover:text-white pointer-events-auto transition-colors text-right"
         >
           {t("cv.saveAsPdf")}
         </button>

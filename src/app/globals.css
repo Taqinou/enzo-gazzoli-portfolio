@@ -8,6 +8,11 @@
   --ink: #000000;
   --blue: #0000ff;
   --yellow: #ffff00;
+  /* Canaux RGB pour l'alpha Tailwind (cf. tailwind.config.ts). Doivent rester
+     synchronisés avec les hex ci-dessus. */
+  --bg-rgb: 249 249 249;
+  --ink-rgb: 0 0 0;
+  --blue-rgb: 0 0 255;
   --font-serif: "Playfair Display", "Times New Roman", serif;
   --font-mono: "Helvetica", "Arial", sans-serif;
 }
@@ -118,6 +123,17 @@ body.cursor-question,
   }
 }
 
+/* Fondu doux au swap d'étape (méthode variante A : la description active est
+   remontée par step, ce fondu évite un remplacement brut). */
+@keyframes studio-soft-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Variante « mask » : reveal typographique par masque (kinetic sobre) —
    la ligne monte de sous sa boîte (overflow hidden), signature des heros
    éditoriaux actuels. */
@@ -138,6 +154,43 @@ body.cursor-question,
 @keyframes studio-mask-in {
   to {
     transform: translateY(0);
+  }
+}
+
+/* Défloutage progressif mot à mot (composant studio/BlurWords.tsx) :
+   chaque mot porte son animation-delay, la vague se propage de gauche à
+   droite quand le conteneur reçoit .in. */
+.studio-blurwords .studio-word {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+}
+
+.studio-blurwords.in .studio-word {
+  animation: studio-word-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--word-delay, 0s);
+}
+
+@keyframes studio-word-in {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Hero atmosphérique : le ciel photographique dérive imperceptiblement
+   (zoom lent alternate, ~45s) — le « vivant » cinématique sans vidéo.
+   Coupé par prefers-reduced-motion (media query globale plus bas). */
+.studio-sky-drift {
+  animation: studio-sky-drift 45s ease-in-out infinite alternate;
+}
+
+@keyframes studio-sky-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
   }
 }
 
@@ -193,6 +246,9 @@ body.cursor-question,
 .theme-minimal {
   --bg: #ffffff;
   --ink: #08090a;
+  /* Canaux RGB synchronisés pour l'alpha Tailwind sous le thème minimal */
+  --bg-rgb: 255 255 255;
+  --ink-rgb: 8 9 10;
   /* Échelle globale du thème minimal : toutes les tailles en rem grossissent de ~6 % */
   font-size: 106.25%;
 }

@@ -10,11 +10,14 @@ export default function StudioNav() {
   const { locale, setLocale, t } = useLanguage();
   const { playClick, playLanguageSwitch } = useSound();
 
+  // Onglets = sections de la home. On réutilise les libellés des sections
+  // (nav ↔ titre garantis identiques) et des ancres #… que Lenis fait défiler
+  // en douceur (anchors: true dans SmoothScroll).
   const links = [
-    { labelKey: "studio.nav.work", href: "/#work" },
-    { labelKey: "studio.nav.method", href: "/#method" },
-    { labelKey: "studio.nav.services", href: "/services" },
-    { labelKey: "studio.nav.archive", href: "/archive" },
+    { labelKey: "studio.offer.label", href: "#offer" },
+    { labelKey: "studio.work.label", href: "#work" },
+    { labelKey: "studio.method.label", href: "#method" },
+    { labelKey: "studio.proof.label", href: "#proof" },
   ];
 
   return (
@@ -33,7 +36,7 @@ export default function StudioNav() {
       <div className="flex items-baseline gap-4 md:gap-7">
         <div className="hidden md:flex items-baseline gap-6">
           {links.map((link) => (
-            <Link
+            <a
               key={link.labelKey}
               href={link.href}
               onClick={() => playClick()}
@@ -41,7 +44,7 @@ export default function StudioNav() {
             >
               {t(link.labelKey)}
               <span className="block h-px w-0 bg-white transition-all duration-300 ease-out-expo group-hover:w-full" />
-            </Link>
+            </a>
           ))}
         </div>
 

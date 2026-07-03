@@ -93,6 +93,9 @@ export default function ServicesPage() {
     <div
       ref={containerRef}
       className="min-h-screen overflow-x-hidden"
+      // Fond blanc pur sur /services (au lieu du crème #f9f9f9 du thème par
+      // défaut) : override local de --bg, sans toucher au crème de la home.
+      style={{ "--bg": "#ffffff", "--bg-rgb": "255 255 255" } as React.CSSProperties}
     >
       <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference">
         <a
@@ -107,13 +110,13 @@ export default function ServicesPage() {
       <section className="bg-bg text-ink min-h-screen relative">
         <main className="relative grid grid-cols-1 md:grid-cols-[clamp(60px,12vw,200px)_1fr]">
 
-          <div className="hidden md:flex sticky top-0 h-screen flex-col items-center justify-center border-r border-ink/10">
+          <div className="hidden md:flex sticky top-0 h-screen flex-col items-center justify-center border-r border-ink/10 overflow-hidden">
             <motion.div
-              className="absolute inset-0 bg-ink/5 origin-bottom"
+              className="absolute inset-0 bg-transparent origin-bottom"
               style={{ scaleY: scrollYProgress }}
             />
             <motion.h1
-              className="whitespace-nowrap font-serif text-[12vh] text-ink origin-center select-none tracking-tight"
+              className="whitespace-nowrap font-serif text-[min(11vh,9vw,180px)] text-ink origin-center select-none tracking-tight"
               initial={{ opacity: 0, filter: "blur(12px)", rotate: -90 }}
               animate={{ opacity: 0.2, filter: "blur(0px)", rotate: -90 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -147,7 +150,7 @@ export default function ServicesPage() {
                       className={`
                         group relative w-full text-left py-6 md:py-10
                         border-b border-ink/20 transition-all duration-300
-                        ${isSelected ? "bg-ink/[0.02]" : "hover:bg-ink/[0.01] hover:border-ink/40"}
+                        ${isSelected ? "" : "hover:border-ink/40"}
                       `}
                       whileTap={{ scale: 0.995 }}
                     >
@@ -208,7 +211,7 @@ export default function ServicesPage() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                          className="overflow-hidden bg-ink/[0.02] border-b border-ink/20"
+                          className="overflow-hidden border-b border-ink/20"
                         >
                           <div className="py-8 md:py-12 px-4 md:px-8">
                             {offer === "custom" || priceMax !== null ? (
@@ -293,7 +296,7 @@ export default function ServicesPage() {
       </section>
 
       <section id="contact" className="bg-blue text-white py-20 md:py-32 px-6 md:px-20 relative scroll-mt-10">
-        <div className="max-w-4xl mx-auto md:ml-[calc(clamp(60px,12vw,200px)+5rem)]">
+        <div className="max-w-4xl mx-auto lg:ml-[calc(clamp(60px,12vw,200px)+5rem)]">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}

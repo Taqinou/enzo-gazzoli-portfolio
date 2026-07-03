@@ -1,83 +1,86 @@
 "use client";
 
-import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import BlurWords from "@/components/studio/BlurWords";
 import Reveal from "@/components/studio/Reveal";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
-import { PERSONAL } from "@/data/constants";
 
-// CTA final : bleu plein écran (le langage des overlays du site), « ? »
-// géant en text-stroke qui suit doucement le curseur (parallax léger via
-// ref DOM, zéro re-render), bouton à inversion brutale.
+// CTA final — rappel du hero : ciel photographique (sky.jpg) bien visible,
+// voile crème comme le hero (texte ink lisible), bouton verre translucide.
+// En bas, la section fond vers le bleu plein → raccord invisible avec le
+// footer bleu (où s'inscrit « enzo gazzoli. »). Centré → enchaîne vers le
+// wordmark centré du footer.
 export default function StudioCTA() {
   const { t } = useTranslation();
   const { playClick } = useSound();
-  const markRef = useRef<HTMLSpanElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const el = markRef.current;
-    if (!el) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    el.style.transform = `translate(${x * 40}px, ${y * 40}px)`;
-  };
+  // Mêmes réglages que le hero (défloutage mot à mot cadencé).
+  const line1 = t("studio.cta.hookLine1");
+  const line2 = t("studio.cta.hookLine2");
+  const l1Words = line1.split(" ").length;
+  const l2Base = 0.2 + l1Words * 0.07;
 
   return (
-    <section
-      className="relative bg-blue text-white px-6 md:px-20 py-24 md:py-40 overflow-hidden"
-      onMouseMove={handleMouseMove}
-    >
-      {/* « ? » géant en text-stroke, parallax curseur */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 flex items-center justify-end pointer-events-none select-none"
-      >
-        <span
-          ref={markRef}
-          className="font-serif italic text-[55vh] leading-[0.7] text-stroke-white opacity-50 translate-x-[6%] transition-transform duration-500 ease-out-expo will-change-transform"
-        >
-          ?
-        </span>
+    <section className="relative text-ink px-6 md:px-20 pt-28 md:pt-40 pb-40 md:pb-56 text-center overflow-hidden">
+      {/* ——— Le ciel (rappel du hero) ——— */}
+      <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
+        <div className="studio-sky-drift absolute inset-0">
+          <Image src="/images/studio/sky.jpg" alt="" fill sizes="100vw" className="object-cover" />
+        </div>
+        {/* voile crème haut : part du crème PLEIN (raccord invisible avec la
+            section crème au-dessus) puis révèle le ciel. + radial de lisibilité */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgb(249,249,249) 0%, rgba(249,249,249,0.8) 7%, rgba(249,249,249,0.15) 22%, rgba(249,249,249,0) 36%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 bg-[radial-gradient(ellipse_62%_46%_at_50%_36%,rgba(249,249,249,0.5),transparent_70%)]"
+        />
+        {/* fondu vers le bleu plein en bas → raccord footer */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,255,0) 60%, rgba(0,0,255,0.5) 82%, rgb(0,0,255) 100%)",
+          }}
+        />
       </div>
 
-      <div className="relative z-10">
-        <h2 className="font-serif lowercase tracking-[-0.05em] leading-[0.95] text-[14vw] md:text-[8vw]">
-          <Reveal variant="mask">
-            <span>{t("studio.cta.hookLine1")}</span>
-          </Reveal>
-          <Reveal variant="mask" delay={0.15}>
-            <span className="italic">{t("studio.cta.hookLine2")}</span>
-          </Reveal>
+      <div className="relative z-10 flex flex-col items-center">
+        <h2 className="font-serif lowercase tracking-[-0.05em] leading-[0.92] text-[14vw] md:text-[8vw]">
+          <span className="block not-italic">
+            <BlurWords text={line1} baseDelay={0.2} />
+          </span>
+          <span className="block italic">
+            <BlurWords text={line2} baseDelay={l2Base} />
+          </span>
         </h2>
 
-        <Reveal delay={0.3}>
-          <p className="font-serif italic text-lg md:text-2xl text-white/70 max-w-xl mt-8 md:mt-10 leading-snug">
+        <Reveal delay={0.28}>
+          <p className="font-serif italic text-lg md:text-2xl text-ink/65 max-w-xl mt-8 md:mt-10 leading-snug">
             {t("studio.cta.subline")}
           </p>
         </Reveal>
 
-        <Reveal delay={0.45}>
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-10 mt-10 md:mt-14">
-            <Link
-              href="/services#contact"
-              onClick={() => playClick()}
-              className="bg-white text-blue px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-transparent hover:text-white border border-white transition-colors duration-300"
+        <Reveal delay={0.4}>
+          <Link
+            href="/services"
+            onClick={() => playClick()}
+            className="group inline-flex items-center gap-2.5 mt-10 md:mt-12 rounded-full bg-white/30 backdrop-blur-xl border border-white/60 text-ink px-8 py-4 font-mn-sans text-[15px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_30px_-14px_rgba(5,5,20,0.3)] hover:bg-white/60 transition-colors duration-300"
+          >
+            {t("studio.cta.button")}
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
             >
-              {t("studio.cta.button")}
-            </Link>
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
-              {t("studio.cta.or")}{" "}
-              <a
-                href={`mailto:${PERSONAL.email}`}
-                onClick={() => playClick()}
-                className="font-serif italic lowercase normal-case text-base md:text-lg tracking-normal text-white underline decoration-1 underline-offset-4 hover:text-white/70 transition-colors duration-300"
-              >
-                {PERSONAL.email}
-              </a>
-            </p>
-          </div>
+              →
+            </span>
+          </Link>
         </Reveal>
       </div>
     </section>

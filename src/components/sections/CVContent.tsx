@@ -56,7 +56,7 @@ export function CVContent({ variant }: CVContentProps) {
                 />
             </div>
         ) : (
-            <div className="absolute top-28 right-6 w-[28vw] md:top-6 md:w-1/4 max-w-[300px] h-auto md:bottom-6 pointer-events-none">
+            <div className="absolute top-32 right-6 w-[22vw] md:top-6 md:w-1/4 max-w-[300px] h-auto md:bottom-6 pointer-events-none">
                 <div className="relative w-full aspect-[3/4] md:aspect-auto md:h-full">
                     <Image 
                         src="/images/profile-picture.jpg" 
