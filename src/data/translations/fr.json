@@ -276,11 +276,11 @@
     },
     "method": {
       "label": "MÉTHODE",
-      "heading": "comment on travaille.",
+      "heading": "comment je travaille.",
       "steps": {
         "01": {
           "title": "cadrage",
-          "description": "on clarifie l'objectif, le public et le périmètre. pas une ligne de code avant d'avoir compris votre besoin."
+          "description": "je clarifie l'objectif, le public et le périmètre. pas une ligne de code avant d'avoir compris votre besoin."
         },
         "02": {
           "title": "design",

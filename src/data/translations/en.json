@@ -276,11 +276,11 @@
     },
     "method": {
       "label": "METHOD",
-      "heading": "how we work.",
+      "heading": "how I work.",
       "steps": {
         "01": {
           "title": "scoping",
-          "description": "we clarify the goal, the audience and the scope. not a single line of code before i understand your need."
+          "description": "I clarify the goal, the audience and the scope. not a single line of code before i understand your need."
         },
         "02": {
           "title": "design",
