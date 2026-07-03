@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useSound } from "@/hooks/useSound";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -25,13 +24,13 @@ export default function StudioNav() {
       aria-label={t("studio.nav.ariaLabel")}
       className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference"
     >
-      <Link
-        href="/"
+      <a
+        href="#top"
         onClick={() => playClick()}
         className="font-serif text-xl md:text-2xl italic lowercase text-white pointer-events-auto transition-colors duration-300 hover:text-white/60"
       >
         {t("studio.nav.wordmark")}
-      </Link>
+      </a>
 
       <div className="flex items-baseline gap-4 md:gap-7">
         <div className="hidden md:flex items-baseline gap-6">

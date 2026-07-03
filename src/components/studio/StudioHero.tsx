@@ -23,7 +23,7 @@ export default function StudioHero() {
   const ctaDelay = 0.5 + (l1Words + l2Words) * 0.07;
 
   return (
-    <section className="relative min-h-screen w-full bg-bg text-ink flex flex-col overflow-hidden">
+    <section id="top" className="relative min-h-screen w-full bg-bg text-ink flex flex-col overflow-hidden">
       {/* ——— Le ciel ——— */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="studio-sky-drift absolute inset-0">
