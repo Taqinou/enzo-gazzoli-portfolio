@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { options, projects } from "@/data/pricing";
+import { projects } from "@/data/pricing";
 
 export default function PricingPage() {
   return (
@@ -44,9 +44,10 @@ export default function PricingPage() {
               <p className="font-mono text-xs uppercase tracking-widest text-ink/30 mb-4">Forfaits projet</p>
               <ul className="flex flex-col gap-3 mb-4">
                 {[
-                  { label: "Site vitrine", min: projects.website.fromPrice, max: projects.website.priceMax },
-                  { label: "Application", min: projects.application.fromPrice, max: projects.application.priceMax },
-                  { label: "E-commerce", min: projects.shopify.fromPrice, max: projects.shopify.priceMax },
+                  { label: "Site vitrine et landing page", min: projects.website.fromPrice },
+                  { label: "Application métier", min: projects.application.fromPrice },
+                  { label: "Boutique en ligne", min: projects.shopify.fromPrice },
+                  { label: "IA sur votre application", min: projects.ai.fromPrice },
                 ].map((f) => (
                   <li
                     key={f.label}
@@ -54,9 +55,7 @@ export default function PricingPage() {
                   >
                     <span className="font-serif text-2xl md:text-3xl">{f.label}</span>
                     <span className="font-mono text-sm font-bold text-blue whitespace-nowrap">
-                      {f.max !== null
-                        ? `${(f.min ?? 0).toLocaleString("fr-FR")} – ${f.max.toLocaleString("fr-FR")} €`
-                        : `à partir de ${(f.min ?? 0).toLocaleString("fr-FR")} €`}
+                      {`à partir de ${f.min.toLocaleString("fr-FR")} €`}
                     </span>
                   </li>
                 ))}
@@ -79,24 +78,6 @@ export default function PricingPage() {
               </Link>
             </div>
           </div>
-        </section>
-
-        <section className="mb-20">
-          <h2 className="font-mono text-xs uppercase tracking-widest mb-8 opacity-40">02. Options disponibles</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
-            {options.map((opt) => (
-              <div key={opt.id} className="flex justify-between items-baseline border-b border-ink/5 py-3">
-                <div>
-                  <span className="block font-serif text-lg">{opt.name}</span>
-                  <span className="font-mono text-[10px] uppercase text-ink/30 tracking-wider">{opt.category}</span>
-                </div>
-                <span className="font-mono font-bold text-blue">{opt.price.toLocaleString("fr-FR")} €</span>
-              </div>
-            ))}
-          </div>
-          <p className="mt-8 font-mono text-[10px] uppercase text-ink/25 tracking-wider">
-            Ces options s&apos;ajoutent au forfait de base selon le périmètre du projet.
-          </p>
         </section>
 
         <footer className="border-t border-ink/10 pt-10 font-mono text-xs text-ink/40 flex justify-between">

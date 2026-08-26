@@ -9,11 +9,11 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { projects, type ProjectType } from "@/data/pricing";
 
-const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
+const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
 
 // Index + volet détail : à gauche les 4 offres, à droite le volet qui se
-// défloute vers l'offre survolée (description Playfair, formules réelles de
-// pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
+// défloute vers l'offre survolée (description Playfair, formules ou éléments
+// inclus tirés de pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
 // sous la ligne active. DA raffinée.
 export default function OfferSection() {
   const { t } = useTranslation();
@@ -25,12 +25,13 @@ export default function OfferSection() {
   const num = (i: number) => String(i + 1).padStart(2, "0");
   const title = (type: ProjectType) => t(`services.offers.${type}.title`);
   const desc = (type: ProjectType) => t(`services.offers.${type}.description`);
+  // Pastilles du volet : les formules de l'offre. Seule la 01 en propose
+  // depuis la refonte de la grille — pour les trois autres la rangée reste
+  // vide, le prix plancher passe seul à droite.
   const formulas = (type: ProjectType) =>
-    projects[type].subtypes.map((s) => (locale === "en" ? s.nameEn : s.name));
+    projects[type].formulas.map((f) => (locale === "en" ? f.nameEn : f.name));
   const priceLabel = (type: ProjectType) => {
-    const fp = projects[type].fromPrice;
-    if (fp == null) return t("services.offers.onRequest");
-    const formatted = String(fp).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const formatted = String(projects[type].fromPrice).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return `${locale === "en" ? "from" : "à partir de"} ${formatted} €`;
   };
 

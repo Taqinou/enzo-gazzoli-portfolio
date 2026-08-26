@@ -126,30 +126,21 @@
     "index": "index.",
     "offers": {
       "website": {
-        "title": "SITE VITRINE",
-        "description": "Un site sur mesure, rapide et bien référencé, qui vous ressemble."
+        "title": "SITE VITRINE ET LANDING PAGE",
+        "description": "Un site développé de zéro, rapide au chargement et bien référencé, qui tient la comparaison avec vos concurrents."
       },
       "application": {
-        "title": "APPLICATION",
-        "description": "Des applications robustes — MVP, SaaS, dashboards — sur une architecture solide, prêtes à intégrer l'IA quand le produit en a besoin."
+        "title": "APPLICATION MÉTIER",
+        "description": "L'outil interne d'une entreprise : suivi de dossiers, de commandes, de stock, exports. Souvent en remplacement d'un tableur devenu ingérable."
       },
       "shopify": {
-        "title": "E-COMMERCE",
-        "description": "Une boutique ultra-rapide, pensée pour vendre : navigation fluide, recommandations pertinentes, une recherche qui trouve du premier coup."
+        "title": "BOUTIQUE EN LIGNE",
+        "description": "Vendre en ligne sans ressembler aux autres boutiques Shopify. Je développe la boutique, Shopify gère les produits, les commandes et le paiement."
       },
-      "custom": {
-        "title": "SUR MESURE",
-        "description": "Intégration d'IA, automatisation, conseil technique : des solutions façonnées autour de votre besoin."
-      },
-      "onRequest": "sur devis"
-    },
-    "valueLine": "Code testé, fiable, livré dans les délais.",
-    "custom": {
-      "note": "Chaque mission sur mesure est différente. Décrivez votre besoin, je vous réponds sous 24 h.",
-      "cta": "Décrire mon projet"
-    },
-    "range": {
-      "note": "Le tarif final dépend du périmètre, des intégrations et du calendrier. Parlons-en pour un devis précis."
+      "ai": {
+        "title": "IA SUR VOTRE APPLICATION",
+        "description": "Sur une application que vous avez déjà : lire des documents, en extraire l'information, répondre à partir de vos propres données. Agents, MCP, RAG, recherche sémantique, extraction de documents, scoring."
+      }
     },
     "simulator": {
       "title": "SIMULATEUR",
@@ -159,12 +150,11 @@
       "step3": "03",
       "projectType": "Type de projet",
       "formula": "Formule",
-      "options": "Options",
       "types": {
-        "website": "Site Web",
-        "application": "Application",
-        "shopify": "E-commerce",
-        "custom": "Sur Mesure"
+        "website": "Site vitrine et landing page",
+        "application": "Application métier",
+        "shopify": "Boutique en ligne",
+        "ai": "IA sur votre application"
       },
       "or": "ou",
       "skipSimulator": "Je préfère décrire mon projet",
