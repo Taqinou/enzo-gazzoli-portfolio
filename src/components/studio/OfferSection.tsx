@@ -25,15 +25,11 @@ export default function OfferSection() {
   const num = (i: number) => String(i + 1).padStart(2, "0");
   const title = (type: ProjectType) => t(`services.offers.${type}.title`);
   const desc = (type: ProjectType) => t(`services.offers.${type}.description`);
-  // Pastilles du volet : les formules quand l'offre en propose (aujourd'hui
-  // la 01), sinon les premiers elements compris dans le forfait.
-  const chips = (type: ProjectType) => {
-    const { formulas, includes } = projects[type];
-    if (formulas.length > 0) {
-      return formulas.map((f) => (locale === "en" ? f.nameEn : f.name));
-    }
-    return includes.slice(0, 3).map((i) => (locale === "en" ? i.nameEn : i.name));
-  };
+  // Pastilles du volet : les formules de l'offre. Seule la 01 en propose
+  // depuis la refonte de la grille — pour les trois autres la rangée reste
+  // vide, le prix plancher passe seul à droite.
+  const formulas = (type: ProjectType) =>
+    projects[type].formulas.map((f) => (locale === "en" ? f.nameEn : f.name));
   const priceLabel = (type: ProjectType) => {
     const formatted = String(projects[type].fromPrice).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return `${locale === "en" ? "from" : "à partir de"} ${formatted} €`;
@@ -122,7 +118,7 @@ export default function OfferSection() {
 
             <div className="relative mt-10 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap gap-2">
-                {chips(activeType).map((name) => (
+                {formulas(activeType).map((name) => (
                   <span
                     key={name}
                     className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink/55 border border-ink/15 rounded-full px-3 py-1.5"

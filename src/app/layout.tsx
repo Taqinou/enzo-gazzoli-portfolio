@@ -122,7 +122,7 @@ export const metadata: Metadata = {
     "Shopify Development",
     "E-commerce Website",
     "Online Store",
-    // EN - Services: AI on an existing application
+    // EN - Services: AI on your application
     "AI Integration",
     "LLM Integration",
     "AI Agents",
@@ -186,11 +186,10 @@ export const metadata: Metadata = {
     "Développement Shopify",
     "Site E-commerce",
     "Boutique en Ligne",
-    // FR - Services: IA sur une application existante
+    // FR - Services: IA sur votre application
     "Intégration IA",
     "Agent IA",
     "Serveur MCP",
-    "RAG",
     "Recherche Sémantique",
     "Extraction de Documents",
     // FR - Fonctionnalités/Options

@@ -131,27 +131,16 @@
       },
       "application": {
         "title": "APPLICATION MÉTIER",
-        "description": "L'outil interne d'une entreprise : suivi de dossiers, de commandes, de stock, exports. Souvent en remplacement d'un tableur devenu ingérable.",
-        "aiNote": "Une couche IA peut faire partie du projet : elle est alors chiffrée dans le devis."
+        "description": "L'outil interne d'une entreprise : suivi de dossiers, de commandes, de stock, exports. Souvent en remplacement d'un tableur devenu ingérable."
       },
       "shopify": {
         "title": "BOUTIQUE EN LIGNE",
         "description": "Vendre en ligne sans ressembler aux autres boutiques Shopify. Je développe la boutique, Shopify gère les produits, les commandes et le paiement."
       },
       "ai": {
-        "title": "IA SUR VOTRE APPLICATION EXISTANTE",
+        "title": "IA SUR VOTRE APPLICATION",
         "description": "Sur une application que vous avez déjà : lire des documents, en extraire l'information, répondre à partir de vos propres données. Agents, MCP, RAG, recherche sémantique, extraction de documents, scoring."
       }
-    },
-    "included": "CE QUI EST INCLUS",
-    "quoteNote": "Décrivez votre projet, je vous réponds sous 24 h.",
-    "cta": "Décrire mon projet",
-    "valueLine": "Prix fixé avant le démarrage, hors taxes.",
-    "maintenance": {
-      "label": "Maintenance :",
-      "perMonth": "/mois",
-      "site": "pour un site",
-      "app": "pour une application"
     },
     "simulator": {
       "title": "SIMULATEUR",
@@ -165,7 +154,7 @@
         "website": "Site vitrine et landing page",
         "application": "Application métier",
         "shopify": "Boutique en ligne",
-        "ai": "IA sur une application existante"
+        "ai": "IA sur votre application"
       },
       "or": "ou",
       "skipSimulator": "Je préfère décrire mon projet",

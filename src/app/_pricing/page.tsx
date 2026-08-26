@@ -47,7 +47,7 @@ export default function PricingPage() {
                   { label: "Site vitrine et landing page", min: projects.website.fromPrice },
                   { label: "Application métier", min: projects.application.fromPrice },
                   { label: "Boutique en ligne", min: projects.shopify.fromPrice },
-                  { label: "IA sur une application existante", min: projects.ai.fromPrice },
+                  { label: "IA sur votre application", min: projects.ai.fromPrice },
                 ].map((f) => (
                   <li
                     key={f.label}

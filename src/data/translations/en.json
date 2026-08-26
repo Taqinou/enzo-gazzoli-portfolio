@@ -131,27 +131,16 @@
       },
       "application": {
         "title": "BUSINESS APPLICATION",
-        "description": "A company's internal tool: tracking cases, orders and stock, plus exports. Often replacing a spreadsheet that has become unmanageable.",
-        "aiNote": "An AI layer can be part of the project: it is then priced in the quote."
+        "description": "A company's internal tool: tracking cases, orders and stock, plus exports. Often replacing a spreadsheet that has become unmanageable."
       },
       "shopify": {
         "title": "ONLINE STORE",
         "description": "Selling online without looking like every other Shopify store. I build the storefront, Shopify handles products, orders and payment."
       },
       "ai": {
-        "title": "AI ON YOUR EXISTING APPLICATION",
+        "title": "AI ON YOUR APPLICATION",
         "description": "On an application you already run: reading documents, pulling the information out of them, answering from your own data. Agents, MCP, RAG, semantic search, document extraction, scoring."
       }
-    },
-    "included": "WHAT'S INCLUDED",
-    "quoteNote": "Tell me about your project, I reply within 24 hours.",
-    "cta": "Describe my project",
-    "valueLine": "Price agreed before we start, excluding tax.",
-    "maintenance": {
-      "label": "Maintenance:",
-      "perMonth": "/month",
-      "site": "for a website",
-      "app": "for an application"
     },
     "simulator": {
       "title": "SIMULATOR",
@@ -165,7 +154,7 @@
         "website": "Website and landing page",
         "application": "Business application",
         "shopify": "Online store",
-        "ai": "AI on an existing application"
+        "ai": "AI on your application"
       },
       "or": "or",
       "skipSimulator": "I prefer to describe my project",

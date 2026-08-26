@@ -8,7 +8,7 @@ import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuoteSimulator } from "@/hooks/useQuoteSimulator";
-import { ProjectType, maintenance, projects } from "@/data/pricing";
+import { Formula, ProjectType, projects } from "@/data/pricing";
 import BlurFade from "@/components/ui/BlurFade";
 
 const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
@@ -29,10 +29,9 @@ export default function ServicesPage() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const { state, toggleProjectType, setFormula, getFormulas } = useQuoteSimulator();
+  const { state, toggleProjectType, setFormula } = useQuoteSimulator();
 
   const isFr = locale === "fr";
-  const formulas = getFormulas();
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -42,21 +41,36 @@ export default function ServicesPage() {
     }, 80);
   };
 
-  const handleOfferClick = (type: ProjectType) => {
-    playClick();
-    toggleProjectType(type);
+  const prefillMessage = (message: string) => {
+    setFormData((prev) => ({ ...prev, message }));
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const handleOfferCta = (offer: ProjectType) => {
+  const formulaMessage = (formula: Formula) => {
+    const name = isFr ? formula.name : formula.nameEn;
+    const price = formula.price.toLocaleString(isFr ? "fr-FR" : "en-US");
+    return isFr
+      ? `Bonjour, je suis intéressé par la formule « ${name} » (à partir de ${price} €). `
+      : `Hi, I'm interested in the "${name}" package (from ${price} €). `;
+  };
+
+  // Clic sur une offre. Seule l'offre 01 propose des formules : elle déplie sa
+  // liste. Les offres globales n'ont rien à déplier, le clic mène droit au
+  // formulaire avec le message pré-rempli.
+  const handleOfferClick = (type: ProjectType) => {
     playClick();
-    const label = t(`services.simulator.types.${offer}`);
-    setFormData((prev) => ({
-      ...prev,
-      message: isFr
-        ? `Bonjour, je suis intéressé par une prestation « ${label} ». `
-        : `Hi, I'm interested in a "${label}" project. `,
-    }));
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    if (projects[type].formulas.length === 0) {
+      const label = t(`services.simulator.types.${type}`);
+      prefillMessage(
+        isFr
+          ? `Bonjour, je suis intéressé par une prestation « ${label} ». `
+          : `Hi, I'm interested in a "${label}" project. `
+      );
+      return;
+    }
+
+    toggleProjectType(type);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -139,7 +153,7 @@ export default function ServicesPage() {
             <div className="flex flex-col">
               {OFFERS.map((offer, index) => {
                 const isSelected = state.projectType === offer;
-                const { fromPrice, includes } = projects[offer];
+                const { fromPrice, formulas } = projects[offer];
 
                 return (
                   <BlurFade key={offer} inView delay={index * 0.08}>
@@ -162,20 +176,33 @@ export default function ServicesPage() {
                             {String(index + 1).padStart(2, "0")}
                           </motion.span>
 
-                          <motion.div
-                            animate={{ rotate: isSelected ? 45 : 0 }}
-                            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className={`shrink-0 ${isSelected ? "text-blue" : "text-ink/30 group-hover:text-ink/60"} transition-colors`}
-                          >
-                            <Plus size={24} strokeWidth={1.5} />
-                          </motion.div>
+                          {/* Le « + » annonce un dépli : il n'a de sens que
+                              sur l'offre qui en a un. Les offres globales, qui
+                              mènent droit au formulaire, portent la flèche
+                              employée partout ailleurs sur le site. */}
+                          {formulas.length > 0 ? (
+                            <motion.div
+                              animate={{ rotate: isSelected ? 45 : 0 }}
+                              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                              className={`shrink-0 ${isSelected ? "text-blue" : "text-ink/30 group-hover:text-ink/60"} transition-colors`}
+                            >
+                              <Plus size={24} strokeWidth={1.5} />
+                            </motion.div>
+                          ) : (
+                            <span
+                              aria-hidden="true"
+                              className="shrink-0 w-6 text-center font-serif text-2xl text-ink/30 group-hover:text-ink/60 transition-colors"
+                            >
+                              →
+                            </span>
+                          )}
 
-                          {/* text-[2.6vw] : les intitulés de la nouvelle
-                              taxonomie sont longs (« IA sur votre application
-                              existante »), ils doivent tenir à côté du prix
-                              sans écraser la colonne de droite. */}
+                          {/* text-[2.8vw] : les intitulés de la nouvelle
+                              taxonomie sont plus longs qu'avant, ils doivent
+                              tenir à côté du prix sans écraser la colonne de
+                              droite. */}
                           <h2 className={`
-                            font-serif text-[7vw] md:text-[2.6vw] leading-[0.95]
+                            font-serif text-[7vw] md:text-[2.8vw] leading-[0.95]
                             transition-colors duration-300
                             ${isSelected ? "text-blue" : "text-ink group-hover:text-ink/70"}
                           `}>
@@ -206,93 +233,43 @@ export default function ServicesPage() {
                           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                           className="overflow-hidden border-b border-ink/20"
                         >
-                          <div className="py-8 md:py-12 px-4 md:px-8 flex flex-col gap-10">
-                            {/* Formules : seule l'offre 01 en propose. Les
-                                trois autres sont globales et chiffrées au
-                                devis à partir de leur plancher. */}
-                            {formulas.length > 0 && (
-                              <div className="flex flex-col gap-2">
-                                {formulas.map((formula, i) => (
-                                  <motion.button
-                                    key={formula.id}
-                                    onClick={() => {
-                                      playClick();
-                                      setFormula(formula.id);
-                                      const name = isFr ? formula.name : formula.nameEn;
-                                      const price = formula.price.toLocaleString(isFr ? "fr-FR" : "en-US");
-                                      setFormData((prev) => ({
-                                        ...prev,
-                                        message: isFr
-                                          ? `Bonjour, je suis intéressé par la formule « ${name} » (à partir de ${price} €). `
-                                          : `Hi, I'm interested in the "${name}" package (from ${price} €). `,
-                                      }));
-                                      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                                    }}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
-                                    className={`
-                                      group/sub flex items-center justify-between gap-6 py-4 px-5 text-left
-                                      border transition-all duration-300
-                                      ${state.formulaId === formula.id
-                                        ? "border-blue bg-blue/5"
-                                        : "border-ink/10 hover:border-ink/30"
-                                      }
-                                    `}
-                                  >
-                                    <span className="flex flex-col gap-1">
-                                      <span className="font-serif text-lg md:text-xl text-ink">
-                                        {isFr ? formula.name : formula.nameEn}
-                                      </span>
-                                      <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink/40">
-                                        {isFr ? formula.scope : formula.scopeEn}
-                                      </span>
+                          {/* Le volet ne s'ouvre que pour une offre à
+                              formules : il n'y a rien d'autre à y montrer. */}
+                          <div className="py-8 md:py-12 px-4 md:px-8">
+                            <div className="flex flex-col gap-2">
+                              {formulas.map((formula, i) => (
+                                <motion.button
+                                  key={formula.id}
+                                  onClick={() => {
+                                    playClick();
+                                    setFormula(formula.id);
+                                    prefillMessage(formulaMessage(formula));
+                                  }}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
+                                  className={`
+                                    group/sub flex items-center justify-between gap-6 py-4 px-5 text-left
+                                    border transition-all duration-300
+                                    ${state.formulaId === formula.id
+                                      ? "border-blue bg-blue/5"
+                                      : "border-ink/10 hover:border-ink/30"
+                                    }
+                                  `}
+                                >
+                                  <span className="font-serif text-lg md:text-xl text-ink">
+                                    {isFr ? formula.name : formula.nameEn}
+                                  </span>
+                                  <span className="flex items-center gap-3">
+                                    <span className="font-mono text-sm md:text-base font-bold text-blue whitespace-nowrap">
+                                      {formula.price.toLocaleString(isFr ? "fr-FR" : "en-US")} €
                                     </span>
-                                    <span className="flex items-center gap-3">
-                                      <span className="font-mono text-sm md:text-base font-bold text-blue whitespace-nowrap">
-                                        {formula.price.toLocaleString(isFr ? "fr-FR" : "en-US")} €
-                                      </span>
-                                      <span className="font-mono text-blue opacity-0 -translate-x-1 transition-all duration-300 group-hover/sub:opacity-100 group-hover/sub:translate-x-0">
-                                        →
-                                      </span>
+                                    <span className="font-mono text-blue opacity-0 -translate-x-1 transition-all duration-300 group-hover/sub:opacity-100 group-hover/sub:translate-x-0">
+                                      →
                                     </span>
-                                  </motion.button>
-                                ))}
-                              </div>
-                            )}
-
-                            <div className="flex flex-col gap-4">
-                              <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
-                                {t("services.included")}
-                              </p>
-                              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2">
-                                {includes.map((item) => (
-                                  <li
-                                    key={item.id}
-                                    className="flex items-baseline gap-3 font-mono text-[11px] md:text-xs uppercase tracking-wider text-ink/60"
-                                  >
-                                    <span aria-hidden="true" className="text-blue">+</span>
-                                    <span>{isFr ? item.name : item.nameEn}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                              {offer === "application" && (
-                                <p className="font-serif italic text-base md:text-lg text-ink/50 max-w-xl pt-2">
-                                  {t("services.offers.application.aiNote")}
-                                </p>
-                              )}
-                            </div>
-
-                            <div className="flex flex-col gap-6 max-w-xl">
-                              <p className="font-serif text-xl md:text-2xl text-ink/70 leading-snug">
-                                {t("services.quoteNote")}
-                              </p>
-                              <button
-                                onClick={() => handleOfferCta(offer)}
-                                className="self-start bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
-                              >
-                                {t("services.cta")}
-                              </button>
+                                  </span>
+                                </motion.button>
+                              ))}
                             </div>
                           </div>
                         </motion.div>
@@ -302,20 +279,6 @@ export default function ServicesPage() {
                   </BlurFade>
                 );
               })}
-            </div>
-
-            <div className="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-              <p className="font-mono text-sm md:text-base uppercase tracking-widest text-ink/50">
-                {t("services.valueLine")}
-              </p>
-              {/* Maintenance : service récurrent, volontairement plus discret
-                  que les quatre offres (pas de cinquième ligne dans la grille). */}
-              <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/40 md:text-right">
-                {t("services.maintenance.label")}{" "}
-                {maintenance.site} €{t("services.maintenance.perMonth")}{" "}
-                {t("services.maintenance.site")}, {maintenance.app} €
-                {t("services.maintenance.perMonth")} {t("services.maintenance.app")}.
-              </p>
             </div>
           </div>
         </main>
