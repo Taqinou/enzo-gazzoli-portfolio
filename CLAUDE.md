@@ -162,3 +162,26 @@ ExampleComponent.displayName = "ExampleComponent";
 
 export default ExampleComponent;
 ```
+
+## 💶 Offre & grille tarifaire (`/services`, `src/data/pricing.ts`)
+
+Refonte du 2026-08-26 (PR #1), après une étude de marché et de concurrence. Quatre offres, **planchers seuls, aucune fourchette haute** :
+
+| # | Offre | Plancher |
+|---|---|---|
+| 01 | Site vitrine et landing page | 1 200 € (Landing 1 200 · Vitrine 3 500) |
+| 02 | Application métier | 6 000 € |
+| 03 | Boutique en ligne | 7 000 € |
+| 04 | IA sur votre application | 1 500 € |
+
+**Retiré, et à ne pas réintroduire** : les intitulés `MVP` / `SaaS complet` / `Dashboard métier`, la formule « Portfolio créatif » (hors cible : entrepreneurs, artisans, PME), l'offre « Sur mesure », le système d'**options payantes unitaires** (auth 300 €, Stripe 250 €, SEO 150 €, Analytics 75 €… — il contredisait le forfait par valeur et invitait à négocier ligne par ligne), le bloc « Ce qui est inclus », les sous-titres sous les noms de formules, et les mentions « prix fixé avant le démarrage, hors taxes » et maintenance mensuelle.
+
+### ✍️ Règle d'écriture des textes visiteur (NON-NÉGOCIABLE, tout le site)
+
+Enzo rejette tout ce qui « sonne généré par IA ». Bannis : **le tiret cadratin**, « sur mesure », « MVP », « SaaS » comme intitulé commercial, « dashboard », « robuste », « ultra-rapide », « architecture solide », « performant », « moderne », « clé en main », « solutions », « qui vous ressemble », « pensé pour ». Interdits de forme : la construction « X, pas Y », la punchline courte en fin de paragraphe, la clause vide (« ça dépend du projet »), les emoji, les gloses entre parenthèses en rythme ternaire.
+
+**Le principe** : nommer des choses réelles plutôt que promettre des bénéfices. « catalogue, panier, paiement » ne peut pas sonner généré, « être visible en ligne » si. Une promesse doit être **vérifiable** : « rapide au chargement » se mesure, « développé de zéro » se constate, « performant » ne s'oppose à rien. Vaut pour le FR **et** l'EN.
+
+### État du simulateur de devis
+
+`useQuoteSimulator.ts` a été fortement réduit (les options ont disparu). `ProjectTypeCard.tsx` et `QuoteSummary.tsx` sont **morts mais compilent**, laissés en place. `OptionCategory.tsx` supprimé. `src/app/_pricing/page.tsx` (non routée, préfixe underscore) a été adaptée mécaniquement pour ne pas casser le typecheck — sa numérotation garde un « 01. » sans « 02. ».
