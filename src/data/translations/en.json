@@ -126,30 +126,32 @@
     "index": "index.",
     "offers": {
       "website": {
-        "title": "WEBSITE",
-        "description": "A custom-built site, fast and well-ranked, that truly reflects you."
+        "title": "WEBSITE AND LANDING PAGE",
+        "description": "A site built from scratch, fast to load and properly indexed, that holds up next to your competitors."
       },
       "application": {
-        "title": "APPLICATION",
-        "description": "Robust applications — MVP, SaaS, dashboards — built on a solid architecture, ready to integrate AI when your product needs it."
+        "title": "BUSINESS APPLICATION",
+        "description": "A company's internal tool: tracking cases, orders and stock, plus exports. Often replacing a spreadsheet that has become unmanageable.",
+        "aiNote": "An AI layer can be part of the project: it is then priced in the quote."
       },
       "shopify": {
-        "title": "E-COMMERCE",
-        "description": "A lightning-fast store, built to sell: smooth navigation, relevant recommendations, and search that finds what shoppers want."
+        "title": "ONLINE STORE",
+        "description": "Selling online without looking like every other Shopify store. I build the storefront, Shopify handles products, orders and payment."
       },
-      "custom": {
-        "title": "CUSTOM",
-        "description": "AI integration, automation, technical consulting: solutions shaped around your needs."
-      },
-      "onRequest": "on request"
+      "ai": {
+        "title": "AI ON YOUR EXISTING APPLICATION",
+        "description": "On an application you already run: reading documents, pulling the information out of them, answering from your own data. Agents, MCP, RAG, semantic search, document extraction, scoring."
+      }
     },
-    "valueLine": "Tested, reliable code, shipped on time.",
-    "custom": {
-      "note": "Every custom engagement is different. Tell me what you need — I'll reply within 24h.",
-      "cta": "Describe my project"
-    },
-    "range": {
-      "note": "The final price depends on scope, integrations and timeline. Let's talk for an accurate quote."
+    "included": "WHAT'S INCLUDED",
+    "quoteNote": "Tell me about your project, I reply within 24 hours.",
+    "cta": "Describe my project",
+    "valueLine": "Price agreed before we start, excluding tax.",
+    "maintenance": {
+      "label": "Maintenance:",
+      "perMonth": "/month",
+      "site": "for a website",
+      "app": "for an application"
     },
     "simulator": {
       "title": "SIMULATOR",
@@ -159,12 +161,11 @@
       "step3": "03",
       "projectType": "Project type",
       "formula": "Package",
-      "options": "Options",
       "types": {
-        "website": "Website",
-        "application": "Application",
-        "shopify": "E-commerce",
-        "custom": "Custom"
+        "website": "Website and landing page",
+        "application": "Business application",
+        "shopify": "Online store",
+        "ai": "AI on an existing application"
       },
       "or": "or",
       "skipSimulator": "I prefer to describe my project",

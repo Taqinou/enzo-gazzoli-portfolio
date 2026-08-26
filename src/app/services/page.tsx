@@ -8,10 +8,10 @@ import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useQuoteSimulator } from "@/hooks/useQuoteSimulator";
-import { ProjectType, projects } from "@/data/pricing";
+import { ProjectType, maintenance, projects } from "@/data/pricing";
 import BlurFade from "@/components/ui/BlurFade";
 
-const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
+const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
 
 export default function ServicesPage() {
   const router = useRouter();
@@ -29,10 +29,10 @@ export default function ServicesPage() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const { state, toggleProjectType, setSubType, getSubTypes } = useQuoteSimulator();
+  const { state, toggleProjectType, setFormula, getFormulas } = useQuoteSimulator();
 
   const isFr = locale === "fr";
-  const subTypes = getSubTypes();
+  const formulas = getFormulas();
 
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -139,8 +139,7 @@ export default function ServicesPage() {
             <div className="flex flex-col">
               {OFFERS.map((offer, index) => {
                 const isSelected = state.projectType === offer;
-                const fromPrice = projects[offer].fromPrice;
-                const priceMax = projects[offer].priceMax;
+                const { fromPrice, includes } = projects[offer];
 
                 return (
                   <BlurFade key={offer} inView delay={index * 0.08}>
@@ -166,13 +165,17 @@ export default function ServicesPage() {
                           <motion.div
                             animate={{ rotate: isSelected ? 45 : 0 }}
                             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                            className={`${isSelected ? "text-blue" : "text-ink/30 group-hover:text-ink/60"} transition-colors`}
+                            className={`shrink-0 ${isSelected ? "text-blue" : "text-ink/30 group-hover:text-ink/60"} transition-colors`}
                           >
                             <Plus size={24} strokeWidth={1.5} />
                           </motion.div>
 
+                          {/* text-[2.6vw] : les intitulés de la nouvelle
+                              taxonomie sont longs (« IA sur votre application
+                              existante »), ils doivent tenir à côté du prix
+                              sans écraser la colonne de droite. */}
                           <h2 className={`
-                            font-serif text-[8vw] md:text-[3.5vw] leading-[0.95]
+                            font-serif text-[7vw] md:text-[2.6vw] leading-[0.95]
                             transition-colors duration-300
                             ${isSelected ? "text-blue" : "text-ink group-hover:text-ink/70"}
                           `}>
@@ -182,21 +185,11 @@ export default function ServicesPage() {
 
                         <div className="flex items-center justify-between md:justify-end gap-6 w-full md:w-auto">
                           <div className="flex flex-col md:items-end gap-1 md:max-w-md pl-8 md:pl-0">
-                            <span className="font-serif italic text-xl md:text-2xl text-ink/60">
-                              {fromPrice === null ? (
-                                t("services.offers.onRequest")
-                              ) : priceMax !== null ? (
-                                <>
-                                  {fromPrice.toLocaleString(isFr ? "fr-FR" : "en-US")} – {priceMax.toLocaleString(isFr ? "fr-FR" : "en-US")} €
-                                </>
-                              ) : (
-                                <>
-                                  {isFr ? "à partir de" : "from"}{" "}
-                                  {fromPrice.toLocaleString(isFr ? "fr-FR" : "en-US")} €
-                                </>
-                              )}
+                            <span className="font-serif italic text-xl md:text-2xl text-ink/60 whitespace-nowrap">
+                              {isFr ? "à partir de" : "from"}{" "}
+                              {fromPrice.toLocaleString(isFr ? "fr-FR" : "en-US")} €
                             </span>
-                            <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-xs">
+                            <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/50 md:text-right max-w-md">
                               {t(`services.offers.${offer}.description`)}
                             </p>
                           </div>
@@ -213,29 +206,20 @@ export default function ServicesPage() {
                           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                           className="overflow-hidden border-b border-ink/20"
                         >
-                          <div className="py-8 md:py-12 px-4 md:px-8">
-                            {offer === "custom" || priceMax !== null ? (
-                              <div className="flex flex-col gap-6 max-w-xl">
-                                <p className="font-serif text-xl md:text-2xl text-ink/70 leading-snug">
-                                  {offer === "custom" ? t("services.custom.note") : t("services.range.note")}
-                                </p>
-                                <button
-                                  onClick={() => handleOfferCta(offer)}
-                                  className="self-start bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
-                                >
-                                  {t("services.custom.cta")}
-                                </button>
-                              </div>
-                            ) : (
+                          <div className="py-8 md:py-12 px-4 md:px-8 flex flex-col gap-10">
+                            {/* Formules : seule l'offre 01 en propose. Les
+                                trois autres sont globales et chiffrées au
+                                devis à partir de leur plancher. */}
+                            {formulas.length > 0 && (
                               <div className="flex flex-col gap-2">
-                                {subTypes.map((sub, i) => (
+                                {formulas.map((formula, i) => (
                                   <motion.button
-                                    key={sub.id}
+                                    key={formula.id}
                                     onClick={() => {
                                       playClick();
-                                      setSubType(sub.id);
-                                      const name = isFr ? sub.name : sub.nameEn;
-                                      const price = sub.price.toLocaleString(isFr ? "fr-FR" : "en-US");
+                                      setFormula(formula.id);
+                                      const name = isFr ? formula.name : formula.nameEn;
+                                      const price = formula.price.toLocaleString(isFr ? "fr-FR" : "en-US");
                                       setFormData((prev) => ({
                                         ...prev,
                                         message: isFr
@@ -248,20 +232,25 @@ export default function ServicesPage() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: 0.1 + i * 0.05, duration: 0.3 }}
                                     className={`
-                                      group/sub flex items-center justify-between py-4 px-5 text-left
+                                      group/sub flex items-center justify-between gap-6 py-4 px-5 text-left
                                       border transition-all duration-300
-                                      ${state.subTypeId === sub.id
+                                      ${state.formulaId === formula.id
                                         ? "border-blue bg-blue/5"
                                         : "border-ink/10 hover:border-ink/30"
                                       }
                                     `}
                                   >
-                                    <span className="font-serif text-lg md:text-xl text-ink">
-                                      {isFr ? sub.name : sub.nameEn}
+                                    <span className="flex flex-col gap-1">
+                                      <span className="font-serif text-lg md:text-xl text-ink">
+                                        {isFr ? formula.name : formula.nameEn}
+                                      </span>
+                                      <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-ink/40">
+                                        {isFr ? formula.scope : formula.scopeEn}
+                                      </span>
                                     </span>
                                     <span className="flex items-center gap-3">
-                                      <span className="font-mono text-sm md:text-base font-bold text-blue">
-                                        {sub.price.toLocaleString(isFr ? "fr-FR" : "en-US")} €
+                                      <span className="font-mono text-sm md:text-base font-bold text-blue whitespace-nowrap">
+                                        {formula.price.toLocaleString(isFr ? "fr-FR" : "en-US")} €
                                       </span>
                                       <span className="font-mono text-blue opacity-0 -translate-x-1 transition-all duration-300 group-hover/sub:opacity-100 group-hover/sub:translate-x-0">
                                         →
@@ -271,6 +260,40 @@ export default function ServicesPage() {
                                 ))}
                               </div>
                             )}
+
+                            <div className="flex flex-col gap-4">
+                              <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-ink/40">
+                                {t("services.included")}
+                              </p>
+                              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-2">
+                                {includes.map((item) => (
+                                  <li
+                                    key={item.id}
+                                    className="flex items-baseline gap-3 font-mono text-[11px] md:text-xs uppercase tracking-wider text-ink/60"
+                                  >
+                                    <span aria-hidden="true" className="text-blue">+</span>
+                                    <span>{isFr ? item.name : item.nameEn}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                              {offer === "application" && (
+                                <p className="font-serif italic text-base md:text-lg text-ink/50 max-w-xl pt-2">
+                                  {t("services.offers.application.aiNote")}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="flex flex-col gap-6 max-w-xl">
+                              <p className="font-serif text-xl md:text-2xl text-ink/70 leading-snug">
+                                {t("services.quoteNote")}
+                              </p>
+                              <button
+                                onClick={() => handleOfferCta(offer)}
+                                className="self-start bg-blue text-white px-8 py-4 font-mono text-sm uppercase tracking-wider font-bold hover:bg-ink transition-colors duration-300"
+                              >
+                                {t("services.cta")}
+                              </button>
+                            </div>
                           </div>
                         </motion.div>
                       )}
@@ -285,10 +308,13 @@ export default function ServicesPage() {
               <p className="font-mono text-sm md:text-base uppercase tracking-widest text-ink/50">
                 {t("services.valueLine")}
               </p>
-              <p className="font-serif italic text-xl md:text-2xl text-ink/50">
-                {isFr
-                  ? "Chaque projet est unique — discutons de votre besoin."
-                  : "Every project is unique — let's talk about yours."}
+              {/* Maintenance : service récurrent, volontairement plus discret
+                  que les quatre offres (pas de cinquième ligne dans la grille). */}
+              <p className="font-mono text-xs md:text-sm uppercase tracking-wider text-ink/40 md:text-right">
+                {t("services.maintenance.label")}{" "}
+                {maintenance.site} €{t("services.maintenance.perMonth")}{" "}
+                {t("services.maintenance.site")}, {maintenance.app} €
+                {t("services.maintenance.perMonth")} {t("services.maintenance.app")}.
               </p>
             </div>
           </div>

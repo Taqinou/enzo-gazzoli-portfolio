@@ -9,11 +9,11 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { projects, type ProjectType } from "@/data/pricing";
 
-const OFFERS: ProjectType[] = ["website", "application", "shopify", "custom"];
+const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
 
 // Index + volet détail : à gauche les 4 offres, à droite le volet qui se
-// défloute vers l'offre survolée (description Playfair, formules réelles de
-// pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
+// défloute vers l'offre survolée (description Playfair, formules ou éléments
+// inclus tirés de pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
 // sous la ligne active. DA raffinée.
 export default function OfferSection() {
   const { t } = useTranslation();
@@ -25,12 +25,17 @@ export default function OfferSection() {
   const num = (i: number) => String(i + 1).padStart(2, "0");
   const title = (type: ProjectType) => t(`services.offers.${type}.title`);
   const desc = (type: ProjectType) => t(`services.offers.${type}.description`);
-  const formulas = (type: ProjectType) =>
-    projects[type].subtypes.map((s) => (locale === "en" ? s.nameEn : s.name));
+  // Pastilles du volet : les formules quand l'offre en propose (aujourd'hui
+  // la 01), sinon les premiers elements compris dans le forfait.
+  const chips = (type: ProjectType) => {
+    const { formulas, includes } = projects[type];
+    if (formulas.length > 0) {
+      return formulas.map((f) => (locale === "en" ? f.nameEn : f.name));
+    }
+    return includes.slice(0, 3).map((i) => (locale === "en" ? i.nameEn : i.name));
+  };
   const priceLabel = (type: ProjectType) => {
-    const fp = projects[type].fromPrice;
-    if (fp == null) return t("services.offers.onRequest");
-    const formatted = String(fp).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const formatted = String(projects[type].fromPrice).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     return `${locale === "en" ? "from" : "à partir de"} ${formatted} €`;
   };
 
@@ -117,7 +122,7 @@ export default function OfferSection() {
 
             <div className="relative mt-10 flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap gap-2">
-                {formulas(activeType).map((name) => (
+                {chips(activeType).map((name) => (
                   <span
                     key={name}
                     className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink/55 border border-ink/15 rounded-full px-3 py-1.5"

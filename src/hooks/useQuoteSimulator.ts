@@ -1,34 +1,20 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
-import {
-  ProjectType,
-  projects,
-  options,
-  calculateTotal,
-  getIncludedOptions,
-} from "@/data/pricing";
+import { useState, useCallback } from "react";
+import { Formula, ProjectType, projects } from "@/data/pricing";
 
 export interface QuoteState {
   projectType: ProjectType | null;
-  subTypeId: string;
-  selectedOptions: Set<string>;
+  formulaId: string;
 }
 
 export interface QuoteSimulatorReturn {
   state: QuoteState;
-  total: number;
-  customDays: number | null;
-  setCustomDays: (days: number) => void;
-  includedOptions: Set<string>;
   setProjectType: (type: ProjectType | null) => void;
   toggleProjectType: (type: ProjectType) => void;
-  setSubType: (id: string) => void;
-  toggleOption: (id: string) => void;
-  isOptionSelected: (id: string) => boolean;
-  isOptionIncluded: (id: string) => boolean;
-  getSubTypes: () => typeof projects.website.subtypes;
-  getCurrentSubType: () => typeof projects.website.subtypes[0] | null;
+  setFormula: (id: string) => void;
+  getFormulas: () => Formula[];
+  getCurrentFormula: () => Formula | null;
   reset: () => void;
   generateSummary: (locale: "fr" | "en") => string;
 }
@@ -36,100 +22,47 @@ export interface QuoteSimulatorReturn {
 function getInitialState(): QuoteState {
   return {
     projectType: null,
-    subTypeId: "",
-    selectedOptions: new Set<string>(),
+    formulaId: "",
   };
 }
 
+// Sélecteur d'offre de /services : mémorise l'offre ouverte et, pour les offres
+// qui proposent plusieurs formules, celle qui est retenue. Les forfaits étant
+// value-based et sans option facturée à l'unité, il n'y a plus de total à
+// calculer : le prix affiché est celui de la formule ou le plancher de l'offre.
 export function useQuoteSimulator(): QuoteSimulatorReturn {
   const [state, setState] = useState<QuoteState>(getInitialState);
-  const [customDays, setCustomDaysState] = useState<number | null>(null);
-
-  const includedOptions = useMemo(() => {
-    if (!state.projectType) return new Set<string>();
-    return getIncludedOptions(state.projectType, state.subTypeId);
-  }, [state.projectType, state.subTypeId]);
-
-  const total = useMemo(() => {
-    if (!state.projectType) return 0;
-    return calculateTotal(state.projectType, state.subTypeId, state.selectedOptions);
-  }, [state.projectType, state.subTypeId, state.selectedOptions]);
-
-  const setCustomDays = useCallback((days: number) => {
-    setCustomDaysState(Math.max(1, days));
-  }, []);
 
   const setProjectType = useCallback((type: ProjectType | null) => {
     if (type === null) {
       setState(getInitialState());
       return;
     }
-    setState(() => {
-      const newSubTypeId = projects[type].subtypes[0].id;
-      return {
-        projectType: type,
-        subTypeId: newSubTypeId,
-        selectedOptions: new Set<string>(),
-      };
-    });
+    setState({ projectType: type, formulaId: projects[type].formulas[0]?.id ?? "" });
   }, []);
 
   const toggleProjectType = useCallback((type: ProjectType) => {
-    setState((prev) => {
-      if (prev.projectType === type) {
-        return getInitialState();
-      }
-      const newSubTypeId = projects[type].subtypes[0].id;
-      return {
-        projectType: type,
-        subTypeId: newSubTypeId,
-        selectedOptions: new Set<string>(),
-      };
-    });
-    setCustomDaysState(null);
+    setState((prev) =>
+      prev.projectType === type
+        ? getInitialState()
+        : { projectType: type, formulaId: projects[type].formulas[0]?.id ?? "" }
+    );
   }, []);
 
-  const setSubType = useCallback((id: string) => {
-    setState((prev) => ({
-      ...prev,
-      subTypeId: id,
-      selectedOptions: new Set<string>(),
-    }));
-    setCustomDaysState(null);
+  const setFormula = useCallback((id: string) => {
+    setState((prev) => ({ ...prev, formulaId: id }));
   }, []);
 
-  const toggleOption = useCallback((id: string) => {
-    setState((prev) => {
-      const newSelected = new Set(prev.selectedOptions);
-      if (newSelected.has(id)) {
-        newSelected.delete(id);
-      } else {
-        newSelected.add(id);
-      }
-      return { ...prev, selectedOptions: newSelected };
-    });
-  }, []);
-
-  const isOptionSelected = useCallback(
-    (id: string) => state.selectedOptions.has(id) || includedOptions.has(id),
-    [state.selectedOptions, includedOptions]
-  );
-
-  const isOptionIncluded = useCallback(
-    (id: string) => includedOptions.has(id),
-    [includedOptions]
-  );
-
-  const getSubTypes = useCallback(() => {
-    if (!state.projectType) return projects.website.subtypes;
-    return projects[state.projectType].subtypes;
+  const getFormulas = useCallback((): Formula[] => {
+    if (!state.projectType) return [];
+    return projects[state.projectType].formulas;
   }, [state.projectType]);
 
-  const getCurrentSubType = useCallback(() => {
+  const getCurrentFormula = useCallback((): Formula | null => {
     if (!state.projectType) return null;
-    const subtypes = projects[state.projectType].subtypes;
-    return subtypes.find((s) => s.id === state.subTypeId) || subtypes[0];
-  }, [state.projectType, state.subTypeId]);
+    const formulas = projects[state.projectType].formulas;
+    return formulas.find((f) => f.id === state.formulaId) ?? formulas[0] ?? null;
+  }, [state.projectType, state.formulaId]);
 
   const reset = useCallback(() => {
     setState(getInitialState());
@@ -138,96 +71,51 @@ export function useQuoteSimulator(): QuoteSimulatorReturn {
   const generateSummary = useCallback(
     (locale: "fr" | "en"): string => {
       if (!state.projectType) return "";
-      
-      const subType = getCurrentSubType();
-      if (!subType) return "";
-      
+
       const isFr = locale === "fr";
+      const project = projects[state.projectType];
+      const formula = project.formulas.find((f) => f.id === state.formulaId) ?? project.formulas[0];
+      const price = (formula?.price ?? project.fromPrice).toLocaleString(isFr ? "fr-FR" : "en-US");
 
-      const projectLabel = isFr
-        ? state.projectType === "website"
-          ? "Site Web"
-          : state.projectType === "application"
-          ? "Application"
-          : "Sur Mesure"
-        : state.projectType === "website"
-        ? "Website"
-        : state.projectType === "application"
-        ? "Application"
-        : "Custom";
+      const lines = [
+        isFr ? "=== DEMANDE DE DEVIS ===" : "=== QUOTE REQUEST ===",
+        "",
+        isFr ? `Offre : ${OFFER_LABELS[state.projectType][0]}` : `Offer: ${OFFER_LABELS[state.projectType][1]}`,
+      ];
 
-      const subTypeLabel = isFr ? subType.name : subType.nameEn;
-      const duration = isFr ? subType.duration : subType.durationEn;
-
-      const selectedOptionsList = options
-        .filter(
-          (opt) =>
-            state.selectedOptions.has(opt.id) && !includedOptions.has(opt.id)
-        )
-        .map((opt) => `${isFr ? opt.name : opt.nameEn} (+${opt.price}€)`);
-
-      const includedOptionsList = options
-        .filter((opt) => includedOptions.has(opt.id))
-        .map((opt) => (isFr ? opt.name : opt.nameEn));
-
-      let summary = isFr
-        ? `=== SIMULATION DE DEVIS ===\n\n`
-        : `=== QUOTE SIMULATION ===\n\n`;
-
-      summary += isFr
-        ? `Type de projet: ${projectLabel}\n`
-        : `Project type: ${projectLabel}\n`;
-
-      summary += isFr
-        ? `Formule: ${subTypeLabel}\n`
-        : `Package: ${subTypeLabel}\n`;
-
-      const daysLine = customDays !== null
-        ? isFr
-          ? `Durée souhaitée: ${customDays}j (recommandé: ${subType.days}j — ${duration})\n\n`
-          : `Desired duration: ${customDays}d (recommended: ${subType.days}d — ${duration})\n\n`
-        : isFr
-          ? `Durée estimée: ${duration}\n\n`
-          : `Estimated duration: ${duration}\n\n`;
-
-      summary += daysLine;
-
-      if (includedOptionsList.length > 0) {
-        summary += isFr
-          ? `Inclus dans la formule:\n${includedOptionsList.map((o) => `  ✓ ${o}`).join("\n")}\n\n`
-          : `Included in package:\n${includedOptionsList.map((o) => `  ✓ ${o}`).join("\n")}\n\n`;
+      if (formula) {
+        lines.push(isFr ? `Formule : ${formula.name}` : `Package: ${formula.nameEn}`);
       }
 
-      if (selectedOptionsList.length > 0) {
-        summary += isFr
-          ? `Options supplémentaires:\n${selectedOptionsList.map((o) => `  + ${o}`).join("\n")}\n\n`
-          : `Additional options:\n${selectedOptionsList.map((o) => `  + ${o}`).join("\n")}\n\n`;
-      }
+      lines.push(
+        "",
+        isFr ? "Inclus dans le forfait :" : "Included in the package:",
+        ...project.includes.map((item) => `  + ${isFr ? item.name : item.nameEn}`),
+        "",
+        isFr ? `À partir de ${price} € HT` : `From ${price} € excl. tax`
+      );
 
-      summary += isFr
-        ? `ESTIMATION: à partir de ${total.toLocaleString("fr-FR")} €`
-        : `ESTIMATE: from ${total.toLocaleString("en-US")} €`;
-
-      return summary;
+      return lines.join("\n");
     },
-    [state, customDays, includedOptions, total, getCurrentSubType]
+    [state]
   );
 
   return {
     state,
-    total,
-    customDays,
-    setCustomDays,
-    includedOptions,
     setProjectType,
     toggleProjectType,
-    setSubType,
-    toggleOption,
-    isOptionSelected,
-    isOptionIncluded,
-    getSubTypes,
-    getCurrentSubType,
+    setFormula,
+    getFormulas,
+    getCurrentFormula,
     reset,
     generateSummary,
   };
 }
+
+// Libellés [FR, EN] employés hors composant React (pas d'accès à `t` ici).
+const OFFER_LABELS: Record<ProjectType, [string, string]> = {
+  website: ["Site vitrine et landing page", "Website and landing page"],
+  application: ["Application métier", "Business application"],
+  shopify: ["Boutique en ligne", "Online store"],
+  ai: ["IA sur une application existante", "AI on an existing application"],
+};

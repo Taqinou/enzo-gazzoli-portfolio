@@ -105,30 +105,31 @@ export const metadata: Metadata = {
     "Creative Coding",
     "Digital Experience",
     "Enzo Gazzoli",
-    // EN - Services: Website
+    // EN - Services: Website & landing page
     "Landing Page",
-    "Creative Portfolio",
     "Business Website",
     "Corporate Website",
     "One Page Website",
     "Custom Website",
-    // EN - Services: Application
-    "MVP Development",
-    "SaaS Development",
-    "Full SaaS",
-    "Business Dashboard",
+    // EN - Services: Business application
+    "Business Application",
+    "Internal Tool",
+    "Back Office Application",
     "Web Application",
-    "Custom Application",
+    "Custom Software",
     // EN - Services: E-commerce
     "Headless Shopify",
     "Shopify Development",
     "E-commerce Website",
     "Online Store",
-    // EN - Services: Custom
-    "Technical Audit",
-    "Code Audit",
-    "Dev Day",
-    "Freelance Consulting",
+    // EN - Services: AI on an existing application
+    "AI Integration",
+    "LLM Integration",
+    "AI Agents",
+    "MCP Server",
+    "RAG",
+    "Semantic Search",
+    "Document Extraction",
     // EN - Features/Options
     "Authentication Integration",
     "Stripe Payment Integration",
@@ -167,33 +168,31 @@ export const metadata: Metadata = {
     "Freelance Lorraine",
     "Agence Web Nancy",
     "Expérience Digitale",
-    // FR - Services: Site Web
+    // FR - Services: Site vitrine et landing page
     "Landing Page",
     "Page de Destination",
-    "Portfolio Créatif",
     "Site Vitrine",
     "Site Internet",
-    "Site Web sur Mesure",
     "Création de Site Web",
     "Conception Web",
-    // FR - Services: Application
-    "Développement MVP",
-    "Développement SaaS",
-    "SaaS Complet",
-    "Dashboard Métier",
-    "Tableau de Bord",
+    // FR - Services: Application métier
+    "Application Métier",
+    "Logiciel Métier",
+    "Outil Interne",
+    "Back Office",
     "Application Web",
-    "Application sur Mesure",
     // FR - Services: E-commerce
     "Boutique Headless",
     "Développement Shopify",
     "Site E-commerce",
     "Boutique en Ligne",
-    // FR - Services: Sur Mesure
-    "Audit Technique",
-    "Audit de Code",
-    "Journée Dev",
-    "Consulting Freelance",
+    // FR - Services: IA sur une application existante
+    "Intégration IA",
+    "Agent IA",
+    "Serveur MCP",
+    "RAG",
+    "Recherche Sémantique",
+    "Extraction de Documents",
     // FR - Fonctionnalités/Options
     "Authentification",
     "Paiement Stripe",
