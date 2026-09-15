@@ -18,7 +18,14 @@ Work is on branch **`feat/studio-home`** (not yet merged to `main`).
 The studio wing must keep Enzo's **existing design system** (Playfair Display lowercase, Helvetica-bold uppercase mono labels, `blue #0000ff`, `bg #f9f9f9`, hard shadows, crosshair, sound design) while raising execution to **"premium AI craft"** level — the references are cursor.com, devin.ai, sinewdesign.com, the-square.io (cinematic motion, atmospheric photographic backgrounds, depth, refined micro-interactions).
 
 - **Rejected directions** (do not reintroduce): plain reproduction of the DA (too flat), and generic modern-SaaS restyling (bento grids / pills / Inter-only → "on se croirait en 2022"). Every studio iteration must pass both tests: (1) is it in his tokens? (2) is it at Cursor/Devin staging level?
-- The home hero (`StudioHero.tsx`) is an **atmospheric hero**: full-bleed photographic sky (`public/images/studio/sky.jpg`, swappable — `sky-alt1/2.jpg` are alternates) with a slow drift, centered element, word-by-word blur reveal on the thesis. Iterate hero details section by section, proposing ideas before coding.
+- The home hero (`StudioHero.tsx` + `src/hooks/useHeroScene.ts`) is a **three-plane scene, "le titre dans le ciel"**: the photographic sky (`public/images/studio/sky.jpg`, swappable, `sky-alt1/2.jpg` are alternates), the big Playfair title, and a foreground cloud veil (`sky-veil.webp`) that passes in front of the letters. The veil is derived from the sky by `scripts/sky-veil.py`: **regenerate it whenever the sky is swapped**.
+  - Opening = one short camera move in CSS (`.studio-hero-*` in `globals.css`: pull-back, focus, overexposure, ~1.9 s), held until the sky has loaded (`.is-ready` pauses every hero animation, since the page only mounts after hydration). Enzo found a ~2.8 s opening too long.
+  - The scroll exit (camera rises into the clouds, title fades into the mist, whiteout) is driven by the native scroll event in `useHeroScene`, writing transforms on dedicated wrappers so they never fight the CSS animations. The hero is `170svh` with a sticky stage; the next section overlaps its end (`-mb-[16svh]`) so the offer arrives inside the white. Disabled under `prefers-reduced-motion`.
+  - **No mouse parallax**: Enzo tried it and rejected it ("quand on bouge le curseur tout bouge ça j'aime pas").
+  - No visible layer edges: the veil has a baked top fade + a long CSS mask ramp and only ever scales from its bottom edge (never translates up), and the blurred focus copy overflows the frame (`-inset-[14%]`).
+  - The hook toggles `html.studio-on-hero`: the nav (`--nav-rgb`, Tailwind color `nav`) is ink over the sky, because `mix-blend-difference` rendered it brown there.
+  - **CTAs stay as they are**: the ink pill + the frosted-glass pill (Inter, `playClick`). Enzo validated them against the pills ban below; hard-shadow rectangle buttons were tried and rejected ("horriblissime").
+  - Iterate hero details section by section, proposing ideas before coding. Enzo wants product-design thinking (staging, depth, motion), not copy proposals.
 
 ### ⚠️ CRITICAL: framer-motion is broken in this env
 

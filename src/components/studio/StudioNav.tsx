@@ -4,7 +4,9 @@ import { useSound } from "@/hooks/useSound";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 // Nav de l'aile studio, dans la grammaire du site : fixe, mix-blend-difference,
-// wordmark serif italic, micro-labels mono uppercase.
+// wordmark serif italic, micro-labels mono uppercase. Sur le ciel du hero, la
+// différence sortait en brun : elle y passe en encre (couleur `nav`, bascule
+// pilotée par useHeroScene via html.studio-on-hero).
 export default function StudioNav() {
   const { locale, setLocale, t } = useLanguage();
   const { playClick, playLanguageSwitch } = useSound();
@@ -22,12 +24,12 @@ export default function StudioNav() {
   return (
     <nav
       aria-label={t("studio.nav.ariaLabel")}
-      className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference"
+      className="studio-nav fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference"
     >
       <a
         href="#top"
         onClick={() => playClick()}
-        className="font-serif text-xl md:text-2xl italic lowercase text-white pointer-events-auto transition-colors duration-300 hover:text-white/60"
+        className="font-serif text-xl md:text-2xl italic lowercase text-nav pointer-events-auto transition-colors duration-300 hover:text-nav/60"
       >
         {t("studio.nav.wordmark")}
       </a>
@@ -39,21 +41,21 @@ export default function StudioNav() {
               key={link.labelKey}
               href={link.href}
               onClick={() => playClick()}
-              className="group font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white pointer-events-auto transition-colors duration-300"
+              className="group font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-nav/50 hover:text-nav pointer-events-auto transition-colors duration-300"
             >
               {t(link.labelKey)}
-              <span className="block h-px w-0 bg-white transition-all duration-300 ease-out-expo group-hover:w-full" />
+              <span className="block h-px w-0 bg-nav transition-all duration-300 ease-out-expo group-hover:w-full" />
             </a>
           ))}
         </div>
 
-        <div className="flex items-baseline gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 pointer-events-auto">
+        <div className="flex items-baseline gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-nav/50 pointer-events-auto">
           <button
             onClick={() => {
               setLocale("fr");
               playLanguageSwitch();
             }}
-            className={`hover:text-white transition-colors ${locale === "fr" ? "text-white underline decoration-2 underline-offset-4" : ""}`}
+            className={`hover:text-nav transition-colors ${locale === "fr" ? "text-nav underline decoration-2 underline-offset-4" : ""}`}
             aria-label={t("hero.languageFrAriaLabel")}
           >
             fr
@@ -64,7 +66,7 @@ export default function StudioNav() {
               setLocale("en");
               playLanguageSwitch();
             }}
-            className={`hover:text-white transition-colors ${locale === "en" ? "text-white underline decoration-2 underline-offset-4" : ""}`}
+            className={`hover:text-nav transition-colors ${locale === "en" ? "text-nav underline decoration-2 underline-offset-4" : ""}`}
             aria-label={t("hero.languageEnAriaLabel")}
           >
             en

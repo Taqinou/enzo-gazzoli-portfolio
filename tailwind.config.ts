@@ -16,6 +16,9 @@ export default {
         bg: "rgb(var(--bg-rgb) / <alpha-value>)",
         ink: "rgb(var(--ink-rgb) / <alpha-value>)",
         blue: "rgb(var(--blue-rgb) / <alpha-value>)",
+        // Couleur de la nav studio : blanc en mix-blend-difference, encre sur
+        // le ciel du hero (--nav-rgb, voir .studio-nav dans globals.css).
+        nav: "rgb(var(--nav-rgb) / <alpha-value>)",
         // Aile studio (dark-first) : fond quasi-noir, surface, filets et
         // déclinaison lisible du bleu signature pour le texte sur dark.
         "st-bg": "#050507",
