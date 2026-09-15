@@ -194,6 +194,137 @@ body.cursor-question,
   }
 }
 
+/* Hero « le titre dans le ciel » (StudioHero.tsx + useHeroScene.ts). Ici,
+   uniquement l'ouverture (un mouvement de caméra : on part dans les nuages,
+   on recule, on fait le point) et les dérives lentes. La parallaxe souris et
+   la sortie au scroll sont posées en JS sur des wrappers dédiés, pour ne
+   jamais se disputer la même propriété transform. L'état de base de chaque
+   élément est l'état final ; les keyframes décrivent le départ (fill both). */
+
+/* Tout attend le chargement du ciel : sans ça, la caméra reculerait sur du
+   vide (la page ne se monte qu'après hydratation, l'image part tard).
+   !important : BlurWords et Reveal redéclarent animation avec plus de
+   spécificité. Le délai des animations est suspendu lui aussi. */
+.studio-hero:not(.is-ready) * {
+  animation-play-state: paused !important;
+}
+
+.studio-hero-camera {
+  animation: studio-hero-camera 1.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes studio-hero-camera {
+  from {
+    transform: scale(1.28);
+  }
+}
+
+/* Copie floue du ciel : filtre statique, seule l'opacité est animée. Le
+   composant la fait déborder largement (-inset-[14%]) : le bord transparent
+   du flou reste hors cadre, sinon il se voit en haut et en bas. */
+.studio-hero-focus {
+  filter: blur(28px);
+  opacity: 0;
+  visibility: hidden;
+  animation: studio-hero-focus 1.3s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both;
+}
+
+@keyframes studio-hero-focus {
+  from {
+    opacity: 1;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* Surexposition du départ, dans les nuages. */
+.studio-hero-flash {
+  opacity: 0;
+  visibility: hidden;
+  animation: studio-hero-flash 1.1s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
+@keyframes studio-hero-flash {
+  from {
+    opacity: 0.85;
+    visibility: visible;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* La nappe se pose en montant pendant que la caméra recule. */
+.studio-hero-veil-rise {
+  animation: studio-hero-veil-rise 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+}
+
+@keyframes studio-hero-veil-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12%);
+  }
+}
+
+/* Dérive horizontale lente de la nappe (plus rapide que le ciel : elle est
+   plus proche). La piste fait 150 % de large, elle ne découvre aucun bord. */
+.studio-hero-veil-drift {
+  animation: studio-hero-veil-drift 80s ease-in-out infinite alternate;
+}
+
+@keyframes studio-hero-veil-drift {
+  to {
+    transform: translateX(-12%);
+  }
+}
+
+/* Haut de la nappe fondu sur une longue rampe adoucie : elle mord le titre
+   par des filaments, sans ligne de coupe visible. */
+.studio-hero-veil-mask {
+  --veil-fade: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(0 0 0 / 0.08) 14%,
+    rgb(0 0 0 / 0.3) 28%,
+    rgb(0 0 0 / 0.66) 44%,
+    #000 60%
+  );
+  -webkit-mask-image: var(--veil-fade);
+  mask-image: var(--veil-fade);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .studio-hero-camera,
+  .studio-hero-focus,
+  .studio-hero-flash,
+  .studio-hero-veil-rise,
+  .studio-hero-veil-drift {
+    animation: none !important;
+  }
+}
+
+/* Nav studio : blanc en mix-blend-difference partout, sauf tant que le ciel
+   du hero passe dessous, où la différence sortait en brun (#5F4737) : elle y
+   passe en encre. La bascule tombe quand le haut de l'écran est redevenu
+   crème, là où les deux rendus sont quasi identiques. */
+.studio-nav {
+  --nav-rgb: 255 255 255;
+}
+
+.studio-on-hero .studio-nav {
+  --nav-rgb: var(--ink-rgb);
+  mix-blend-mode: normal;
+}
+
+.studio-nav-instant .studio-nav,
+.studio-nav-instant .studio-nav * {
+  transition: none !important;
+}
+
 /* Marquee mono (bande défilante de labels) : le contenu est dupliqué dans
    le markup, la piste défile de -50% en boucle. */
 .studio-marquee {

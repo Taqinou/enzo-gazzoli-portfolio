@@ -18,7 +18,14 @@ Work is on branch **`feat/studio-home`** (not yet merged to `main`).
 The studio wing must keep Enzo's **existing design system** (Playfair Display lowercase, Helvetica-bold uppercase mono labels, `blue #0000ff`, `bg #f9f9f9`, hard shadows, crosshair, sound design) while raising execution to **"premium AI craft"** level — the references are cursor.com, devin.ai, sinewdesign.com, the-square.io (cinematic motion, atmospheric photographic backgrounds, depth, refined micro-interactions).
 
 - **Rejected directions** (do not reintroduce): plain reproduction of the DA (too flat), and generic modern-SaaS restyling (bento grids / pills / Inter-only → "on se croirait en 2022"). Every studio iteration must pass both tests: (1) is it in his tokens? (2) is it at Cursor/Devin staging level?
-- The home hero (`StudioHero.tsx`) is an **atmospheric hero**: full-bleed photographic sky (`public/images/studio/sky.jpg`, swappable — `sky-alt1/2.jpg` are alternates) with a slow drift, centered element, word-by-word blur reveal on the thesis. Iterate hero details section by section, proposing ideas before coding.
+- The home hero (`StudioHero.tsx` + `src/hooks/useHeroScene.ts`) is a **three-plane scene, "le titre dans le ciel"**: the photographic sky (`public/images/studio/sky.jpg`, swappable, `sky-alt1/2.jpg` are alternates), the big Playfair title, and a foreground cloud veil (`sky-veil.webp`) that passes in front of the letters. The veil is derived from the sky by `scripts/sky-veil.py`: **regenerate it whenever the sky is swapped**.
+  - Opening = one short camera move in CSS (`.studio-hero-*` in `globals.css`: pull-back, focus, overexposure, ~1.9 s), held until the sky has loaded (`.is-ready` pauses every hero animation, since the page only mounts after hydration). Enzo found a ~2.8 s opening too long.
+  - The scroll exit (camera rises into the clouds, title fades into the mist, whiteout) is driven by the native scroll event in `useHeroScene`, writing transforms on dedicated wrappers so they never fight the CSS animations. The hero is `170svh` with a sticky stage; the next section overlaps its end (`-mb-[16svh]`) so the offer arrives inside the white. Disabled under `prefers-reduced-motion`.
+  - **No mouse parallax**: Enzo tried it and rejected it ("quand on bouge le curseur tout bouge ça j'aime pas").
+  - No visible layer edges: the veil has a baked top fade + a long CSS mask ramp and only ever scales from its bottom edge (never translates up), and the blurred focus copy overflows the frame (`-inset-[14%]`).
+  - The hook toggles `html.studio-on-hero`: the nav (`--nav-rgb`, Tailwind color `nav`) is ink over the sky, because `mix-blend-difference` rendered it brown there.
+  - **CTAs stay as they are**: the ink pill + the frosted-glass pill (Inter, `playClick`). Enzo validated them against the pills ban below; hard-shadow rectangle buttons were tried and rejected ("horriblissime").
+  - Iterate hero details section by section, proposing ideas before coding. Enzo wants product-design thinking (staging, depth, motion), not copy proposals.
 
 ### ⚠️ CRITICAL: framer-motion is broken in this env
 
@@ -162,3 +169,26 @@ ExampleComponent.displayName = "ExampleComponent";
 
 export default ExampleComponent;
 ```
+
+## 💶 Offre & grille tarifaire (`/services`, `src/data/pricing.ts`)
+
+Refonte du 2026-08-26 (PR #1), après une étude de marché et de concurrence. Quatre offres, **planchers seuls, aucune fourchette haute** :
+
+| # | Offre | Plancher |
+|---|---|---|
+| 01 | Site vitrine et landing page | 1 200 € (Landing 1 200 · Vitrine 3 500) |
+| 02 | Application métier | 6 000 € |
+| 03 | Boutique en ligne | 7 000 € |
+| 04 | IA sur votre application | 1 500 € |
+
+**Retiré, et à ne pas réintroduire** : les intitulés `MVP` / `SaaS complet` / `Dashboard métier`, la formule « Portfolio créatif » (hors cible : entrepreneurs, artisans, PME), l'offre « Sur mesure », le système d'**options payantes unitaires** (auth 300 €, Stripe 250 €, SEO 150 €, Analytics 75 €… — il contredisait le forfait par valeur et invitait à négocier ligne par ligne), le bloc « Ce qui est inclus », les sous-titres sous les noms de formules, et les mentions « prix fixé avant le démarrage, hors taxes » et maintenance mensuelle.
+
+### ✍️ Règle d'écriture des textes visiteur (NON-NÉGOCIABLE, tout le site)
+
+Enzo rejette tout ce qui « sonne généré par IA ». Bannis : **le tiret cadratin**, « sur mesure », « MVP », « SaaS » comme intitulé commercial, « dashboard », « robuste », « ultra-rapide », « architecture solide », « performant », « moderne », « clé en main », « solutions », « qui vous ressemble », « pensé pour ». Interdits de forme : la construction « X, pas Y », la punchline courte en fin de paragraphe, la clause vide (« ça dépend du projet »), les emoji, les gloses entre parenthèses en rythme ternaire.
+
+**Le principe** : nommer des choses réelles plutôt que promettre des bénéfices. « catalogue, panier, paiement » ne peut pas sonner généré, « être visible en ligne » si. Une promesse doit être **vérifiable** : « rapide au chargement » se mesure, « développé de zéro » se constate, « performant » ne s'oppose à rien. Vaut pour le FR **et** l'EN.
+
+### État du simulateur de devis
+
+`useQuoteSimulator.ts` a été fortement réduit (les options ont disparu). `ProjectTypeCard.tsx` et `QuoteSummary.tsx` sont **morts mais compilent**, laissés en place. `OptionCategory.tsx` supprimé. `src/app/_pricing/page.tsx` (non routée, préfixe underscore) a été adaptée mécaniquement pour ne pas casser le typecheck — sa numérotation garde un « 01. » sans « 02. ».
