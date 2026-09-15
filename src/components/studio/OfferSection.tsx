@@ -2,162 +2,129 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import BlurWords from "@/components/studio/BlurWords";
-import Reveal from "@/components/studio/Reveal";
+import InView from "@/components/studio/offer/InView";
+import { OFFERS, num, useOfferCopy, OfferHeading, OfferCta } from "@/components/studio/offer/shared";
 import { useSound } from "@/hooks/useSound";
-import { useTranslation } from "@/hooks/useTranslation";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { projects, type ProjectType } from "@/data/pricing";
 
-const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
-
-// Index + volet détail : à gauche les 4 offres, à droite le volet qui se
-// défloute vers l'offre survolée (description Playfair, formules ou éléments
-// inclus tirés de pricing.ts, prix plancher). Numéro géant en filigrane, filet bleu qui glisse
-// sous la ligne active. DA raffinée.
+// Section offre « le viseur » (retenue le 15 sept. 2026 parmi trois refontes) : un seul écran. Les quatre offres occupent les
+// quatre quadrants d'un cadre, séparés par une croix — celle du crosshair de
+// la DA. Au survol d'un quadrant, la croix glisse vers lui : la cellule
+// regardée s'agrandit, les trois autres s'effacent, la description apparaît
+// dedans. C'est une mise au point, comme l'ouverture du hero. Aucun fond,
+// aucun arrondi : des filets seulement. À l'arrivée, la croix se dessine
+// depuis son centre et les titres sortent de la brume.
 export default function OfferSection() {
-  const { t } = useTranslation();
-  const { locale } = useLanguage();
+  const { title, desc, price, from } = useOfferCopy();
   const { playClick, playMechanicalClack } = useSound();
-
-  const [activeD, setActiveD] = useState(0);
-
-  const num = (i: number) => String(i + 1).padStart(2, "0");
-  const title = (type: ProjectType) => t(`services.offers.${type}.title`);
-  const desc = (type: ProjectType) => t(`services.offers.${type}.description`);
-  // Pastilles du volet : les formules de l'offre. Seule la 01 en propose
-  // depuis la refonte de la grille — pour les trois autres la rangée reste
-  // vide, le prix plancher passe seul à droite.
-  const formulas = (type: ProjectType) =>
-    projects[type].formulas.map((f) => (locale === "en" ? f.nameEn : f.name));
-  const priceLabel = (type: ProjectType) => {
-    const formatted = String(projects[type].fromPrice).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    return `${locale === "en" ? "from" : "à partir de"} ${formatted} €`;
-  };
-
-  const activeType = OFFERS[activeD];
+  // Sans survol : aucun point, les quatre cases au repos, nettes.
+  const [focus, setFocus] = useState<number | null>(null);
 
   return (
-    <section id="offer" className="relative text-ink px-6 md:px-20 pt-4 md:pt-6 pb-20 md:pb-32 overflow-hidden scroll-mt-20">
-      <Reveal>
-        <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-4">
-          {t("studio.offer.label")}
-        </p>
-        <h2 className="font-serif lowercase tracking-[-0.05em] leading-085 text-[11vw] md:text-[5vw] mb-4">
-          {t("studio.offer.heading")}
-        </h2>
-        <p className="font-serif italic text-lg md:text-xl text-ink/50 mb-14 md:mb-20 max-w-lg">
-          {t("studio.offer.lede")}
-        </p>
-      </Reveal>
+    <section id="offer" className="relative text-ink px-6 md:px-20 pt-4 md:pt-6 pb-20 md:pb-32 scroll-mt-20">
+      <OfferHeading />
 
-      <div className="grid grid-cols-1 md:grid-cols-[0.82fr_1.18fr] gap-10 md:gap-16 items-start">
-        {/* index */}
-        <div className="border-b border-ink/[0.12]">
-          {OFFERS.map((type, i) => (
+      <div
+        className="offer-viewfinder relative mt-12 md:mt-16 grid md:h-[78svh] md:min-h-[36rem]"
+        data-focus={focus ?? ""}
+        onMouseLeave={() => setFocus(null)}
+      >
+        {/* cadre : filets haut et bas */}
+        <InView className="studio-rule absolute top-0 left-0 right-0 h-px bg-ink/[0.14]" />
+        <InView className="studio-rule absolute bottom-0 left-0 right-0 h-px bg-ink/[0.14]" delay={0.1} />
+
+        {/* la croix : deux lignes qui suivent --cx / --cy et se dessinent du centre */}
+        <InView className="offer-viewfinder-lines pointer-events-none absolute inset-0 hidden md:block">
+          <span
+            aria-hidden="true"
+            className="offer-viewfinder-center absolute top-0 bottom-0 w-px bg-ink/[0.14]"
+            style={{ top: 0, transform: "scaleY(var(--draw))" }}
+          />
+          <span
+            aria-hidden="true"
+            className="offer-viewfinder-center absolute left-0 right-0 h-px bg-ink/[0.14]"
+            style={{ left: 0, transform: "scaleX(var(--draw))" }}
+          />
+        </InView>
+
+        {OFFERS.map((type, i) => {
+          const on = focus === i;
+          const dim = focus !== null && !on;
+          return (
             <Link
               key={type}
               href="/services"
               onMouseEnter={() => {
-                setActiveD(i);
-                playMechanicalClack(200, 0.12);
+                if (focus !== i) playMechanicalClack(200, 0.12);
+                setFocus(i);
               }}
-              onFocus={() => setActiveD(i)}
+              onFocus={() => setFocus(i)}
               onClick={() => playClick()}
-              className="group relative flex items-baseline gap-4 border-t border-ink/[0.12] py-4 md:py-5"
+              className={`relative flex flex-col p-5 md:p-7 min-h-[40svh] md:min-h-0 overflow-hidden border-b border-ink/[0.14] md:border-0 ${
+                i === 3 ? "border-b-0" : ""
+              }`}
             >
-              <span
-                className={`font-mono text-[11px] font-bold tabular-nums transition-colors duration-300 ${
-                  activeD === i ? "text-blue" : "text-ink/40"
-                }`}
-              >
-                {num(i)}
-              </span>
-              <span
-                className={`font-serif lowercase tracking-[-0.03em] text-[7vw] md:text-[2.3vw] leading-tight transition-all duration-300 ease-out-expo ${
-                  activeD === i ? "text-ink italic md:translate-x-1.5" : "text-ink/40"
-                }`}
-              >
-                {title(type)}
-              </span>
+              {/* la brume revient là où on regarde */}
               <span
                 aria-hidden="true"
-                className={`absolute -bottom-px left-0 h-px bg-blue transition-all duration-500 ease-out-expo ${
-                  activeD === i ? "w-full" : "w-0"
-                }`}
+                className={`offer-viewfinder-haze pointer-events-none absolute inset-0 ${on ? "on" : ""}`}
               />
-            </Link>
-          ))}
-        </div>
-
-        {/* volet détail */}
-        <Link
-          href="/services"
-          onClick={() => playClick()}
-          className="group block md:min-h-[20rem] md:sticky md:top-28"
-        >
-          {/* key={activeD} → remonte le bloc à chaque offre : la description se
-              re-défloute mot à mot. min-h fige la hauteur (≈ colonne de gauche)
-              pour que la section ne bouge plus au survol. */}
-          <div key={activeD} className="relative">
-            {/* numéro géant en filigrane (5 % via opacité d'élément) */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute -top-8 right-0 md:-top-12 font-mono font-black text-ink text-[8rem] md:text-[13rem] leading-none tracking-[-0.05em] select-none"
-              style={{ opacity: 0.05 }}
-            >
-              {num(activeD)}
-            </span>
-
-            <p className="relative font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-blue mb-5">
-              {num(activeD)} — {title(activeType)}
-            </p>
-            <p className="relative font-serif italic text-[7vw] md:text-[2.7vw] leading-[1.06] text-ink">
-              <BlurWords text={desc(activeType)} step={0.03} />
-            </p>
-
-            <div className="relative mt-10 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex flex-wrap gap-2">
-                {formulas(activeType).map((name) => (
-                  <span
-                    key={name}
-                    className="font-mono text-[10px] uppercase tracking-[0.1em] text-ink/55 border border-ink/15 rounded-full px-3 py-1.5"
-                  >
-                    {name}
-                  </span>
-                ))}
-              </div>
-              <p className="inline-flex items-center gap-3 font-mono text-xs uppercase tracking-[0.12em] text-ink/70">
-                {priceLabel(activeType)}
-                <span
-                  aria-hidden="true"
-                  className="font-serif text-xl text-blue transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
+              <InView className="studio-mist relative flex flex-col h-full" delay={0.35 + i * 0.12}>
+                <div
+                  className={`flex flex-col h-full transition-[filter,opacity] duration-[900ms] ease-out-expo ${
+                    dim ? "md:blur-[3px] md:opacity-70" : "blur-0 opacity-100"
+                  }`}
                 >
-                  →
-                </span>
-              </p>
-            </div>
-          </div>
-        </Link>
+                <div className="flex items-baseline justify-between">
+                  <span
+                    className={`font-mono text-[11px] font-bold tabular-nums transition-colors duration-500 ${
+                      on ? "text-blue" : dim ? "text-ink/25" : "text-ink/40"
+                    }`}
+                  >
+                    {num(i)}
+                  </span>
+                  <span
+                    className={`font-mono text-[10px] md:text-[11px] uppercase tracking-[0.14em] transition-colors duration-500 ${
+                      on ? "text-ink" : dim ? "text-ink/25" : "text-ink/45"
+                    }`}
+                  >
+                    {from} {price(type)}
+                  </span>
+                </div>
+
+                <div className="mt-auto pt-8">
+                  {/* La taille suit la mise au point par transform (pas de
+                      font-size) et la boîte du titre a une largeur fixe en vw :
+                      les retours à la ligne ne bougent jamais pendant que les
+                      cases se redimensionnent, donc aucun reflow. */}
+                  <h3
+                    className={`font-serif tracking-[-0.04em] leading-[0.95] text-[9vw] md:text-[4.6vw] md:w-[40vw] origin-bottom-left will-change-transform transition-[transform,color] duration-[900ms] ease-out-expo ${
+                      on
+                        ? "italic text-ink md:scale-[1.15]"
+                        : dim
+                          ? "text-ink/55 md:scale-[0.6]"
+                          : "text-ink md:scale-100"
+                    }`}
+                  >
+                    {title(type)}
+                  </h3>
+                  <p
+                    className={`font-serif italic mt-4 md:mt-5 text-[4.4vw] md:text-[1.25vw] leading-[1.25] text-ink/70 max-w-xl transition-all duration-700 ease-out-expo ${
+                      on ? "md:opacity-100 md:blur-0 md:delay-200" : "md:opacity-0 md:blur-sm md:delay-0"
+                    }`}
+                  >
+                    {desc(type)}
+                  </p>
+                </div>
+                </div>
+              </InView>
+            </Link>
+          );
+        })}
       </div>
 
-      <Reveal delay={0.15}>
-        <div className="mt-14 md:mt-20">
-          <Link
-            href="/services"
-            onClick={() => playClick()}
-            className="group inline-flex items-center gap-2.5 rounded-full bg-ink text-white font-mn-sans text-[15px] font-medium px-8 py-4 shadow-[0_10px_30px_-10px_rgba(5,5,20,0.5)] hover:bg-blue transition-colors duration-300"
-          >
-            {t("studio.offer.cta")}
-            <span
-              aria-hidden="true"
-              className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
-            >
-              →
-            </span>
-          </Link>
-        </div>
-      </Reveal>
+      <InView className="studio-mist mt-14 md:mt-20" delay={0.3}>
+        <OfferCta />
+      </InView>
     </section>
   );
 }

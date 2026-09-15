@@ -307,7 +307,7 @@ body.cursor-question,
   }
 }
 
-/* ===== Section offre : variantes de refonte (studio/offer/*) =====
+/* ===== Section offre « le viseur » (studio/OfferSection.tsx) =====
    Sortie de brume : plus profonde que .studio-reveal (flou 18px, léger
    zoom), pour prolonger la sortie du hero dans les nuages. La classe .in
    est posée par IntersectionObserver (composant Mist). */
@@ -348,22 +348,6 @@ body.cursor-question,
   to {
     transform: scaleX(1);
   }
-}
-
-/* A « le sommaire » : tiroir sous la ligne active (grid-template-rows 0fr→1fr) */
-.offer-drawer {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.offer-drawer.open {
-  grid-template-rows: 1fr;
-}
-
-.offer-drawer > div {
-  min-height: 0;
-  overflow: hidden;
 }
 
 /* B « le viseur » : la croix (bords des cellules) glisse vers la cellule
@@ -467,7 +451,6 @@ body.cursor-question,
     transform: none;
     --draw: 1;
   }
-  .offer-drawer,
   .offer-viewfinder,
   .offer-viewfinder-center,
   .offer-viewfinder-haze {
