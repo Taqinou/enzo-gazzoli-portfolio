@@ -38,7 +38,7 @@ export default function OfferSection() {
   const activeType = OFFERS[activeD];
 
   return (
-    <section id="offer" className="relative bg-bg text-ink px-6 md:px-20 py-20 md:py-32 overflow-hidden scroll-mt-20">
+    <section id="offer" className="relative text-ink px-6 md:px-20 pt-4 md:pt-6 pb-20 md:pb-32 overflow-hidden scroll-mt-20">
       <Reveal>
         <p className="font-mono text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-blue mb-4">
           {t("studio.offer.label")}

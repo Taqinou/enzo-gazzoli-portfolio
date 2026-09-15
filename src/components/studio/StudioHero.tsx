@@ -69,7 +69,7 @@ export default function StudioHero() {
     <section
       id="top"
       ref={sectionRef}
-      className={`studio-hero relative w-full bg-bg text-ink h-svh motion-safe:h-[170svh] motion-safe:-mb-[16svh] ${
+      className={`studio-hero relative w-full bg-bg text-ink h-svh motion-safe:h-[130svh] motion-safe:-mb-[24svh] ${
         ready ? "is-ready" : ""
       }`}
     >

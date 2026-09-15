@@ -57,7 +57,7 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
       const vh = window.innerHeight;
       const range = rect.height - vh;
       const p = range > 0 ? clamp01(-rect.top / range) : 0;
-      const white = span(p, 0.35, 0.78);
+      const white = span(p, 0.2, 0.55);
 
       // Le bas du hero est crème : le ciel ne passe plus sous la nav une fois
       // qu'il reste moins de ~14 % de hero à l'écran, ou que l'écran a blanchi.
@@ -66,7 +66,7 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
       lastProgress = p;
 
       const rise = span(p, 0, 1);
-      const fade = span(p, 0.08, 0.6);
+      const fade = span(p, 0.04, 0.45);
       const ctaFade = span(p, 0, 0.22);
 
       if (sky.current) {
