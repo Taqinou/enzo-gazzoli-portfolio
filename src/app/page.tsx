@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SmoothScroll from "@/components/studio/SmoothScroll";
 import StudioNav from "@/components/studio/StudioNav";
 import StudioHero from "@/components/studio/StudioHero";
-import OfferSection from "@/components/studio/OfferSection";
+import OfferSwitch from "@/components/studio/offer/OfferSwitch";
 import CaseStudiesSection from "@/components/studio/CaseStudiesSection";
 import MethodSection from "@/components/studio/MethodSection";
 import ProofSection from "@/components/studio/ProofSection";
@@ -37,7 +37,7 @@ export default function StudioHome() {
 
         <main>
           <StudioHero />
-          <OfferSection />
+          <OfferSwitch />
           <CaseStudiesSection />
           <MethodSection />
           <ProofSection />
