@@ -38,6 +38,10 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let lastProgress = -1;
+    // Téléphone : pose plus courte (cf. StudioHero), ni flou animé ni gros
+    // zoom du ciel, trop lourds pour un mobile et qui saccadaient.
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    let mobile = mobileQuery.matches;
     let navOnHero: boolean | null = null;
 
     const setNavOnHero = (value: boolean) => {
@@ -61,7 +65,7 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
       // depuis le pli) arrive sous la nav : le ciel reste derrière lui pendant
       // toute sa montée. Fini plus tôt, il laissait un écran blanc vide
       // au-dessus de l'offre.
-      const white = span(p, 0.45, 1);
+      const white = mobile ? span(p, 0.3, 1) : span(p, 0.45, 1);
 
       // Le bas du hero est crème : le ciel ne passe plus sous la nav une fois
       // qu'il reste moins de ~14 % de hero à l'écran, ou que l'écran a blanchi.
@@ -71,20 +75,23 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
 
       const rise = span(p, 0, 1);
       // Le titre se dissout pendant que celui de l'offre entre par le bas.
-      const fade = span(p, 0.011, 0.19);
-      const ctaFade = span(p, 0, 0.08);
+      // Distances en hauteurs d'écran scrollées, identiques quelle que soit la
+      // longueur de la pose (desktop ou mobile).
+      const scrolled = -rect.top / vh;
+      const fade = span(scrolled, 0.01, 0.17);
+      const ctaFade = span(scrolled, 0, 0.07);
 
       if (sky.current) {
-        sky.current.style.transform = `translate3d(0, ${rise * vh * 0.04}px, 0) scale(${
-          1 + rise * 0.28
-        })`;
+        sky.current.style.transform = mobile
+          ? `scale(${1 + rise * 0.08})`
+          : `translate3d(0, ${rise * vh * 0.04}px, 0) scale(${1 + rise * 0.28})`;
       }
       if (title.current) {
         title.current.style.transform = `translate3d(0, ${-fade * vh * 0.06}px, 0) scale(${
           1 - fade * 0.08
         })`;
         title.current.style.opacity = String(1 - fade);
-        title.current.style.filter = fade > 0 ? `blur(${fade * 10}px)` : "none";
+        title.current.style.filter = !mobile && fade > 0 ? `blur(${fade * 10}px)` : "none";
       }
       if (cta.current) {
         cta.current.style.transform = `translate3d(0, ${-ctaFade * 24}px, 0)`;
@@ -94,7 +101,7 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
       if (veil.current) {
         // Agrandie depuis son bord bas (origin-bottom), jamais translatée : la
         // nappe monte sur l'écran sans découvrir son bord inférieur.
-        veil.current.style.transform = `scale(${1 + rise * 0.55})`;
+        veil.current.style.transform = `scale(${1 + rise * (mobile ? 0.2 : 0.55)})`;
       }
       if (whiteout.current) {
         whiteout.current.style.opacity = String(white);
@@ -102,6 +109,7 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
     };
 
     const onResize = () => {
+      mobile = mobileQuery.matches;
       lastProgress = -1;
       render();
     };

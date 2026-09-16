@@ -114,22 +114,24 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
         </nav>
 
         {/* Hero immersif */}
-        <header className="relative flex min-h-[82vh] items-end overflow-hidden">
+        <header className="relative flex flex-col md:flex-row md:min-h-[82svh] md:items-end overflow-hidden">
           {/* média (image + voile) : raccord exact avec la copie du zoom de la
-              home (lib/workZoom.ts), cadre plein largeur × 82vh */}
-          <div className="absolute inset-0 overflow-hidden">
+              home (lib/workZoom.ts). Desktop : plein largeur × 82svh, titre
+              posé dessus. Téléphone : l'image à son ratio (aucun recadrage
+              portrait), titre en dessous. */}
+          <div className="relative w-full aspect-[2400/1463] md:absolute md:inset-0 md:aspect-auto overflow-hidden">
             <div className="absolute inset-0">{visual()}</div>
             {/* voile crème bas pour poser le titre en ink */}
             <div
               ref={veilRef}
               aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(247,246,245,0.25)_0%,rgba(247,246,245,0)_28%,rgba(247,246,245,0)_45%,rgba(247,246,245,0.75)_74%,rgb(247,246,245)_97%)]"
+              className="hidden md:block absolute inset-0 bg-[linear-gradient(to_bottom,rgba(247,246,245,0.25)_0%,rgba(247,246,245,0)_28%,rgba(247,246,245,0)_45%,rgba(247,246,245,0.75)_74%,rgb(247,246,245)_97%)]"
             />
           </div>
           {/* Le texte : présent en visite directe, en fondu doux après le zoom
               (textVisible). */}
           <div
-            className="relative z-10 w-full px-6 md:px-20 pb-12 md:pb-16"
+            className="relative z-10 w-full px-6 md:px-20 pt-8 md:pt-0 pb-10 md:pb-16"
             style={{ opacity: textVisible ? 1 : 0, transition: "opacity .08s linear" }}
           >
             <h1 className="font-serif lowercase tracking-[-0.05em] leading-[0.9] text-[14vw] md:text-[min(8vw,7rem)]">

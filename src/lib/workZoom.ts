@@ -2,7 +2,8 @@
 //
 // Au clic, une copie exacte de la vignette (même fichier, même recadrage
 // object-cover, pixels nets) est posée en position fixe par-dessus la page et
-// s'agrandit jusqu'au cadre exact du hero de /work (toute la largeur, 82vh),
+// s'agrandit jusqu'au cadre exact du hero de /work (toute la largeur × 82svh,
+// ou l'image à son ratio sur téléphone),
 // pendant que l'image s'approche (scale → HERO_ZOOM) et que la page s'efface
 // sous un papier crème. On navigue pendant le zoom : /work monte son hero à
 // l'identique sous la copie (même image, même cadre, même zoom), puis retire la copie une
@@ -11,8 +12,10 @@
 // La couche vit dans document.body, hors de l'arbre React : elle survit au
 // changement de route. Variable de module : même contexte JS en navigation SPA.
 
-/** Hauteur du hero de /work (header min-h-[82vh] dans CaseStudyContent). */
+/** Hauteur du hero de /work sur desktop (md:min-h-[82svh] dans CaseStudyContent). */
 export const HERO_HEIGHT_VH = 82;
+/** Ratio des visuels (2400×1463) : hauteur du hero sur téléphone (aspect-[2400/1463]). */
+const SHOT_RATIO = 1463 / 2400;
 /** Zoom de l'image du hero de /work (scale-[1.08] dans CaseStudyContent). */
 export const HERO_ZOOM = 1.08;
 const DURATION = 700;
@@ -53,11 +56,14 @@ export function zoomIntoWork(frame: HTMLElement, img: HTMLImageElement, slug: st
 
   requestAnimationFrame(() => {
     paper.style.opacity = "1";
+    // même cadre que le hero de /work : image à son ratio sur téléphone,
+    // 82svh sur desktop (innerHeight = hauteur visible, barres comprises)
+    const phone = window.matchMedia("(max-width: 767px)").matches;
     Object.assign(box.style, {
       top: "0px",
       left: "0px",
       width: `${window.innerWidth}px`,
-      height: `${(window.innerHeight * HERO_HEIGHT_VH) / 100}px`,
+      height: `${phone ? window.innerWidth * SHOT_RATIO : (window.innerHeight * HERO_HEIGHT_VH) / 100}px`,
     });
     copy.style.transform = `scale(${HERO_ZOOM})`;
   });
