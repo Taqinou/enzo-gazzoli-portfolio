@@ -33,7 +33,7 @@ export function zoomIntoWork(frame: HTMLElement, img: HTMLImageElement, slug: st
   const r = frame.getBoundingClientRect();
 
   const layer = document.createElement("div");
-  // sous le grain global (z-200) des deux pages, au-dessus de tout le reste
+  // au-dessus de toute la page (nav z-50 comprise)
   layer.style.cssText = "position:fixed;inset:0;z-index:190;pointer-events:none;";
 
   const paper = document.createElement("div");

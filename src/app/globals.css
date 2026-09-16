@@ -579,7 +579,9 @@ body.cursor-question,
 
 /* Brume derrière la cellule regardée : le ciel du hero, flou, en fondu radial */
 .offer-viewfinder-haze {
-  background-image: url("/images/studio/sky-painting.jpg");
+  /* petite version du ciel (640 px, déjà adoucie) : floutée à 36 px, elle
+     suffit, et évite de charger les 775 Ko de la peinture pour un survol */
+  background-image: url("/images/studio/sky-haze.webp");
   background-size: cover;
   background-position: center 40%;
   filter: blur(36px) saturate(0.85);

@@ -71,8 +71,9 @@ export default function DitherWave({ className = "" }: { className?: string }) {
     };
 
     const loop = (now: number) => {
+      if (!visible) return;
       raf = requestAnimationFrame(loop);
-      if (!visible || now - last < 1000 / FPS) return;
+      if (now - last < 1000 / FPS) return;
       last = now;
       draw(now / 1000);
     };
@@ -86,11 +87,14 @@ export default function DitherWave({ className = "" }: { className?: string }) {
     });
     sizeObserver.observe(canvas);
 
+    // animation seulement à l'écran : aucune image calculée hors champ
     const observer = new IntersectionObserver(([entry]) => {
+      const was = visible;
       visible = entry.isIntersecting;
+      if (visible && !was && !reduce) raf = requestAnimationFrame(loop);
+      if (!visible) cancelAnimationFrame(raf);
     });
     observer.observe(canvas);
-    if (!reduce) raf = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(raf);

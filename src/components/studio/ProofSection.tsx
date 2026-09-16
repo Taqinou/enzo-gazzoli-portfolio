@@ -57,8 +57,9 @@ export default function ProofSection() {
         const head = read * (words.length + 2);
         words.forEach((w, j) => {
           const wp = clamp01(head - j);
+          // flou seul, sans opacité réduite (comme la méthode) : le texte garde
+          // son contraste
           w.style.filter = wp >= 1 ? "none" : `blur(${((1 - wp) * 8).toFixed(2)}px)`;
-          w.style.opacity = (0.15 + wp * 0.85).toFixed(3);
         });
       }
 

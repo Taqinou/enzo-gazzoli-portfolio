@@ -77,10 +77,29 @@ export default function MethodSection() {
           }
         }
       }
-      rafId = requestAnimationFrame(loop);
+      if (running) rafId = requestAnimationFrame(loop);
     };
-    rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
+    // la boucle ne tourne que lorsque la section est à l'écran ou tout près
+    // (sinon elle occupait le fil principal en permanence)
+    let running = false;
+    const visibility = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !running) {
+          running = true;
+          rafId = requestAnimationFrame(loop);
+        } else if (!entry.isIntersecting && running) {
+          running = false;
+          cancelAnimationFrame(rafId);
+        }
+      },
+      { rootMargin: "50% 0px" }
+    );
+    if (sectionRef.current) visibility.observe(sectionRef.current);
+    return () => {
+      running = false;
+      cancelAnimationFrame(rafId);
+      visibility.disconnect();
+    };
   }, [playScrollTick]);
 
   const heading = (

@@ -362,7 +362,6 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <div className="fixed inset-0 pointer-events-none z-[200] opacity-[0.03] grayscale contrast-150 mix-blend-multiply bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
     </div>
   );
 }
