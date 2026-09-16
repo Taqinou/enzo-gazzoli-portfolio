@@ -47,6 +47,7 @@ interface Figure {
 
 const FIGURES: Record<ProjectType, Figure> = {
   // 01 : une page debout ; au survol, ses sections se détachent vers l'avant.
+  // Grande face de profil : trame allégée (data-tone), sinon trop dense.
   website: {
     viewBox: "46.54 10.5 110.39 161",
     ratio: "110.39 / 161",
@@ -54,23 +55,23 @@ const FIGURES: Record<ProjectType, Figure> = {
     shape: (
       <>
         <g>
-          <polygon className="fig-face" points="48.04,110 151.96,170 151.96,74 48.04,14" />
+          <polygon className="fig-face" data-tone="3" points="48.04,110 151.96,170 151.96,74 48.04,14" />
           <polygon className="fig-face" points="155.43,168 151.96,170 151.96,74 155.43,72" />
           <polygon className="fig-face" points="51.5,12 155.43,72 151.96,74 48.04,14" />
         </g>
         <g data-move="" style={{ "--tx": "-5.2px", "--ty": "3px", "--d": "0ms" } as React.CSSProperties}>
-          <polygon className="fig-face" points="53.23,23 146.77,77 146.77,83 53.23,29" />
+          <polygon className="fig-face" data-tone="4" points="53.23,23 146.77,77 146.77,83 53.23,29" />
         </g>
         <g data-move="" style={{ "--tx": "-15.59px", "--ty": "9px", "--d": "60ms" } as React.CSSProperties}>
           <polygon className="fig-blue" points="53.23,35 146.77,89 146.77,117 53.23,63" />
         </g>
         <g data-move="" style={{ "--tx": "-8.66px", "--ty": "5px", "--d": "120ms" } as React.CSSProperties}>
-          <polygon className="fig-face" points="53.23,70 112.12,104 112.12,109 53.23,75" />
-          <polygon className="fig-face" points="53.23,78 125.98,120 125.98,125 53.23,83" />
+          <polygon className="fig-face" data-tone="4" points="53.23,70 112.12,104 112.12,109 53.23,75" />
+          <polygon className="fig-face" data-tone="4" points="53.23,78 125.98,120 125.98,125 53.23,83" />
         </g>
         <g data-move="" style={{ "--tx": "-12.12px", "--ty": "7px", "--d": "180ms" } as React.CSSProperties}>
-          <polygon className="fig-face" points="53.23,91 98.27,117 98.27,131 53.23,105" />
-          <polygon className="fig-face" points="101.73,119 146.77,145 146.77,159 101.73,133" />
+          <polygon className="fig-face" data-tone="4" points="53.23,91 98.27,117 98.27,131 53.23,105" />
+          <polygon className="fig-face" data-tone="4" points="101.73,119 146.77,145 146.77,159 101.73,133" />
         </g>
       </>
     ),

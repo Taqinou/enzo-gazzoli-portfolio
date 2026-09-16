@@ -132,7 +132,10 @@ export default function PixelSvg({ viewBox, className = "", svgClassName = "", s
       }
       const chain: Element[] = [];
       for (let p: Element | null = el; p && p !== svg; p = p.parentElement) chain.push(p);
-      shapes.push({ el, pts, closed, chain, css: getComputedStyle(el), face: closed ? faceTone(pts) : 0 });
+      // data-tone (en seizièmes) : trame imposée à une face, à la place de son orientation
+      const tone = el.getAttribute("data-tone");
+      const face = !closed ? 0 : tone ? Number(tone) / 16 : faceTone(pts);
+      shapes.push({ el, pts, closed, chain, css: getComputedStyle(el), face });
     });
 
     const colors = new Map<string, number[] | null>();
