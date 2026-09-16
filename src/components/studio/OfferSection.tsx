@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import InView from "@/components/studio/offer/InView";
-import { OFFERS, num, useOfferCopy, OfferHeading, OfferCta } from "@/components/studio/offer/shared";
+import OfferFigure from "@/components/studio/offer/OfferFigure";
+import { OFFERS, useOfferCopy, OfferHeading } from "@/components/studio/offer/shared";
 import { useSound } from "@/hooks/useSound";
 
 // Section offre « le viseur » (retenue le 15 sept. 2026 parmi trois refontes) : un seul écran. Les quatre offres occupent les
@@ -70,18 +71,17 @@ export default function OfferSection() {
               />
               <InView className="studio-mist relative flex flex-col h-full" delay={0.35 + i * 0.12}>
                 <div
-                  className={`flex flex-col h-full transition-[filter,opacity] duration-[900ms] ease-out-expo ${
+                  className={`relative flex flex-col h-full transition-[filter,opacity] duration-[900ms] ease-out-expo ${
                     dim ? "md:blur-[3px] md:opacity-70" : "blur-0 opacity-100"
                   }`}
                 >
-                <div className="flex items-baseline justify-between">
-                  <span
-                    className={`font-mono text-[11px] font-bold tabular-nums transition-colors duration-500 ${
-                      on ? "text-blue" : dim ? "text-ink/25" : "text-ink/40"
-                    }`}
-                  >
-                    {num(i)}
-                  </span>
+                {/* la figure de l'offre, en filigrane : grande, au centre de la
+                    case, derrière le titre, à demi transparente au repos comme
+                    au survol (elle ne concurrence jamais le texte) */}
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-50">
+                  <OfferFigure type={type} on={on} dim={dim} />
+                </div>
+                <div className="relative flex items-baseline justify-end">
                   <span
                     className={`font-mono text-[10px] md:text-[11px] uppercase tracking-[0.14em] transition-colors duration-500 ${
                       on ? "text-ink" : dim ? "text-ink/25" : "text-ink/45"
@@ -91,7 +91,7 @@ export default function OfferSection() {
                   </span>
                 </div>
 
-                <div className="mt-auto pt-8">
+                <div className="relative mt-auto">
                   {/* La taille suit la mise au point par transform (pas de
                       font-size) et la boîte du titre a une largeur fixe en vw :
                       les retours à la ligne ne bougent jamais pendant que les
@@ -107,13 +107,23 @@ export default function OfferSection() {
                   >
                     {title(type)}
                   </h3>
-                  <p
-                    className={`font-serif italic mt-4 md:mt-5 text-[4.4vw] md:text-[1.25vw] leading-[1.25] text-ink/70 max-w-xl transition-all duration-700 ease-out-expo ${
-                      on ? "md:opacity-100 md:blur-0 md:delay-200" : "md:opacity-0 md:blur-sm md:delay-0"
+                  {/* au repos la description ne réserve aucune place (le titre
+                      reste en bas de case) ; elle se déplie au survol */}
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-700 ease-out-expo ${
+                      on ? "md:grid-rows-[1fr]" : "md:grid-rows-[0fr]"
                     }`}
                   >
-                    {desc(type)}
-                  </p>
+                    <div className="min-h-0 overflow-hidden">
+                      <p
+                        className={`font-serif italic mt-4 md:mt-5 text-[4.4vw] md:text-[1.25vw] leading-[1.25] text-ink/70 max-w-xl transition-all duration-700 ease-out-expo ${
+                          on ? "md:opacity-100 md:blur-0 md:delay-200" : "md:opacity-0 md:blur-sm md:delay-0"
+                        }`}
+                      >
+                        {desc(type)}
+                      </p>
+                    </div>
+                  </div>
                 </div>
                 </div>
               </InView>
@@ -121,10 +131,6 @@ export default function OfferSection() {
           );
         })}
       </div>
-
-      <InView className="studio-mist mt-14 md:mt-20" delay={0.3}>
-        <OfferCta />
-      </InView>
     </section>
   );
 }

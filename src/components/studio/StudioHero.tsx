@@ -2,11 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import BlurWords from "@/components/studio/BlurWords";
+import HeroPill from "@/components/studio/HeroPill";
 import Reveal from "@/components/studio/Reveal";
 import { useHeroScene } from "@/hooks/useHeroScene";
-import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 
 // Délai max avant de lancer l'ouverture si le ciel tarde à charger (ms).
@@ -14,18 +13,22 @@ const READY_FALLBACK_MS = 1500;
 // Début de la vague de mots : la caméra a presque fini de reculer (s).
 const WORDS_DELAY = 0.55;
 const WORD_STEP = 0.07;
+// Tuiles de la nappe qui défile : la nappe, son miroir, la nappe (raccords
+// invisibles, boucle sans saut).
+const VEIL_TILES = [false, true, false];
 
 // Hero « le titre dans le ciel ». Trois plans : le ciel au fond, le titre, puis
-// une nappe de nuages détourée de la même photo (sky-veil.webp, voir
+// une nappe de nuages détourée de la même image (sky-veil-painting.webp, voir
 // scripts/sky-veil.py) qui passe devant les lettres. Ouverture en un seul
 // mouvement de caméra : on part dans les nuages, la caméra recule et fait le
 // point, le titre se dégage à la fin. Sortie liée au scroll : la caméra monte
-// dans les nuages, l'écran blanchit et l'offre arrive dans ce blanc (la
-// section suivante chevauche la fin du hero, cf. -mb). Sortie au scroll :
+// dans les nuages, l'écran blanchit et l'offre monte à travers la brume : la
+// section suivante démarre juste sous le pli (hauteur − chevauchement ≈ 100svh)
+// et chevauche tout le temps de pose, le blanc ne s'achève qu'une fois son
+// titre à mi-écran, jamais d'écran vide. Sortie au scroll :
 // useHeroScene ; ouverture et dérives : .studio-hero-* dans globals.css.
 export default function StudioHero() {
   const { t } = useTranslation();
-  const { playClick } = useSound();
 
   const sectionRef = useRef<HTMLElement>(null);
   const skyRef = useRef<HTMLDivElement>(null);
@@ -69,7 +72,7 @@ export default function StudioHero() {
     <section
       id="top"
       ref={sectionRef}
-      className={`studio-hero relative w-full bg-bg text-ink h-svh motion-safe:h-[130svh] motion-safe:-mb-[24svh] ${
+      className={`studio-hero relative w-full bg-bg text-ink h-svh motion-safe:h-[192svh] motion-safe:-mb-[90svh] ${
         ready ? "is-ready" : ""
       }`}
     >
@@ -77,23 +80,33 @@ export default function StudioHero() {
         {/* ——— Plan 1 : le ciel ——— */}
         <div ref={skyRef} aria-hidden="true" className="absolute -inset-[4%] will-change-transform">
           <div className="studio-hero-camera absolute inset-0">
-            <div className="studio-sky-drift absolute inset-0">
-              <Image
-                ref={skyImgRef}
-                src="/images/studio/sky.jpg"
-                alt=""
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-                onLoad={() => setReady(true)}
-              />
+            <div className="studio-sky-drift absolute inset-0 overflow-hidden">
+              {/* le ciel défile vers la gauche sans fin : trois tuiles de
+                  sky-painting-loop.jpg (raccordée à elle-même, scripts/sky-loop.py),
+                  décalées d'une tuile par boucle */}
+              <div className="studio-sky-loop">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className="studio-sky-tile">
+                    <Image
+                      ref={i === 0 ? skyImgRef : undefined}
+                      src="/images/studio/sky-painting-loop.jpg"
+                      alt=""
+                      fill
+                      priority={i === 0}
+                      loading="eager"
+                      sizes="115vw"
+                      className="object-cover"
+                      onLoad={i === 0 ? () => setReady(true) : undefined}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             {/* Mise au point : copie floue du ciel qui s'efface pendant le recul.
                 Débord large : le bord transparent du flou reste hors cadre. */}
             <div className="studio-hero-focus absolute -inset-[14%]">
               <Image
-                src="/images/studio/sky.jpg"
+                src="/images/studio/sky-painting.jpg"
                 alt=""
                 fill
                 loading="eager"
@@ -103,16 +116,18 @@ export default function StudioHero() {
             </div>
           </div>
         </div>
-        {/* Intégration : fondu crème en haut (nav) et longue transition en
-            bas jusqu'au crème opaque */}
+        {/* Intégration : léger voile crème en bas seulement (Enzo a fait
+            retirer la brume du haut). Le bas n'a pas besoin d'aller jusqu'au
+            crème opaque : à la sortie, l'écran a blanchi avant que le bord du
+            hero ne remonte. */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(249,249,249,0.55)_0%,rgba(249,249,249,0)_22%,rgba(249,249,249,0)_52%,rgba(249,249,249,0.45)_72%,rgba(249,249,249,0.85)_86%,rgb(249,249,249)_97%)]"
+          className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(247,246,245,0)_66%,rgba(247,246,245,0.3)_84%,rgba(247,246,245,0.6)_100%)]"
         />
         {/* Voile radial doux derrière le titre (lisibilité) */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 bg-[radial-gradient(ellipse_52%_36%_at_50%_46%,rgba(249,249,249,0.4),transparent_70%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_52%_36%_at_50%_46%,rgba(247,246,245,0.4),transparent_70%)]"
         />
 
         {/* ——— Plan 2 : le titre. Colonne sans z-index : le titre (z-10) passe
@@ -133,26 +148,8 @@ export default function StudioHero() {
           <div ref={ctaRef} className="relative z-30 mt-10 md:mt-12">
             <Reveal delay={ctaDelay}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-5">
-                <Link
-                  href="/services"
-                  onClick={() => playClick()}
-                  className="group inline-flex items-center gap-2.5 rounded-full bg-ink text-white font-mn-sans text-[15px] font-medium px-8 py-4 shadow-[0_10px_30px_-10px_rgba(5,5,20,0.5)] hover:bg-blue transition-colors duration-300"
-                >
-                  {t("studio.hero.ctaPrimary")}
-                  <span
-                    aria-hidden="true"
-                    className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
-                  >
-                    →
-                  </span>
-                </Link>
-                <Link
-                  href="/#work"
-                  onClick={() => playClick()}
-                  className="rounded-full bg-white/25 backdrop-blur-xl border border-white/50 text-ink font-mn-sans text-[15px] font-medium px-8 py-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_30px_-14px_rgba(5,5,20,0.3)] hover:bg-white/45 transition-colors duration-300"
-                >
-                  {t("studio.hero.ctaSecondary")} ↓
-                </Link>
+                <HeroPill href="/services" label={t("studio.hero.ctaPrimary")} variant="primary" arrow="right" />
+                <HeroPill href="/#work" label={t("studio.hero.ctaSecondary")} variant="glass" arrow="down" />
               </div>
             </Reveal>
           </div>
@@ -166,15 +163,19 @@ export default function StudioHero() {
         >
           <div className="studio-hero-veil-mask absolute inset-0">
             <div className="studio-hero-veil-rise absolute inset-0">
-              <div className="studio-hero-veil-drift absolute inset-y-0 -left-[25%] w-[150%]">
-                <Image
-                  src="/images/studio/sky-veil.webp"
-                  alt=""
-                  fill
-                  loading="eager"
-                  sizes="150vw"
-                  className="object-cover object-top"
-                />
+              <div className="studio-hero-veil-drift absolute inset-y-0 left-0 flex w-[300%] will-change-transform">
+                {VEIL_TILES.map((mirrored, i) => (
+                  <div key={i} className="relative h-full w-1/3 shrink-0">
+                    <Image
+                      src="/images/studio/sky-veil-painting.webp"
+                      alt=""
+                      fill
+                      loading="eager"
+                      sizes="100vw"
+                      className={`object-cover object-top ${mirrored ? "-scale-x-100" : ""}`}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>

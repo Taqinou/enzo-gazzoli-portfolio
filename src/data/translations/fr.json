@@ -278,7 +278,7 @@
         },
         "03": {
           "title": "développement",
-          "description": "un code propre, rapide et testé — avec des points d'étape réguliers pour rester alignés."
+          "description": "un code propre, rapide et testé, avec des points d'étape réguliers pour rester alignés."
         },
         "04": {
           "title": "mise en ligne & suivi",
@@ -305,7 +305,7 @@
     "cta": {
       "hookLine1": "un projet",
       "hookLine2": "en tête ?",
-      "subline": "une idée, un cahier des charges ou juste une envie — parlons-en.",
+      "subline": "une idée, un cahier des charges ou juste une envie : parlons-en.",
       "button": "démarrer un projet",
       "or": "ou par email :",
       "availability": "disponible pour de nouveaux projets",

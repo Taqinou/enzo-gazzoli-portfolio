@@ -1,15 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import Reveal from "@/components/studio/Reveal";
-import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { projects, type ProjectType } from "@/data/pricing";
 
 export const OFFERS: ProjectType[] = ["website", "application", "shopify", "ai"];
-
-export const num = (i: number) => String(i + 1).padStart(2, "0");
 
 /** Libellés partagés par les variantes : titre, description, prix plancher, formules. */
 export function useOfferCopy() {
@@ -42,26 +38,5 @@ export function OfferHeading({ lede = false }: { lede?: boolean }) {
         </p>
       )}
     </Reveal>
-  );
-}
-
-/** La pilule encre validée sur le hero. */
-export function OfferCta({ className = "" }: { className?: string }) {
-  const { t } = useTranslation();
-  const { playClick } = useSound();
-  return (
-    <Link
-      href="/services"
-      onClick={() => playClick()}
-      className={`group inline-flex items-center gap-2.5 rounded-full bg-ink text-white font-mn-sans text-[15px] font-medium px-8 py-4 shadow-[0_10px_30px_-10px_rgba(5,5,20,0.5)] hover:bg-blue transition-colors duration-300 ${className}`}
-    >
-      {t("studio.offer.cta")}
-      <span
-        aria-hidden="true"
-        className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
-      >
-        →
-      </span>
-    </Link>
   );
 }

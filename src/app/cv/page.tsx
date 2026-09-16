@@ -29,7 +29,7 @@ export default function CVPage() {
     // Use a higher scale for printing quality
     const canvas = await html2canvas(element, {
       scale: 2,
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "#f7f6f5",
       useCORS: true,
       logging: false,
     });

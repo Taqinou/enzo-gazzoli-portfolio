@@ -107,9 +107,6 @@ export default function ServicesPage() {
     <div
       ref={containerRef}
       className="min-h-screen overflow-x-hidden"
-      // Fond blanc pur sur /services (au lieu du crème #f9f9f9 du thème par
-      // défaut) : override local de --bg, sans toucher au crème de la home.
-      style={{ "--bg": "#ffffff", "--bg-rgb": "255 255 255" } as React.CSSProperties}
     >
       <nav className="fixed top-0 left-0 w-full flex justify-between items-baseline px-6 md:px-10 py-6 md:py-8 z-[50] pointer-events-none mix-blend-difference">
         <a

@@ -2,5 +2,5 @@
 // cas, restaurée au retour (bouton « studio. ») pour retomber au même endroit
 // de la page plutôt qu'en haut. Variable de module → persiste durant la
 // navigation client (SPA), consommée puis remise à null. Voir SmoothScroll
-// (restauration) et CaseStudiesSection (mémorisation).
+// (restauration) et work/shared.tsx (mémorisation).
 export const homeScroll = { y: null as number | null };

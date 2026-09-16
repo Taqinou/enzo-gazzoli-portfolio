@@ -1,6 +1,6 @@
-# Génère public/images/studio/sky-veil.webp, la nappe de nuages du premier plan
+# Génère public/images/studio/sky-veil-painting.webp, la nappe de nuages du premier plan
 # du hero studio, détourée depuis le ciel du fond. À relancer si on change
-# sky.jpg :   python3 scripts/sky-veil.py [chemin/du/ciel.jpg]
+# le ciel :   python3 scripts/sky-veil.py [chemin/du/ciel.jpg] [sortie.webp]
 #
 # On garde les zones blanches (canal min élevé), on écarte le bleu et les nuages
 # gris, on ajoute une brume qui s'épaissit vers le bas, et on floute : le
@@ -10,8 +10,8 @@ import sys
 
 from PIL import Image, ImageChops, ImageFilter, ImageOps
 
-SRC = sys.argv[1] if len(sys.argv) > 1 else "public/images/studio/sky.jpg"
-OUT = "public/images/studio/sky-veil.webp"
+SRC = sys.argv[1] if len(sys.argv) > 1 else "public/images/studio/sky-painting.jpg"
+OUT = sys.argv[2] if len(sys.argv) > 2 else "public/images/studio/sky-veil-painting.webp"
 LO, HI, CAP = 115, 200, 0.95
 OUT_WIDTH = 1800
 
@@ -37,11 +37,11 @@ def top_fade(v):
 
 gradient = Image.linear_gradient("L").resize(band.size)
 alpha = whiteness.point(ramp)
-mist = gradient.point(lambda v: int(v * 0.55))
+mist = gradient.point(lambda v: int(v * 0.3))
 alpha = ImageChops.lighter(alpha, mist).filter(ImageFilter.GaussianBlur(12))
 alpha = ImageChops.multiply(alpha, gradient.point(top_fade))
 
-cream = Image.new("RGB", band.size, (249, 249, 249))
+cream = Image.new("RGB", band.size, (247, 246, 245))  # --bg du site
 veil = Image.blend(band, cream, 0.6).filter(ImageFilter.GaussianBlur(6))
 veil.putalpha(alpha)
 

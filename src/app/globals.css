@@ -4,13 +4,13 @@
 @tailwind utilities;
 
 :root {
-  --bg: #f9f9f9;
+  --bg: #f7f6f5;
   --ink: #000000;
   --blue: #0000ff;
   --yellow: #ffff00;
   /* Canaux RGB pour l'alpha Tailwind (cf. tailwind.config.ts). Doivent rester
      synchronisés avec les hex ci-dessus. */
-  --bg-rgb: 249 249 249;
+  --bg-rgb: 247 246 245;
   --ink-rgb: 0 0 0;
   --blue-rgb: 0 0 255;
   --font-serif: "Playfair Display", "Times New Roman", serif;
@@ -270,15 +270,48 @@ body.cursor-question,
   }
 }
 
-/* Dérive horizontale lente de la nappe (plus rapide que le ciel : elle est
-   plus proche). La piste fait 150 % de large, elle ne découvre aucun bord. */
+/* Le ciel défile vers la gauche, sans fin, plus lentement que la nappe (il
+   est plus loin). Piste de trois tuiles de sky-painting-loop.jpg, chacune au ratio de
+   l'image (aucun recadrage horizontal, donc raccords exacts), plus haute que
+   le cadre (125 %) pour qu'une tuile couvre toute la largeur ; une boucle
+   décale d'une tuile (1/3 de la piste). */
+.studio-sky-loop {
+  position: absolute;
+  top: -12.5%;
+  left: 0;
+  height: 125%;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: studio-sky-loop 200s linear infinite;
+}
+
+.studio-sky-tile {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 2560 / 1366; /* ratio de sky-painting-loop.jpg : à reporter si on la régénère */
+  flex-shrink: 0;
+}
+
+@keyframes studio-sky-loop {
+  to {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+}
+
+/* La nappe défile vers la gauche, sans fin. Piste de trois tuiles (la nappe,
+   son miroir, la nappe) : les bords se raccordent, et une translation de deux
+   tuiles (2/3 de la piste) ramène exactement au point de départ. */
 .studio-hero-veil-drift {
-  animation: studio-hero-veil-drift 80s ease-in-out infinite alternate;
+  animation: studio-hero-veil-drift 130s linear infinite;
 }
 
 @keyframes studio-hero-veil-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
   to {
-    transform: translateX(-12%);
+    transform: translate3d(-66.6667%, 0, 0);
   }
 }
 
@@ -302,8 +335,139 @@ body.cursor-question,
   .studio-hero-focus,
   .studio-hero-flash,
   .studio-hero-veil-rise,
-  .studio-hero-veil-drift {
+  .studio-hero-veil-drift,
+  .studio-sky-loop {
     animation: none !important;
+  }
+}
+
+/* ===== Pilules du hero (studio/HeroPill.tsx) =====
+   Design au repos inchangé. Au survol : légère levée, la couleur se répand
+   en cercle depuis le point d'entrée du curseur (--px/--py, posés en JS) et se
+   retire vers le point de sortie ; un flou gaussien traverse le libellé puis
+   la flèche, lettre par lettre, sans les déplacer (le roulement des lettres
+   a été refusé). */
+.hero-pill {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-pill:hover {
+  transform: translateY(-2px);
+}
+
+.hero-pill:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.hero-pill-fill {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  clip-path: circle(0px at var(--px, 50%) var(--py, 50%));
+  transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-pill:hover .hero-pill-fill,
+.hero-pill:focus-visible .hero-pill-fill {
+  clip-path: circle(160% at var(--px, 50%) var(--py, 50%));
+}
+
+.hero-pill-primary .hero-pill-fill {
+  background: var(--blue);
+}
+
+.hero-pill-glass .hero-pill-fill {
+  background: rgb(255 255 255 / 0.62);
+}
+
+/* Flou gaussien qui traverse le libellé : chaque lettre se floute puis
+   redevient nette, en décalé (--i), sans bouger. Rejoué à chaque survol.
+   Repris sur les noms de projets de la section travaux (.work-title-char). */
+.hero-pill-char,
+.work-title-char {
+  display: inline-block;
+}
+
+.hero-pill:hover .hero-pill-char,
+.hero-pill:focus-visible .hero-pill-char,
+.group:hover .work-title-char,
+.group:focus-visible .work-title-char {
+  animation: hero-pill-blur 0.5s cubic-bezier(0.33, 1, 0.68, 1) both;
+  animation-delay: calc(var(--i, 0) * 14ms);
+}
+
+@keyframes hero-pill-blur {
+  0% {
+    filter: blur(0);
+  }
+  35% {
+    filter: blur(4px);
+    opacity: 0.55;
+  }
+  100% {
+    filter: blur(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-pill,
+  .hero-pill-fill {
+    transition: none !important;
+  }
+  .hero-pill:hover {
+    transform: none !important;
+  }
+  .hero-pill:hover .hero-pill-char,
+  .group:hover .work-title-char {
+    animation: none !important;
+  }
+}
+
+/* ===== Méthode : changement d'étape à gauche (studio/MethodSection.tsx) =====
+   Le chiffre et le titre ne glissent plus d'un bloc : l'ancien se dissout
+   dans un flou en s'effaçant vite, le nouveau sort du flou plus lentement, à
+   peine décalé (le titre suit le chiffre). Même langage que les mots de la
+   description qui se défloutent. */
+.method-swap {
+  transition:
+    opacity 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+    filter 0.45s cubic-bezier(0.33, 1, 0.68, 1),
+    transform 0.45s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.method-swap.is-on {
+  opacity: 1;
+  filter: blur(0);
+  transform: none;
+  transition-duration: 1s;
+  transition-delay: 0.08s;
+}
+
+.method-swap-late.is-on {
+  transition-delay: 0.2s;
+}
+
+.method-swap.is-past,
+.method-swap.is-next {
+  opacity: 0;
+  filter: blur(16px);
+}
+
+.method-swap.is-past {
+  transform: translateY(-10px);
+}
+
+.method-swap.is-next {
+  transform: translateY(10px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .method-swap {
+    transition: opacity 0.2s linear !important;
+    filter: none !important;
+    transform: none !important;
   }
 }
 
@@ -389,7 +553,7 @@ body.cursor-question,
 
 /* Brume derrière la cellule regardée : le ciel du hero, flou, en fondu radial */
 .offer-viewfinder-haze {
-  background-image: url("/images/studio/sky.jpg");
+  background-image: url("/images/studio/sky-painting.jpg");
   background-size: cover;
   background-position: center 40%;
   filter: blur(36px) saturate(0.85);
@@ -418,6 +582,124 @@ body.cursor-question,
   }
   .offer-viewfinder-haze {
     display: none;
+  }
+}
+
+/* Figures de l'offre (studio/offer/OfferFigure.tsx) : un objet au trait par
+   offre, qui raconte l'offre au survol. Faces pleines couleur fond (arêtes
+   arrière cachées), trait fin constant quelle que soit la taille, un seul
+   détail bleu. Au survol (.on), chaque [data-move] passe de --rx/--ry à
+   --tx/--ty avec son délai d'aller (--d) ; au retour, délai --od (les
+   mouvements en plusieurs temps se rembobinent dans l'ordre inverse). */
+.offer-fig {
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+/* Taille des figures, en filigrane au centre de leur case derrière le titre :
+   la plus haute occupe la hauteur d'une case au repos, moins de l'air. */
+.offer-viewfinder {
+  --fig-s: 9rem;
+}
+
+@media (min-width: 768px) {
+  .offer-viewfinder {
+    --fig-s: min(17vw, calc(max(78svh, 36rem) / 2 - 6rem));
+  }
+}
+
+.offer-fig polygon,
+.offer-fig line,
+.offer-fig path,
+.offer-fig ellipse {
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.fig-face {
+  fill: var(--bg);
+  stroke: rgb(var(--ink-rgb) / 0.42);
+  stroke-width: 1;
+}
+
+.fig-inner {
+  fill: color-mix(in srgb, var(--ink) 5%, var(--bg));
+  stroke: rgb(var(--ink-rgb) / 0.42);
+  stroke-width: 1;
+}
+
+.fig-blue,
+.fig-blue-2,
+.fig-blue-3 {
+  stroke: var(--blue);
+  stroke-width: 1;
+}
+
+.fig-blue {
+  fill: var(--blue);
+}
+
+.fig-blue-2 {
+  fill: color-mix(in srgb, var(--blue) 78%, var(--bg));
+}
+
+.fig-blue-3 {
+  fill: color-mix(in srgb, var(--blue) 56%, var(--bg));
+}
+
+.fig-rule,
+.fig-handle {
+  fill: none;
+  stroke: rgb(var(--ink-rgb) / 0.42);
+  stroke-width: 1;
+}
+
+/* Mise en ligne (figures de la méthode) : ondes bleues sur le plateau, ombre
+   de la page qui lévite */
+.fig-signal {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 1.25;
+}
+
+.fig-shadow {
+  fill: rgb(var(--ink-rgb) / 0.07);
+  stroke: none;
+}
+
+.fig-text {
+  stroke: rgb(var(--ink-rgb) / 0.3);
+  stroke-width: 2;
+}
+
+.fig-extract {
+  transition: stroke 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.offer-fig.on .fig-extract {
+  stroke: var(--blue);
+}
+
+.fig-scan {
+  stroke: var(--blue);
+  stroke-width: 1.5;
+}
+
+.offer-fig [data-move] {
+  transform: translate(var(--rx, 0px), var(--ry, 0px));
+  transition: transform var(--dur, 900ms) var(--ease, cubic-bezier(0.16, 1, 0.3, 1)) var(--od, 0ms);
+}
+
+.offer-fig.on [data-move] {
+  transform: translate(var(--tx, 0px), var(--ty, 0px));
+  transition-delay: var(--d, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .offer-fig [data-move],
+  .fig-extract {
+    transition: none !important;
   }
 }
 
@@ -527,10 +809,10 @@ body.cursor-question,
 
 /* Overrides des variables historiques sous la classe posée sur <html> */
 .theme-minimal {
-  --bg: #ffffff;
+  --bg: #f7f6f5;
   --ink: #08090a;
   /* Canaux RGB synchronisés pour l'alpha Tailwind sous le thème minimal */
-  --bg-rgb: 255 255 255;
+  --bg-rgb: 247 246 245;
   --ink-rgb: 8 9 10;
   /* Échelle globale du thème minimal : toutes les tailles en rem grossissent de ~6 % */
   font-size: 106.25%;

@@ -3,7 +3,7 @@ import SmoothScroll from "@/components/studio/SmoothScroll";
 import StudioNav from "@/components/studio/StudioNav";
 import StudioHero from "@/components/studio/StudioHero";
 import OfferSection from "@/components/studio/OfferSection";
-import CaseStudiesSection from "@/components/studio/CaseStudiesSection";
+import WorkSection from "@/components/studio/work/WorkSection";
 import MethodSection from "@/components/studio/MethodSection";
 import ProofSection from "@/components/studio/ProofSection";
 import StudioCTA from "@/components/studio/StudioCTA";
@@ -38,7 +38,7 @@ export default function StudioHome() {
         <main>
           <StudioHero />
           <OfferSection />
-          <CaseStudiesSection />
+          <WorkSection />
           <MethodSection />
           <ProofSection />
           <StudioCTA />

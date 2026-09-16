@@ -1,74 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import MethodFigure from "@/components/studio/MethodFigure";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 
 const STEPS = ["01", "02", "03", "04"] as const;
+// Part de l'écran sur laquelle la section confiance chevauche la fin de la
+// méthode (lg:-mt-[18vh] dans ProofSection) : moins de blanc entre les deux.
+const EXIT_OVERLAP = 0.18;
 
-// Petit glyphe abstrait (trait bleu) propre à chaque étape : cadrage → design
-// → développement → mise en ligne. Line art minimal, pas d'icône littérale.
-function Glyph({ step, className }: { step: string; className?: string }) {
-  const common = {
-    fill: "none",
-    stroke: "var(--blue)",
-    strokeWidth: 1.5,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-  };
-  return (
-    <svg viewBox="0 0 120 120" className={className} aria-hidden="true">
-      {step === "01" && (
-        <>
-          {/* cadrage : cadre + point de mire */}
-          <path {...common} d="M22 34V22h12M98 34V22H86M22 86v12h12M98 86v12H86" />
-          <circle {...common} cx="60" cy="60" r="14" />
-          <circle cx="60" cy="60" r="3" fill="var(--blue)" stroke="none" />
-        </>
-      )}
-      {step === "02" && (
-        <>
-          {/* design : deux plans de travail décalés */}
-          <rect {...common} x="26" y="34" width="52" height="40" rx="4" />
-          <rect {...common} x="46" y="50" width="52" height="40" rx="4" />
-        </>
-      )}
-      {step === "03" && (
-        <>
-          {/* développement : chevrons de code */}
-          <path {...common} d="M44 42 26 60l18 18M76 42l18 18-18 18" />
-          <path {...common} d="M66 38 54 82" />
-        </>
-      )}
-      {step === "04" && (
-        <>
-          {/* mise en ligne : trajectoire ascendante + pulse */}
-          <path {...common} d="M24 92 54 62l16 16 30-42" />
-          <path {...common} d="M84 36h16v16" />
-          <circle cx="54" cy="62" r="3" fill="var(--blue)" stroke="none" />
-        </>
-      )}
-    </svg>
-  );
-}
-
-// Méthode — éditorial « pinned split » : le scroll fait défiler 4 étapes dans
-// un panneau sticky (conteneur h-[400vh] ⚠️ nécessite un ancêtre SANS overflow
-// qui créerait un conteneur de scroll — la home est en overflow-x-clip pour ça).
-// Gauche : chiffre Playfair géant + titre. Droite : glyphe abstrait + phrase
-// qui s'encre mot à mot au scroll (suivi de lecture). Rail de progression.
 export default function MethodSection() {
   const { t } = useTranslation();
   const { playScrollTick } = useSound();
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const descRef = useRef<HTMLParagraphElement>(null);
+  const figureRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const lastActiveRef = useRef(0);
 
   // Boucle rAF : progression continue → (1) l'étape active, (2) la sous-
-  // progression DANS l'étape, qui encre les mots de la description un à un
-  // (gris → noir) façon « suivi de lecture au scroll ». Aucun setState par
+  // progression DANS l'étape, qui défloute les mots de la description un à un
+  // façon « suivi de lecture au scroll ». Aucun setState par
   // frame hors changement d'étape ; les couleurs sont posées en direct sur le
   // DOM. Respecte prefers-reduced-motion (texte encré d'emblée).
   useEffect(() => {
@@ -80,10 +35,32 @@ export default function MethodSection() {
         const total = el.offsetHeight - window.innerHeight;
         if (total > 0) {
           const rect = el.getBoundingClientRect();
-          const p = Math.min(0.9999, Math.max(0, -rect.top / total));
+          const vhPx = window.innerHeight;
+          // la lecture s'achève un peu avant la fin de l'épinglage : la section
+          // confiance remonte par-dessus les derniers EXIT_OVERLAP de scroll
+          const p = Math.min(0.9999, Math.max(0, -rect.top / (total - vhPx * EXIT_OVERLAP)));
+          // sortie : une fois décrochée, la scène se dissout dans le flou en
+          // remontant (la section confiance sort du même flou)
+          const stage = stageRef.current;
+          if (stage && !reduce) {
+            const vh = window.innerHeight;
+            const exit = Math.max(0, Math.min(1, (vh * (1 + EXIT_OVERLAP) - rect.bottom) / (vh * 0.5)));
+            stage.style.filter = exit > 0 ? `blur(${(exit * 12).toFixed(2)}px)` : "";
+            stage.style.opacity = exit > 0 ? (1 - exit * 0.85).toFixed(3) : "";
+          }
           const stepF = p * STEPS.length;
           const step = Math.min(STEPS.length - 1, Math.floor(stepF));
           const sub = reduce ? 1 : Math.max(0, Math.min(1, stepF - step));
+          // la figure de l'étape se construit au même rythme que la lecture ;
+          // les étapes passées restent complètes (1) et les suivantes vides
+          // (0) : pendant le fondu, la figure qui s'efface ne se réinitialise pas
+          const figures = figureRef.current?.children;
+          if (figures) {
+            for (let k = 0; k < figures.length; k++) {
+              const value = k < step ? 1 : k > step ? 0 : sub;
+              (figures[k] as SVGElement).style.setProperty("--p", value.toFixed(3));
+            }
+          }
           if (step !== lastActiveRef.current) {
             lastActiveRef.current = step;
             setActive(step);
@@ -94,7 +71,8 @@ export default function MethodSection() {
             const head = sub * (words.length + 3); // tête de lecture
             words.forEach((w, j) => {
               const wp = Math.max(0, Math.min(1, head - j));
-              w.style.color = `rgb(var(--ink-rgb) / ${(0.26 + 0.74 * wp).toFixed(3)})`;
+              // flou → net au passage de la tête de lecture (plus d'opacité réduite)
+              w.style.filter = wp >= 1 ? "none" : `blur(${((1 - wp) * 7).toFixed(2)}px)`;
             });
           }
         }
@@ -122,7 +100,7 @@ export default function MethodSection() {
           md, car en tablette portrait la colonne est trop étroite pour le
           chiffre en vh → la liste mobile prend le relais jusqu'à 1024px. ——— */}
       <div ref={sectionRef} className="hidden lg:block relative h-[400vh]">
-        <section className="sticky top-0 h-screen bg-bg text-ink overflow-hidden flex flex-col">
+        <section ref={stageRef} className="sticky top-0 h-screen bg-bg text-ink overflow-hidden flex flex-col">
           <div className="px-20 pt-28">{heading}</div>
 
           {/* split : chiffre géant + titre à gauche, glyphe + description à droite */}
@@ -133,12 +111,8 @@ export default function MethodSection() {
                   <span
                     key={step}
                     aria-hidden={i !== active}
-                    className={`absolute left-0 bottom-0 font-serif leading-none text-[min(38vh,24vw)] tracking-[-0.05em] transition-all duration-[650ms] ease-out-expo ${
-                      i === active
-                        ? "opacity-100 translate-y-0 text-ink"
-                        : i < active
-                          ? "opacity-0 -translate-y-8"
-                          : "opacity-0 translate-y-8"
+                    className={`method-swap absolute left-0 bottom-0 font-serif leading-none text-[min(38vh,24vw)] tracking-[-0.05em] ${
+                      i === active ? "is-on text-ink" : i < active ? "is-past" : "is-next"
                     }`}
                   >
                     {step}
@@ -150,8 +124,8 @@ export default function MethodSection() {
                   <h3
                     key={step}
                     aria-hidden={i !== active}
-                    className={`absolute inset-x-0 top-0 font-serif lowercase text-[min(2.75rem,3.4vw)] leading-[0.95] tracking-[-0.05em] transition-all duration-[650ms] ease-out-expo ${
-                      i === active ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                    className={`method-swap method-swap-late absolute inset-x-0 top-0 font-serif lowercase text-[min(2.75rem,3.4vw)] leading-[0.95] tracking-[-0.05em] ${
+                      i === active ? "is-on" : i < active ? "is-past" : "is-next"
                     }`}
                   >
                     {t(`studio.method.steps.${step}.title`)}
@@ -161,13 +135,16 @@ export default function MethodSection() {
             </div>
 
             <div className="relative h-full flex flex-col justify-center px-20 py-10">
-              <div className="relative h-40 w-40 mb-12">
+              {/* les figures partagent le même plateau et chacune démarre où la
+                  précédente s'arrête : un simple fondu court, sans échelle, suffit
+                  à les enchaîner sans que le passage se voie */}
+              <div ref={figureRef} className="relative h-56 w-56 mb-8 -ml-4">
                 {STEPS.map((step, i) => (
-                  <Glyph
+                  <MethodFigure
                     key={step}
                     step={step}
-                    className={`absolute inset-0 h-full w-full transition-all duration-[650ms] ease-out-expo ${
-                      i === active ? "opacity-100 scale-100" : "opacity-0 scale-90"
+                    className={`absolute inset-0 h-full w-full transition-opacity duration-300 ease-out ${
+                      i === active ? "opacity-100" : "opacity-0"
                     }`}
                   />
                 ))}
@@ -182,28 +159,16 @@ export default function MethodSection() {
                 {t(`studio.method.steps.${STEPS[active]}.description`)
                   .split(" ")
                   .map((word, j) => (
-                    <span key={j} data-w className="text-ink/25 transition-[color] duration-200 ease-linear">
-                      {word}{" "}
-                    </span>
+                    <Fragment key={j}>
+                      <span data-w className="inline-block blur-[7px] transition-[filter] duration-200 ease-linear">
+                        {word}
+                      </span>{" "}
+                    </Fragment>
                   ))}
               </p>
             </div>
           </div>
 
-          {/* rail de progression bas */}
-          <div className="flex items-center gap-2 px-20 pb-12">
-            {STEPS.map((step, i) => (
-              <span
-                key={step}
-                className={`h-px transition-all duration-[600ms] ease-out-expo ${
-                  i === active ? "w-12 bg-blue" : "w-5 bg-ink/20"
-                }`}
-              />
-            ))}
-            <span className="font-mono text-[10px] font-bold text-ink/40 ml-2">
-              {STEPS[active]} / {String(STEPS.length).padStart(2, "0")}
-            </span>
-          </div>
         </section>
       </div>
 
@@ -217,7 +182,7 @@ export default function MethodSection() {
                 {step}
               </p>
               <div className="flex items-start gap-4">
-                <Glyph step={step} className="h-9 w-9 shrink-0 mt-1" />
+                <MethodFigure step={step} className="h-20 w-20 shrink-0 -mt-2" />
                 <div>
                   <h3 className="font-serif lowercase text-4xl leading-[1.05] tracking-[-0.05em]">
                     {t(`studio.method.steps.${step}.title`)}

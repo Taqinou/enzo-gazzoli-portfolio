@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CaseStudyNarrative from "@/components/studio/CaseStudyNarrative";
@@ -9,10 +10,9 @@ import SmoothScroll from "@/components/studio/SmoothScroll";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getCaseStudy, getNextCaseStudy } from "@/data/caseStudies";
-import { morphOrigin } from "@/lib/morphOrigin";
+import { releaseWorkZoom, workZoom } from "@/lib/workZoom";
 
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
-const HERO_EASE = "cubic-bezier(0.16,1,0.3,1)";
 
 interface CaseStudyContentProps {
   slug: string;
@@ -26,77 +26,34 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
   const { t } = useTranslation();
   const { playClick, playExit } = useSound();
 
-  const heroMediaRef = useRef<HTMLDivElement>(null);
+  const heroImgRef = useRef<HTMLImageElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
-  const morphDone = useRef(false);
-  // Part caché SI on arrive via un morph (sinon visible d'emblée) → un seul
-  // fondu d'apparition, jamais de fade-out puis fade-in.
-  const [textVisible, setTextVisible] = useState(
-    () => !(morphOrigin.slug === slug && morphOrigin.rect),
-  );
+  // Arrivée par le zoom de la home (workZoom) : le hero est déjà exactement à
+  // l'image de la copie posée par-dessus ; titre et voile apparaissent ensuite.
+  const [textVisible, setTextVisible] = useState(() => workZoom.slug !== slug);
 
-  // Morph unifié : si on arrive depuis une vignette « travaux », le hero se
-  // déplie lui-même depuis la position mémorisée (fixed → plein écran, l'image
-  // object-cover se recadre sans distorsion), puis se rend à son flux normal.
-  // Le texte est le vrai texte, il apparaît en fondu. Aucun clone, aucun raccord.
   useIsoLayoutEffect(() => {
-    // Garde one-shot : le StrictMode (dev) double-appelle l'effet ; on ne
-    // déclenche le morph qu'une fois et on NE nettoie PAS les timers (sinon le
-    // 1er nettoyage StrictMode laisserait le média bloqué en position:fixed).
-    if (morphDone.current) return;
-    if (morphOrigin.slug !== slug || !morphOrigin.rect) return;
-    morphDone.current = true;
-    const r = morphOrigin.rect;
-    morphOrigin.rect = null;
-    morphOrigin.slug = null;
-    const el = heroMediaRef.current;
+    if (workZoom.slug !== slug) return;
     const veil = veilRef.current;
-    if (!el) return;
-
-    setTextVisible(false);
-    // pas de z-index : le média reste sous le texte (z-10) et sous la nav
-    // (z-50), il ne les couvre jamais.
-    Object.assign(el.style, {
-      position: "fixed",
-      top: `${r.top}px`,
-      left: `${r.left}px`,
-      width: `${r.width}px`,
-      height: `${r.height}px`,
-      borderRadius: "16px",
-    } as Partial<CSSStyleDeclaration> as CSSStyleDeclaration);
     if (veil) veil.style.opacity = "0";
-    el.getBoundingClientRect(); // reflow
-
-    el.style.transition = `top .7s ${HERO_EASE}, left .7s ${HERO_EASE}, width .7s ${HERO_EASE}, height .7s ${HERO_EASE}, border-radius .7s ${HERO_EASE}`;
-    if (veil) veil.style.transition = `opacity .7s ${HERO_EASE}`;
-    requestAnimationFrame(() => {
-      Object.assign(el.style, {
-        top: "0px",
-        left: "0px",
-        width: "100vw",
-        height: "82vh",
-        borderRadius: "0px",
-      } as CSSStyleDeclaration);
-      if (veil) veil.style.opacity = "1";
-    });
-
-    // Fin du morph : le média se rend à son flux normal (absolute inset-0 via
-    // className) et le texte s'affiche. Déclenchée au timer OU immédiatement si
-    // l'utilisateur scrolle (sinon le média fixed bloquerait la vue).
-    let finished = false;
-    const finish = () => {
-      if (finished) return;
-      finished = true;
-      window.removeEventListener("wheel", finish);
-      window.removeEventListener("touchmove", finish);
-      el.removeAttribute("style");
-      if (veil) veil.removeAttribute("style");
-      setTextVisible(true);
-    };
-    window.addEventListener("wheel", finish, { passive: true });
-    window.addEventListener("touchmove", finish, { passive: true });
-    window.setTimeout(() => setTextVisible(true), 420);
-    window.setTimeout(finish, 760);
+    const img = heroImgRef.current;
+    const reveal = () =>
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          // l'image du hero est peinte sous la copie : dès la fin du zoom, on
+          // retire la copie et le texte arrive aussitôt
+          window.setTimeout(() => {
+            releaseWorkZoom();
+            if (veil) {
+              veil.style.transition = "opacity .15s ease-out";
+              veil.style.opacity = "1";
+            }
+            setTextVisible(true);
+          }, Math.max(0, workZoom.endsAt - performance.now()));
+        }),
+      );
+    if (img && !img.complete) img.addEventListener("load", reveal, { once: true });
+    else reveal();
   }, [slug]);
 
   const caseStudy = getCaseStudy(slug);
@@ -113,18 +70,22 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
     }, 80);
   };
 
-  // Hero projet : champ bleu + gros index en filigrane À DROITE (pas de
-  // screenshot → cohérence avec les miniatures bleues et morph propre). Le titre
-  // est porté par l'overlay du hero, pas de doublon.
+  // Hero projet : la même image que la vignette de la home (capture imprimée
+  // en pixels bleus, *-pixel.webp), plein cadre et légèrement zoomée
+  // (HERO_ZOOM = 1.08 dans lib/workZoom.ts : à garder synchronisés), pixels
+  // nets. Le titre est porté par l'overlay du hero, pas de doublon.
   const visual = () => (
-    <div className="absolute inset-0 bg-blue overflow-hidden">
-      <span
-        aria-hidden="true"
-        className="absolute bottom-[12vh] right-[-2vw] font-mono font-black text-[42vw] md:text-[26vw] leading-none text-white select-none"
-        style={{ opacity: 0.12 }}
-      >
-        {caseStudy.projectIndex}
-      </span>
+    <div className="absolute inset-0 bg-bg overflow-hidden">
+      <Image
+        ref={heroImgRef}
+        src={`/images/work/${slug}-pixel.webp`}
+        alt=""
+        fill
+        priority
+        unoptimized
+        sizes="100vw"
+        className="object-cover [image-rendering:pixelated] scale-[1.08]"
+      />
     </div>
   );
 
@@ -154,22 +115,22 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
 
         {/* Hero immersif */}
         <header className="relative flex min-h-[82vh] items-end overflow-hidden">
-          {/* média (image + voile) : c'est CE bloc qui se déplie depuis la
-              vignette lors du morph (voir useIsoLayoutEffect) */}
-          <div ref={heroMediaRef} className="absolute inset-0 overflow-hidden">
+          {/* média (image + voile) : raccord exact avec la copie du zoom de la
+              home (lib/workZoom.ts), cadre plein largeur × 82vh */}
+          <div className="absolute inset-0 overflow-hidden">
             <div className="absolute inset-0">{visual()}</div>
             {/* voile crème bas pour poser le titre en ink */}
             <div
               ref={veilRef}
               aria-hidden="true"
-              className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(249,249,249,0.25)_0%,rgba(249,249,249,0)_28%,rgba(249,249,249,0)_45%,rgba(249,249,249,0.75)_74%,rgb(249,249,249)_97%)]"
+              className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(247,246,245,0.25)_0%,rgba(247,246,245,0)_28%,rgba(247,246,245,0)_45%,rgba(247,246,245,0.75)_74%,rgb(247,246,245)_97%)]"
             />
           </div>
-          {/* Le texte est le vrai texte (aucun clone) : présent en visite
-              directe, en fondu doux lors du morph (textVisible). */}
+          {/* Le texte : présent en visite directe, en fondu doux après le zoom
+              (textVisible). */}
           <div
             className="relative z-10 w-full px-6 md:px-20 pb-12 md:pb-16"
-            style={{ opacity: textVisible ? 1 : 0, transition: "opacity .5s ease" }}
+            style={{ opacity: textVisible ? 1 : 0, transition: "opacity .08s linear" }}
           >
             <h1 className="font-serif lowercase tracking-[-0.05em] leading-[0.9] text-[14vw] md:text-[min(8vw,7rem)]">
               {titleText}.

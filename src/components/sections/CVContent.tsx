@@ -25,7 +25,7 @@ export function CVContent({ variant }: CVContentProps) {
       id={isPrint ? "cv-print-template" : "cv-content"}
       className={
         isPrint
-          ? "bg-[#f9f9f9] text-black font-mono overflow-hidden"
+          ? "bg-[#f7f6f5] text-black font-mono overflow-hidden"
           : "relative z-10 w-full max-w-[1400px] mx-auto px-6 py-12 lg:py-20 flex flex-col gap-8 lg:gap-12 font-mono"
       }
       style={

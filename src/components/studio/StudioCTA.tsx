@@ -1,20 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import BlurWords from "@/components/studio/BlurWords";
+import DitherWave from "@/components/studio/DitherWave";
+import HeroPill from "@/components/studio/HeroPill";
 import Reveal from "@/components/studio/Reveal";
-import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 
-// CTA final — rappel du hero : ciel photographique (sky.jpg) bien visible,
-// voile crème comme le hero (texte ink lisible), bouton verre translucide.
-// En bas, la section fond vers le bleu plein → raccord invisible avec le
-// footer bleu (où s'inscrit « enzo gazzoli. »). Centré → enchaîne vers le
-// wordmark centré du footer.
+// CTA final — rappel du hero : le ciel (sky-painting.jpg) bien visible,
+// voile crème comme le hero (texte ink lisible), pilule verre du hero. En bas,
+// la section passe au bleu plein par une bande de pixels tramés qui ondule
+// (DitherWave) → raccord invisible avec le footer bleu (« enzo gazzoli. »).
+// Centré → enchaîne vers le wordmark centré du footer.
 export default function StudioCTA() {
   const { t } = useTranslation();
-  const { playClick } = useSound();
 
   // Mêmes réglages que le hero (défloutage mot à mot cadencé).
   const line1 = t("studio.cta.hookLine1");
@@ -23,11 +22,11 @@ export default function StudioCTA() {
   const l2Base = 0.2 + l1Words * 0.07;
 
   return (
-    <section className="relative text-ink px-6 md:px-20 pt-28 md:pt-40 pb-40 md:pb-56 text-center overflow-hidden">
+    <section className="relative text-ink px-6 md:px-20 pt-16 md:pt-24 pb-40 md:pb-56 text-center overflow-hidden">
       {/* ——— Le ciel (rappel du hero) ——— */}
       <div aria-hidden="true" className="absolute inset-0 overflow-hidden">
         <div className="studio-sky-drift absolute inset-0">
-          <Image src="/images/studio/sky.jpg" alt="" fill sizes="100vw" className="object-cover" />
+          <Image src="/images/studio/sky-painting.jpg" alt="" fill sizes="100vw" className="object-cover" />
         </div>
         {/* voile crème haut : part du crème PLEIN (raccord invisible avec la
             section crème au-dessus) puis révèle le ciel. + radial de lisibilité */}
@@ -35,20 +34,16 @@ export default function StudioCTA() {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(to bottom, rgb(249,249,249) 0%, rgba(249,249,249,0.8) 7%, rgba(249,249,249,0.15) 22%, rgba(249,249,249,0) 36%)",
+              "linear-gradient(to bottom, rgb(247,246,245) 0%, rgba(247,246,245,0.8) 7%, rgba(247,246,245,0.15) 22%, rgba(247,246,245,0) 36%)",
           }}
         />
         <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_62%_46%_at_50%_36%,rgba(249,249,249,0.5),transparent_70%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_62%_46%_at_50%_36%,rgba(247,246,245,0.5),transparent_70%)]"
         />
-        {/* fondu vers le bleu plein en bas → raccord footer */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,255,0) 60%, rgba(0,0,255,0.5) 82%, rgb(0,0,255) 100%)",
-          }}
-        />
+        {/* passage au bleu plein en bas → raccord footer : bande de pixels
+            bleus tramés qui ondule comme de la lave (même tramage que les
+            visuels des travaux) */}
+        <DitherWave className="absolute inset-x-0 bottom-0 h-[20%] w-full" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center">
@@ -68,19 +63,10 @@ export default function StudioCTA() {
         </Reveal>
 
         <Reveal delay={0.4}>
-          <Link
-            href="/services"
-            onClick={() => playClick()}
-            className="group inline-flex items-center gap-2.5 mt-10 md:mt-12 rounded-full bg-white/30 backdrop-blur-xl border border-white/60 text-ink px-8 py-4 font-mn-sans text-[15px] font-medium shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_30px_-14px_rgba(5,5,20,0.3)] hover:bg-white/60 transition-colors duration-300"
-          >
-            {t("studio.cta.button")}
-            <span
-              aria-hidden="true"
-              className="inline-block transition-transform duration-300 ease-out-expo group-hover:translate-x-1"
-            >
-              →
-            </span>
-          </Link>
+          {/* même pilule et même survol que le hero (remplissage, flou des lettres) */}
+          <div className="mt-10 md:mt-12">
+            <HeroPill href="/services" label={t("studio.cta.button")} variant="glass" arrow="right" />
+          </div>
         </Reveal>
       </div>
     </section>

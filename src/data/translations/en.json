@@ -278,7 +278,7 @@
         },
         "03": {
           "title": "development",
-          "description": "clean, fast, tested code — with regular checkpoints to stay aligned."
+          "description": "clean, fast, tested code, with regular checkpoints to stay aligned."
         },
         "04": {
           "title": "launch & follow-up",
@@ -305,7 +305,7 @@
     "cta": {
       "hookLine1": "a project",
       "hookLine2": "in mind?",
-      "subline": "an idea, a brief or just an itch — let's talk.",
+      "subline": "an idea, a brief or just an itch: let's talk.",
       "button": "start a project",
       "or": "or by email:",
       "availability": "available for new projects",
