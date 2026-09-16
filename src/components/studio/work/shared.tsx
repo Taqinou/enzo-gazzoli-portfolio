@@ -77,7 +77,7 @@ export function WorkShot({
 }) {
   const src = `/images/work/${cs.slug}-pixel.webp`;
   return (
-    <div data-morph className={`overflow-hidden bg-bg ${className}`}>
+    <div data-morph data-slug={cs.slug} className={`overflow-hidden bg-bg ${className}`}>
       <Image
         src={src}
         alt=""

@@ -10,7 +10,7 @@ import SmoothScroll from "@/components/studio/SmoothScroll";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getCaseStudy, getNextCaseStudy } from "@/data/caseStudies";
-import { releaseWorkZoom, workZoom } from "@/lib/workZoom";
+import { releaseWorkZoom, workZoom, zoomOutOfWork } from "@/lib/workZoom";
 
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
@@ -27,6 +27,7 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
   const { playClick, playExit } = useSound();
 
   const heroImgRef = useRef<HTMLImageElement>(null);
+  const mediaRef = useRef<HTMLDivElement>(null);
   const veilRef = useRef<HTMLDivElement>(null);
   // Arrivée par le zoom de la home (workZoom) : le hero est déjà exactement à
   // l'image de la copie posée par-dessus ; titre et voile apparaissent ensuite.
@@ -62,12 +63,19 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
   const nextCaseStudy = getNextCaseStudy(slug);
   const titleText = t(`caseStudies.${slug}.title`);
 
+  // Retour à la home : zoom arrière du hero jusqu'à la vignette du projet.
   const handleBack = (e: React.MouseEvent) => {
     e.preventDefault();
     playExit();
-    setTimeout(() => {
-      router.push("/");
-    }, 80);
+    const media = mediaRef.current;
+    const img = heroImgRef.current;
+    if (!media || !img || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setTimeout(() => {
+        router.push("/");
+      }, 80);
+      return;
+    }
+    zoomOutOfWork(media, img, slug, () => router.push("/"));
   };
 
   // Hero projet : la même image que la vignette de la home (capture imprimée
@@ -119,7 +127,10 @@ export default function CaseStudyContent({ slug }: CaseStudyContentProps) {
               home (lib/workZoom.ts). Desktop : plein largeur × 82svh, titre
               posé dessus. Téléphone : l'image à son ratio (aucun recadrage
               portrait), titre en dessous. */}
-          <div className="relative w-full aspect-[2400/1463] md:absolute md:inset-0 md:aspect-auto overflow-hidden">
+          <div
+            ref={mediaRef}
+            className="relative w-full aspect-[2400/1463] md:absolute md:inset-0 md:aspect-auto overflow-hidden"
+          >
             <div className="absolute inset-0">{visual()}</div>
             {/* voile crème bas pour poser le titre en ink */}
             <div
