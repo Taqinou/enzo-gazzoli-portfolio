@@ -391,12 +391,17 @@ body.cursor-question,
   z-index: -1;
   border-radius: inherit;
   clip-path: circle(0px at var(--px, 50%) var(--py, 50%));
-  transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+  /* au départ du curseur : retrait court et régulier. Avec la courbe du survol
+     (très rapide au début, très lente à la fin), le cercle passait le début
+     de sa course hors du bouton et ne rétrécissait visiblement qu'à la fin :
+     le retrait semblait deux fois plus lent que l'arrivée. */
+  transition: clip-path 0.45s cubic-bezier(0.3, 0, 0.6, 1);
 }
 
 .hero-pill:hover .hero-pill-fill,
 .hero-pill:focus-visible .hero-pill-fill {
   clip-path: circle(160% at var(--px, 50%) var(--py, 50%));
+  transition: clip-path 1.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-pill-primary .hero-pill-fill {
