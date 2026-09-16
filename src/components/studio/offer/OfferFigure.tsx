@@ -130,6 +130,8 @@ const FIGURES: Record<ProjectType, Figure> = {
           <polygon className="fig-inner" points="89.61,130 65.36,144 65.36,94 89.61,80" />
           <polygon className="fig-inner" points="89.61,130 134.64,156 134.64,106 89.61,80" />
         </g>
+        {/* anse arrière : attachée au bord haut de la paroi du fond (derrière l'article) */}
+        <path className="fig-handle" d="M101.73 87.0 Q112.12 53.0 122.52 99.0" />
         <g data-move="" style={{ "--rx": "0px", "--ry": "-46px", "--tx": "0px", "--ty": "0px", "--dur": "700ms" } as React.CSSProperties}>
           <polygon className="fig-blue-2" points="86.14,120 100,128 100,112 86.14,104" />
           <polygon className="fig-blue-3" points="113.86,120 100,128 100,112 113.86,104" />
@@ -139,7 +141,8 @@ const FIGURES: Record<ProjectType, Figure> = {
           <polygon className="fig-face" points="65.36,144 110.39,170 110.39,120 65.36,94" />
           <polygon className="fig-face" points="134.64,156 110.39,170 110.39,120 134.64,106" />
         </g>
-        <path className="fig-handle" d="M88.74 93.5 Q100 66 111.26 106.5" />
+        {/* anse avant : attachée au bord haut de la paroi avant */}
+        <path className="fig-handle" d="M77.48 101.0 Q87.88 67.0 98.27 113.0" />
       </>
     ),
   },
