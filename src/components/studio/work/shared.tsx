@@ -4,6 +4,7 @@ import type { MouseEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import InView from "@/components/studio/offer/InView";
+import PixelNoise from "@/components/studio/work/PixelNoise";
 import { useSound } from "@/hooks/useSound";
 import { useTranslation } from "@/hooks/useTranslation";
 import { homeScroll } from "@/lib/homeScroll";
@@ -58,8 +59,12 @@ export function WorkHeading() {
  * bleus #0000ff sur crème (tramage 1 bit, *-pixel.webp, cf.
  * scripts/work-pixel.py ; sneakerscope, sans site en ligne, a une plaque à son
  * nom). Servie sans réencodage : une compression avec perte baverait les
- * pixels. L'image reste telle quelle au survol (Enzo).
+ * pixels. Au survol, l'image ne change pas mais un bruit léger fait grésiller
+ * quelques pixels de sa trame (PixelNoise) ; sur les visuels presque tout bleus,
+ * seulement ceux du texte ou du logo.
  */
+const MARK_ONLY = new Set(["sneakerscope", "7eyes"]);
+
 export function WorkShot({
   cs,
   className = "relative",
@@ -70,16 +75,18 @@ export function WorkShot({
   className?: string;
   sizes?: string;
 }) {
+  const src = `/images/work/${cs.slug}-pixel.webp`;
   return (
     <div data-morph className={`overflow-hidden bg-bg ${className}`}>
       <Image
-        src={`/images/work/${cs.slug}-pixel.webp`}
+        src={src}
         alt=""
         fill
         sizes={sizes}
         unoptimized
         className="object-cover [image-rendering:pixelated]"
       />
+      <PixelNoise src={src} markOnly={MARK_ONLY.has(cs.slug)} />
     </div>
   );
 }
