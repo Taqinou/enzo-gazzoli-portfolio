@@ -1,5 +1,6 @@
 "use client";
 
+import PixelSvg from "@/components/studio/PixelSvg";
 import type { ProjectType } from "@/data/pricing";
 
 interface OfferFigureProps {
@@ -20,19 +21,20 @@ interface OfferFigureProps {
 //
 // Au survol (.on), les groupes [data-move] passent de --rx/--ry à --tx/--ty
 // (délai --d à l'aller, --od au retour). Styles : .offer-fig dans globals.css.
+// Rendu en pixels bleus tramés, comme les visuels des travaux (PixelSvg).
 export default function OfferFigure({ type, on, dim }: OfferFigureProps) {
   const { viewBox, ratio, scale, shape } = FIGURES[type];
   return (
-    <svg
-      aria-hidden="true"
+    <PixelSvg
       viewBox={viewBox}
-      className={`offer-fig origin-center transition-transform duration-[900ms] ease-out-expo ${
+      className="relative shrink-0"
+      svgClassName={`offer-fig origin-center transition-transform duration-[900ms] ease-out-expo ${
         on ? "on md:scale-[1.12]" : dim ? "md:scale-[0.6]" : ""
       }`}
       style={{ height: `calc(var(--fig-s) * ${scale})`, aspectRatio: ratio }}
     >
       {shape}
-    </svg>
+    </PixelSvg>
   );
 }
 

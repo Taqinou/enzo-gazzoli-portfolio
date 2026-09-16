@@ -78,7 +78,7 @@ export default function OfferSection() {
                 {/* la figure de l'offre, en filigrane : grande, au centre de la
                     case, derrière le titre, à demi transparente au repos comme
                     au survol (elle ne concurrence jamais le texte) */}
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-50">
+                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                   <OfferFigure type={type} on={on} dim={dim} />
                 </div>
                 <div className="relative flex items-baseline justify-end">

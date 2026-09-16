@@ -1,5 +1,7 @@
 "use client";
 
+import PixelSvg from "@/components/studio/PixelSvg";
+
 // Figures de la méthode : la même scène en perspective isométrique que les
 // figures de l'offre (plateau, page, bloc bleu), qui raconte les quatre étapes
 // d'un seul geste : on cadre, on dessine la page, on la construit, on la met en
@@ -7,11 +9,12 @@
 // (0 → 1, posé par MethodSection sur chaque figure) pilote ses calques via des
 // sous-progressions clamp(). Hors scroll (mobile, mouvement réduit) : --p
 // absent, la figure est complète. Géométrie générée, viewBox 200×200.
+// Rendu en pixels bleus tramés, comme les visuels des travaux (PixelSvg).
 export default function MethodFigure({ step, className = "" }: { step: string; className?: string }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 200 200" className={`offer-fig ${className}`}>
+    <PixelSvg viewBox="0 0 200 200" className={className} svgClassName="offer-fig">
       {FIGURES[step]}
-    </svg>
+    </PixelSvg>
   );
 }
 

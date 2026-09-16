@@ -58,7 +58,7 @@ export default function MethodSection() {
           if (figures) {
             for (let k = 0; k < figures.length; k++) {
               const value = k < step ? 1 : k > step ? 0 : sub;
-              (figures[k] as SVGElement).style.setProperty("--p", value.toFixed(3));
+              (figures[k] as HTMLElement).style.setProperty("--p", value.toFixed(3));
             }
           }
           if (step !== lastActiveRef.current) {
@@ -201,7 +201,7 @@ export default function MethodSection() {
                 {step}
               </p>
               <div className="flex items-start gap-4">
-                <MethodFigure step={step} className="h-20 w-20 shrink-0 -mt-2" />
+                <MethodFigure step={step} className="relative h-20 w-20 shrink-0 -mt-2" />
                 <div>
                   <h3 className="font-serif lowercase text-4xl leading-[1.05] tracking-[-0.05em]">
                     {t(`studio.method.steps.${step}.title`)}
