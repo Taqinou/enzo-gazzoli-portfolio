@@ -18,7 +18,9 @@ const NBSP = "\u00a0";
 const VARIANT_CLASSES = {
   primary: "bg-ink text-white shadow-[0_10px_30px_-10px_rgba(5,5,20,0.5)]",
   glass:
-    "bg-white/25 backdrop-blur-xl border border-white/50 text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_30px_-14px_rgba(5,5,20,0.3)]",
+    // verre dépoli sur desktop ; sur téléphone un voile blanc un peu plus
+    // dense sans backdrop-filter (trop coûteux quand le hero s'efface)
+    "bg-white/45 md:bg-white/25 md:backdrop-blur-xl border border-white/50 text-ink shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_10px_30px_-14px_rgba(5,5,20,0.3)]",
 };
 
 // Pilules du hero (design validé, inchangé au repos). Au survol : la couleur

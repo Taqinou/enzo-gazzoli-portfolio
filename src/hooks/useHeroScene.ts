@@ -86,17 +86,29 @@ export function useHeroScene({ section, sky, title, veil, cta, whiteout }: HeroS
           ? `scale(${1 + rise * 0.08})`
           : `translate3d(0, ${rise * vh * 0.04}px, 0) scale(${1 + rise * 0.28})`;
       }
-      if (title.current) {
-        title.current.style.transform = `translate3d(0, ${-fade * vh * 0.06}px, 0) scale(${
-          1 - fade * 0.08
-        })`;
-        title.current.style.opacity = String(1 - fade);
-        title.current.style.filter = !mobile && fade > 0 ? `blur(${fade * 10}px)` : "none";
-      }
-      if (cta.current) {
-        cta.current.style.transform = `translate3d(0, ${-ctaFade * 24}px, 0)`;
-        cta.current.style.opacity = String(1 - ctaFade);
-        cta.current.style.visibility = ctaFade >= 1 ? "hidden" : "";
+      if (mobile) {
+        // Téléphone : le titre et les boutons ne suivent pas le doigt image
+        // par image (saccadé sur mobile) ; passé un seuil, une classe lance
+        // une transition CSS (opacité + translation, sur le compositeur), qui
+        // se rembobine si on remonte (.studio-hero.is-leaving, globals.css).
+        sectionEl.classList.toggle("is-leaving", scrolled > 0.03);
+        for (const el of [title.current, cta.current]) {
+          if (el) el.removeAttribute("style");
+        }
+      } else {
+        sectionEl.classList.remove("is-leaving");
+        if (title.current) {
+          title.current.style.transform = `translate3d(0, ${-fade * vh * 0.06}px, 0) scale(${
+            1 - fade * 0.08
+          })`;
+          title.current.style.opacity = String(1 - fade);
+          title.current.style.filter = fade > 0 ? `blur(${fade * 10}px)` : "none";
+        }
+        if (cta.current) {
+          cta.current.style.transform = `translate3d(0, ${-ctaFade * 24}px, 0)`;
+          cta.current.style.opacity = String(1 - ctaFade);
+          cta.current.style.visibility = ctaFade >= 1 ? "hidden" : "";
+        }
       }
       if (veil.current) {
         // Agrandie depuis son bord bas (origin-bottom), jamais translatée : la

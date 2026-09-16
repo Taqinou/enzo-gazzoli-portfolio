@@ -174,7 +174,9 @@ body.cursor-question,
 @keyframes studio-word-in {
   to {
     opacity: 1;
-    filter: blur(0);
+    /* none (et non blur(0)) : une fois nets, les mots ne gardent pas un filtre
+       actif, qui alourdissait l'effacement du titre sur mobile */
+    filter: none;
   }
 }
 
@@ -255,6 +257,30 @@ body.cursor-question,
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+/* Téléphone : le titre et les boutons du hero s'effacent par une transition
+   déclenchée au premier scroll (useHeroScene pose .is-leaving), pas image par
+   image au doigt. Rembobinée si on remonte. */
+@media (max-width: 767px) {
+  .studio-hero [data-hero-title],
+  .studio-hero [data-hero-cta] {
+    transition:
+      opacity 0.55s cubic-bezier(0.33, 1, 0.68, 1),
+      transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .studio-hero.is-leaving [data-hero-title] {
+    opacity: 0;
+    transform: translate3d(0, -28px, 0) scale(0.97);
+  }
+
+  .studio-hero.is-leaving [data-hero-cta] {
+    opacity: 0;
+    transform: translate3d(0, -18px, 0);
+    transition-duration: 0.35s, 0.6s;
+    pointer-events: none;
   }
 }
 

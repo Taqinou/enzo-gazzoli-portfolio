@@ -135,6 +135,7 @@ export default function StudioHero() {
         <div className="relative h-full flex flex-col items-center justify-center px-6 pt-16 pb-[6vh]">
           <h1
             ref={titleRef}
+            data-hero-title
             className="relative z-10 w-full text-center leading-[0.98] text-ink will-change-transform"
           >
             <span className="block font-serif not-italic lowercase tracking-[-0.035em] text-[9vw] md:text-[min(7.4vw,9rem)]">
@@ -145,7 +146,7 @@ export default function StudioHero() {
             </span>
           </h1>
 
-          <div ref={ctaRef} className="relative z-30 mt-10 md:mt-12">
+          <div ref={ctaRef} data-hero-cta className="relative z-30 mt-10 md:mt-12">
             <Reveal delay={ctaDelay}>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-5">
                 <HeroPill href="/services" label={t("studio.hero.ctaPrimary")} variant="primary" arrow="right" />
