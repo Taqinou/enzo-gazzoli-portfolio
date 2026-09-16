@@ -59,7 +59,10 @@ export default function DitherWave({ className = "" }: { className?: string }) {
             0.04 * Math.sin(x * 0.08 - t * 0.16 + fy * 2.4) +
             0.025 * Math.sin((x + y * 1.7) * 0.05 + t * 0.24);
           const v = fy * 1.25 - 0.2 + wave;
-          const on = v > BAYER[(y % 8) * 8 + (x % 8)];
+          // les dernières lignes sont toujours pleines : sinon quelques pixels
+          // restaient vides au ras du bord et dessinaient un liseré clair
+          // contre le footer bleu
+          const on = y >= rows - 3 || v > BAYER[(y % 8) * 8 + (x % 8)];
           const i = (y * cols + x) * 4;
           data[i] = 0;
           data[i + 1] = 0;
