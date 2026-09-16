@@ -47,15 +47,16 @@ def plate(name: str, font_path: str) -> Image.Image:
 
 def pixel_print(gray: Image.Image) -> Image.Image:
     gray = ImageOps.autocontrast(gray, cutoff=1)
-    cols, rows = W // PX, H // PX
+    # grille qui couvre toute l'image (arrondie au-dessus puis recadrée) : une
+    # grille arrondie au-dessous laissait des lignes vides en bord, rendues en
+    # liseré crème sur les plaques bleues
+    cols, rows = -(-W // PX), -(-H // PX)
     small = np.asarray(gray.resize((cols, rows), Image.BOX), dtype=np.float32) / 255
     threshold = (BAYER + 0.5) / 64
     tile = np.tile(threshold, (rows // 8 + 1, cols // 8 + 1))[:rows, :cols]
     ink = (1 - small > tile).astype(np.uint8) * 255
-    big = Image.fromarray(ink, "L").resize((cols * PX, rows * PX), Image.NEAREST)
-    canvas = Image.new("L", (W, H), 0)
-    canvas.paste(big, ((W - cols * PX) // 2, (H - rows * PX) // 2))
-    a = np.asarray(canvas, dtype=np.float32)[..., None] / 255
+    big = Image.fromarray(ink, "L").resize((cols * PX, rows * PX), Image.NEAREST).crop((0, 0, W, H))
+    a = np.asarray(big, dtype=np.float32)[..., None] / 255
     return Image.fromarray((CREAM + (BLUE - CREAM) * a).astype(np.uint8), "RGB")
 
 
