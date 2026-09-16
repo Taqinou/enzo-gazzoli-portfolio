@@ -9,6 +9,26 @@ import { homeScroll } from "@/lib/homeScroll";
 // retour), useEffect en repli SSR pour éviter l'avertissement.
 const useIsoLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
+// Rechargement de page : on restaure nous-mêmes la position, AVANT le premier
+// affichage du contenu. Laissée au navigateur, la restauration arrivait après
+// coup : le haut de page (l'image du hero) apparaissait un instant, puis la
+// page sautait à l'ancienne position.
+const SCROLL_KEY = "studio-scroll:";
+let reloadHandled = false;
+
+function reloadedScroll(pathname: string): number | null {
+  if (reloadHandled) return null;
+  reloadHandled = true;
+  try {
+    const nav = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (nav?.type !== "reload") return null;
+    const saved = sessionStorage.getItem(SCROLL_KEY + pathname);
+    return saved == null ? null : Number(saved);
+  } catch {
+    return null;
+  }
+}
+
 interface SmoothScrollProps {
   children: React.ReactNode;
 }
@@ -20,6 +40,20 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
   const pathname = usePathname();
   const lenisRef = useRef<Lenis | null>(null);
   const positionedPathRef = useRef<string | null>(null);
+
+  // la position est enregistrée en quittant la page, restaurée au rechargement
+  useEffect(() => {
+    try {
+      history.scrollRestoration = "manual";
+    } catch {}
+    const save = () => {
+      try {
+        sessionStorage.setItem(SCROLL_KEY + window.location.pathname, String(window.scrollY));
+      } catch {}
+    };
+    window.addEventListener("pagehide", save);
+    return () => window.removeEventListener("pagehide", save);
+  }, []);
 
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -62,7 +96,9 @@ export default function SmoothScroll({ children }: SmoothScrollProps) {
     positionedPathRef.current = pathname;
     if (window.location.hash) return; // ancre explicite (#contact…) → on laisse
 
-    const target = pathname === "/" && homeScroll.y != null ? homeScroll.y : 0;
+    const reloaded = reloadedScroll(pathname);
+    const target =
+      reloaded != null ? reloaded : pathname === "/" && homeScroll.y != null ? homeScroll.y : 0;
     if (pathname === "/") homeScroll.y = null; // consommé UNIQUEMENT sur la home
 
     const apply = () => {

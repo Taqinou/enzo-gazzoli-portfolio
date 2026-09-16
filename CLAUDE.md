@@ -35,6 +35,9 @@ The studio wing must keep Enzo's **existing design system** (Playfair Display lo
 
   - **Final CTA (`StudioCTA`, 2026-09-16)**: the button is a `HeroPill` (glass, same hover as the hero). The bottom blend from the painted sky to the solid blue footer is no longer a gradient but `DitherWave.tsx`: a canvas of blue pixels in the same ordered Bayer dither as the work images, sparse at the top and solid at the bottom, whose boundary rolls slowly like lava (three crossed sine waves, 30 fps, paused off-screen, still under reduced motion). Kept subtle: a thin band (20 % of the section, 3 px pixels, small wave amplitude); a first 48 %/40 % version was "beaucoup trop fort", and a blur over the pixels was refused.
 
+  - **Case study narrative (`CaseStudyNarrative`)**: keep the single column with the gentle blue thread. 2026-09-16, two "serpentine" versions were refused: steps alternating left/right with a thread crossing the page in S ("très moche"), and text on the right with a wide meandering river in the left whitespace ("nul").
+  - **Reload**: `SmoothScroll` sets `history.scrollRestoration = "manual"`, saves the scroll position on `pagehide` (sessionStorage) and restores it before the content's first paint on a reload; the browser's late restoration flashed the hero image before jumping.
+
 ### ⚠️ CRITICAL: framer-motion is broken in this env
 
 Framer-motion `initial`/`animate` and `whileInView` animations **stay frozen at their initial state** (content invisible) on fresh load — reproduced on `main`, in dev AND production build, with framer-motion 12.25.0 and 12.42.2 (React 19 + Next 16 + the `LanguageProvider` returning `null` before hydration).
